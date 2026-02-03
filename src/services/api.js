@@ -5,7 +5,7 @@ const getToken = () => localStorage.getItem('admin_token');
 
 const api = axios.create({
   // Use your Laravel backend's URL
-  baseURL: 'http://127.0.0.1/projects/raahtech/api/v1', 
+  baseURL: import.meta.env.VITE_API_BASE_URL, 
 });
 
 // Add a request interceptor to include the token

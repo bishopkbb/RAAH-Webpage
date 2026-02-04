@@ -65,7 +65,7 @@ const HeroCarousel = () => {
                 transition={{ duration: 0.8, ease: "easeOut" }}
                 className="text-left"
               >
-                <div className="inline-block bg-green-600/90 text-white px-4 py-1 rounded-full text-sm font-bold uppercase tracking-widest mb-6 backdrop-blur-sm">
+                <div className="inline-block bg-green-600/90 text-white px-4 py-1 rounded-full text-sm font-bold uppercase tracking-widest -mb-30 md:mb-6 backdrop-blur-sm">
                   Home Health Software
                 </div>
                 <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 font-serif leading-tight drop-shadow-lg">

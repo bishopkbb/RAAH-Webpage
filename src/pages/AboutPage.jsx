@@ -39,7 +39,7 @@ const AboutPage = () => {
   return (
     <Layout>
       <PageBanner 
-        title="About CareFlow" 
+        title="About RAAH Home Health" 
         subtitle="Bridging the gap between compassionate care and advanced technology."
         image="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=2070" 
       />
@@ -62,7 +62,7 @@ const AboutPage = () => {
               <span className="text-green-600 font-bold tracking-widest uppercase text-sm mb-4 block">Our Mission</span>
               <h2 className="text-4xl font-bold text-gray-900 mb-6 font-serif">Empowering Care Providers</h2>
               <p className="text-gray-600 mb-8 text-lg leading-relaxed">
-                At CareFlow, we believe that administrative burdens should never get in the way of patient care. Our mission is to empower home health agencies with intuitive, powerful tools that streamline operations, ensure compliance, and ultimately improve patient outcomes.
+                At RAAH Home Health, we believe that administrative burdens should never get in the way of patient care. Our mission is to empower home health agencies with intuitive, powerful tools that streamline operations, ensure compliance, and ultimately improve patient outcomes.
               </p>
               
               <div className="grid sm:grid-cols-2 gap-6">

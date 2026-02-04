@@ -68,10 +68,10 @@ const Navbar = () => {
           <div className="nav-container relative flex justify-between items-center">
             {/* Logo */}
             <Link to="/" className="flex items-center gap-2 z-[60] group">
-              <img src={logoUrl} alt="RAAH" className="nav-logo h-10 w-auto object-contain" />
+              <img src={logoUrl} alt="RAAH" className="nav-logo h-20 w-auto object-contain" />
               <div className="hidden xl:block ml-2">
                 <span className="text-2xl font-bold text-gray-800 font-serif leading-none block group-hover:text-green-700 transition"></span>
-                <span className="text-xs text-green-600 font-sans tracking-widest uppercase block">Home Health</span>
+                {/*<span className="text-xs text-green-600 font-sans tracking-widest uppercase block">Home Health</span>*/}
               </div>
             </Link>
 

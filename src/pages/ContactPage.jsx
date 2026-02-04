@@ -33,7 +33,7 @@ const ContactPage = () => {
                   </div>
                   <div>
                     <h3 className="text-xl font-bold text-gray-900 mb-2">Our Location</h3>
-                    <p className="text-gray-600">123 Healthcare Blvd,<br/>Wellness City, HC 90210</p>
+                    <p className="text-gray-600">13891 Oswego Street,<br/>Aurora CO</p>
                   </div>
                 </div>
 
@@ -43,7 +43,7 @@ const ContactPage = () => {
                   </div>
                   <div>
                     <h3 className="text-xl font-bold text-gray-900 mb-2">Phone Number</h3>
-                    <p className="text-gray-600 text-lg">(555) 123-4567</p>
+                    <p className="text-gray-600 text-lg"> +1 (0001) 2222-2890</p>
                     <p className="text-green-600 text-sm mt-1 font-medium">Mon-Fri from 8am to 6pm</p>
                   </div>
                 </div>
@@ -54,8 +54,7 @@ const ContactPage = () => {
                   </div>
                   <div>
                     <h3 className="text-xl font-bold text-gray-900 mb-2">Email Address</h3>
-                    <p className="text-gray-600">info@careflow.com</p>
-                    <p className="text-gray-600">support@careflow.com</p>
+                    <p className="text-gray-600">info@raahhealth.org</p>
                   </div>
                 </div>
               </div>
@@ -82,7 +81,7 @@ const ContactPage = () => {
       </section>
 
       {/* Support CTA */}
-      <section className="bg-green-50 py-20">
+      {/*<section className="bg-green-50 py-20">
         <div className="container-custom text-center">
           <h2 className="text-3xl font-bold text-gray-900 mb-6 font-serif">Current Client?</h2>
           <p className="text-gray-600 mb-8 max-w-2xl mx-auto text-lg">
@@ -92,7 +91,7 @@ const ContactPage = () => {
             Visit Help Center
           </button>
         </div>
-      </section>
+      </section>*/}
     </Layout>
   );
 };

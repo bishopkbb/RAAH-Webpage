@@ -48,8 +48,8 @@ const Navbar = () => {
       <div className="bg-gradient-to-r from-green-900 to-green-800 text-green-50 py-2.5 px-4 text-xs md:text-sm hidden md:block border-b border-green-700">
         <div className="container-custom flex justify-between items-center">
           <div className="flex items-center gap-6">
-            <span className="flex items-center gap-2 hover:text-white transition cursor-pointer"><MapPin size={14} className="text-green-400" /> 123 Healthcare Blvd, Wellness City</span>
-            <span className="flex items-center gap-2 hover:text-white transition cursor-pointer"><Phone size={14} className="text-green-400" /> (555) 123-4567</span>
+            <span className="flex items-center gap-2 hover:text-white transition cursor-pointer"><MapPin size={14} className="text-green-400" /> 13891 Oswego Street, Aurora CO</span>
+            <span className="flex items-center gap-2 hover:text-white transition cursor-pointer"><Phone size={14} className="text-green-400" /> +1 (0001) 2222-2890</span>
             <span className="flex items-center gap-2 text-green-300"><Clock size={14} /> Mon - Fri: 8:00 AM - 6:00 PM</span>
           </div>
           <div className="flex items-center gap-6">
@@ -70,7 +70,7 @@ const Navbar = () => {
             <Link to="/" className="flex items-center gap-2 z-[60] group">
               <img src={logoUrl} alt="RAAH" className="nav-logo h-10 w-auto object-contain" />
               <div className="hidden xl:block ml-2">
-                <span className="text-2xl font-bold text-gray-800 font-serif leading-none block group-hover:text-green-700 transition">CareFlow</span>
+                <span className="text-2xl font-bold text-gray-800 font-serif leading-none block group-hover:text-green-700 transition"></span>
                 <span className="text-xs text-green-600 font-sans tracking-widest uppercase block">Home Health</span>
               </div>
             </Link>
@@ -155,8 +155,8 @@ const Navbar = () => {
             <div className="mt-8 pt-8 border-t border-gray-200 pb-10">
               <h4 className="text-gray-400 uppercase text-xs font-bold tracking-widest mb-6">Contact Info</h4>
               <div className="space-y-4 text-gray-600">
-                <p className="flex items-center gap-4 text-lg"><Phone size={20} className="text-green-600" /> (555) 123-4567</p>
-                <p className="flex items-start gap-4 text-lg"><MapPin size={20} className="text-green-600 mt-1" /> 123 Healthcare Blvd</p>
+                <p className="flex items-center gap-4 text-lg"><Phone size={20} className="text-green-600" /> +1 (0001) 2222-2890</p>
+                <p className="flex items-start gap-4 text-lg"><MapPin size={20} className="text-green-600 mt-1" /> 13891 Oswego Street, Aurora CO </p>
                 <p className="flex items-center gap-4 text-lg"><Clock size={20} className="text-green-600" /> Mon - Fri: 8am - 6pm</p>
               </div>
             </div>

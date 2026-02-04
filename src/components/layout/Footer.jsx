@@ -11,7 +11,7 @@ const Footer = () => {
           <div>
             <div className="flex items-center gap-2 mb-4">
               <img src="/raah.png" alt="RAAH" className="h-10 w-auto bg-white rounded p-1" />
-              <span className="text-2xl font-bold font-serif">RAAH<span className="text-green-500">Tech</span></span>
+              {/*<span className="text-2xl font-bold font-serif">RAAH<span className="text-green-500">Tech</span></span>*/}
             </div>
             <p className="text-gray-400 mb-6">
               Revolutionizing home health care with integrated technology solutions for agencies, caregivers, and patients.
@@ -54,15 +54,15 @@ const Footer = () => {
             <ul className="space-y-4">
               <li className="flex items-start gap-3 text-gray-400">
                 <MapPin className="text-green-500 mt-1 shrink-0" size={18} />
-                <span>123 Healthcare Blvd,<br/>Wellness City, HC 90210</span>
+                <span>13891 Oswego Street,<br/>Aurora CO.</span>
               </li>
               <li className="flex items-center gap-3 text-gray-400">
                 <Phone className="text-green-500 shrink-0" size={18} />
-                <span>(555) 123-4567</span>
+                <span> +1 (0001) 2222-2890</span>
               </li>
               <li className="flex items-center gap-3 text-gray-400">
                 <Mail className="text-green-500 shrink-0" size={18} />
-                <span>info@raahtech.com</span>
+                <span>info@raahhealth.org</span>
               </li>
             </ul>
           </div>

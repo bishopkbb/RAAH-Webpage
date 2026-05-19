@@ -804,6 +804,622 @@ const WorkflowStep = ({ step, isLast }) => {
   );
 };
 
+// ─── Testimonials data ────────────────────────────────────────────────────────
+const TESTIMONIALS = [
+  {
+    quote: 'RAAH transformed our billing process completely. We reduced claim rejections by 90% in the first month and our cash flow has never been stronger. The onboarding team held our hand the whole way.',
+    name: 'Sarah Johnson',
+    role: 'Director of Operations',
+    company: 'Caring Hands Home Health',
+    initials: 'SJ',
+    metric: '90%',
+    metricLabel: 'Fewer Claim Rejections',
+    color: '#166534',
+  },
+  {
+    quote: 'The mobile app is exactly what our caregivers needed. Training took under an hour, compliance issues disappeared, and our visit documentation is now airtight. I recommend RAAH to every agency owner I know.',
+    name: 'Michael Chen',
+    role: 'Owner',
+    company: 'BrightPath Home Services',
+    initials: 'MC',
+    metric: '< 1hr',
+    metricLabel: 'Staff Training Time',
+    color: '#14532d',
+  },
+  {
+    quote: 'Before RAAH, our schedulers were spending six hours a day on conflict resolution. Now it takes forty minutes. The drag-and-drop builder with skill-matching is genuinely a game changer for a team our size.',
+    name: 'Amara Osei',
+    role: 'Agency Administrator',
+    company: 'Golden Care Network',
+    initials: 'AO',
+    metric: '85%',
+    metricLabel: 'Scheduling Time Saved',
+    color: '#052e16',
+  },
+  {
+    quote: 'EVV compliance was keeping me up at night before we switched. RAAH syncs with our state aggregator in real time and I have not had a single EVV-related claim issue in eight months. That peace of mind is priceless.',
+    name: 'Denise Ramirez',
+    role: 'Billing Coordinator',
+    company: 'Sunrise Home Health',
+    initials: 'DR',
+    metric: '8 mo',
+    metricLabel: 'Zero EVV Claim Issues',
+    color: '#166534',
+  },
+  {
+    quote: 'We scaled from 40 to 120 caregivers in under a year and RAAH scaled right with us. No performance issues, no re-training, no gaps. It is genuinely built for growth and I cannot imagine running our agency without it.',
+    name: 'James Okafor',
+    role: 'CEO',
+    company: 'LifeFirst Health Agency',
+    initials: 'JO',
+    metric: '3x',
+    metricLabel: 'Team Growth, Zero Friction',
+    color: '#14532d',
+  },
+  {
+    quote: 'The reporting dashboards alone justified the switch. I can see payer mix, caregiver performance, and care gaps on one screen before my first cup of coffee. My clinical team now makes decisions in hours, not weeks.',
+    name: 'Patricia Nguyen',
+    role: 'Clinical Director',
+    company: 'Harmony Home Health',
+    initials: 'PN',
+    metric: '+52%',
+    metricLabel: 'Faster Clinical Decisions',
+    color: '#052e16',
+  },
+  {
+    quote: 'RAAH is the first platform that actually understands home health billing. Secondary crossover claims, PDGM compliance, 835 remittance, all handled automatically. Our revenue cycle team has gone from reactive to completely proactive.',
+    name: 'Kevin Adeyemi',
+    role: 'Revenue Cycle Manager',
+    company: 'PrimeCare Solutions',
+    initials: 'KA',
+    metric: '99.2%',
+    metricLabel: 'Billing Accuracy Rate',
+    color: '#166534',
+  },
+];
+
+// ─── Single testimonial card ──────────────────────────────────────────────────
+const TestimonialCard = ({ t, visible }) => {
+  const [hovered, setHovered] = useState(false);
+
+  return (
+    <div
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        background: '#ffffff',
+        borderRadius: '20px',
+        padding: '40px 36px 32px',
+        position: 'relative',
+        overflow: 'hidden',
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        border: '1px solid',
+        borderColor: hovered ? 'rgba(22,163,74,0.25)' : 'rgba(22,163,74,0.10)',
+        boxShadow: hovered
+          ? '0 20px 60px rgba(5,46,22,0.12), 0 4px 16px rgba(22,163,74,0.08)'
+          : '0 4px 24px rgba(5,46,22,0.06)',
+        transform: hovered ? 'translateY(-4px)' : 'translateY(0)',
+        transition: 'all 0.35s cubic-bezier(0.22, 1, 0.36, 1)',
+        opacity: visible ? 1 : 0,
+        cursor: 'default',
+      }}
+    >
+      {/* Top green accent bar — slides in on hover */}
+      <div
+        style={{
+          position: 'absolute',
+          top: 0, left: 0, right: 0,
+          height: '3px',
+          background: 'linear-gradient(to right, #16a34a, #4ade80)',
+          transform: hovered ? 'scaleX(1)' : 'scaleX(0)',
+          transformOrigin: 'left',
+          transition: 'transform 0.4s cubic-bezier(0.22, 1, 0.36, 1)',
+          borderRadius: '20px 20px 0 0',
+        }}
+      />
+
+      {/* Decorative quote mark */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          top: '24px',
+          right: '28px',
+          opacity: hovered ? 0.18 : 0.08,
+          transition: 'opacity 0.35s ease',
+        }}
+      >
+        <svg width="56" height="44" viewBox="0 0 56 44" fill="none">
+          <path d="M0 44V28C0 12.536 11.193 2.358 33.58 0L36 5.09C24.387 7.208 18.58 12.762 18.58 21.752H28V44H0ZM28 44V28C28 12.536 39.193 2.358 61.58 0L64 5.09C52.387 7.208 46.58 12.762 46.58 21.752H56V44H28Z"
+            fill="#16a34a"
+          />
+        </svg>
+      </div>
+
+      {/* Stars */}
+      <div style={{ display: 'flex', gap: '3px', marginBottom: '20px' }}>
+        {[1,2,3,4,5].map(s => (
+          <svg key={s} width="16" height="16" viewBox="0 0 16 16" fill="#f59e0b">
+            <path d="M8 1l1.854 3.756L14 5.528l-3 2.923.708 4.129L8 10.5l-3.708 2.08L5 8.451 2 5.528l4.146-.772z"/>
+          </svg>
+        ))}
+      </div>
+
+      {/* Quote text */}
+      <p
+        style={{
+          fontFamily: "'Poppins', sans-serif",
+          fontSize: '0.9875rem',
+          fontWeight: 400,
+          lineHeight: 1.80,
+          color: '#374151',
+          marginBottom: '28px',
+          flexGrow: 1,
+          fontStyle: 'italic',
+        }}
+      >
+        "{t.quote}"
+      </p>
+
+      {/* Divider */}
+      <div
+        style={{
+          height: '1px',
+          background: hovered ? 'rgba(22,163,74,0.18)' : 'rgba(0,0,0,0.06)',
+          marginBottom: '24px',
+          transition: 'background 0.35s ease',
+        }}
+      />
+
+      {/* Bottom row — avatar + name/role + metric */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px' }}>
+
+        {/* Avatar + identity */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          <div
+            style={{
+              width: '48px',
+              height: '48px',
+              borderRadius: '50%',
+              background: `linear-gradient(135deg, ${t.color} 0%, #16a34a 100%)`,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0,
+              boxShadow: '0 4px 12px rgba(5,46,22,0.20)',
+            }}
+          >
+            <span
+              style={{
+                fontFamily: "'Inter', sans-serif",
+                fontWeight: 800,
+                fontSize: '0.875rem',
+                color: '#ffffff',
+                letterSpacing: '0.02em',
+              }}
+            >
+              {t.initials}
+            </span>
+          </div>
+          <div>
+            <p
+              style={{
+                fontFamily: "'Inter', sans-serif",
+                fontWeight: 700,
+                fontSize: '1rem',
+                color: '#0f172a',
+                lineHeight: 1.2,
+                marginBottom: '2px',
+              }}
+            >
+              {t.name}
+            </p>
+            <p
+              style={{
+                fontFamily: "'Poppins', sans-serif",
+                fontSize: '0.8rem',
+                fontWeight: 400,
+                color: '#16a34a',
+                lineHeight: 1.3,
+              }}
+            >
+              {t.role}, {t.company}
+            </p>
+          </div>
+        </div>
+
+        {/* Metric callout */}
+        <div
+          style={{
+            textAlign: 'right',
+            flexShrink: 0,
+            opacity: hovered ? 1 : 0.70,
+            transition: 'opacity 0.35s ease',
+          }}
+        >
+          <p
+            style={{
+              fontFamily: "'Inter', sans-serif",
+              fontSize: '1.25rem',
+              fontWeight: 900,
+              color: '#052e16',
+              lineHeight: 1,
+              letterSpacing: '-0.02em',
+            }}
+          >
+            {t.metric}
+          </p>
+          <p
+            style={{
+              fontFamily: "'Poppins', sans-serif",
+              fontSize: '0.65rem',
+              fontWeight: 500,
+              color: '#64748b',
+              textTransform: 'uppercase',
+              letterSpacing: '0.08em',
+              marginTop: '2px',
+              maxWidth: '90px',
+            }}
+          >
+            {t.metricLabel}
+          </p>
+        </div>
+
+      </div>
+    </div>
+  );
+};
+
+// ─── Testimonials Section ─────────────────────────────────────────────────────
+const TestimonialsSection = () => {
+  const [current, setCurrent]   = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [direction, setDirection] = useState(1); // 1=forward, -1=back
+  const timerRef = useRef(null);
+
+  // Number of cards visible: 2 desktop, 1 mobile — handled via CSS
+  // Logical "pages": we advance by 1 testimonial at a time
+  const total = TESTIMONIALS.length;
+
+  const goTo = (index, dir = 1) => {
+    if (isAnimating) return;
+    setIsAnimating(true);
+    setDirection(dir);
+    setCurrent((index + total) % total);
+    setTimeout(() => setIsAnimating(false), 550);
+  };
+
+  const prev = () => goTo(current - 1, -1);
+  const next = () => goTo(current + 1,  1);
+
+  // Auto-advance every 5s — uses functional setState to avoid stale closure
+  useEffect(() => {
+    if (isPaused) { clearInterval(timerRef.current); return; }
+    timerRef.current = setInterval(() => {
+      setDirection(1);
+      setIsAnimating(true);
+      setCurrent(p => (p + 1) % total);
+      setTimeout(() => setIsAnimating(false), 550);
+    }, 6000);
+    return () => clearInterval(timerRef.current);
+  }, [isPaused, total]);
+
+  // Which two testimonials are visible (desktop shows current + next)
+  const visibleA = current;
+  const visibleB = (current + 1) % total;
+
+  return (
+    <section
+      style={{
+        background: '#ffffff',
+        padding: '120px 0 140px',
+        position: 'relative',
+        overflow: 'hidden',
+      }}
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+    >
+      {/* Keyframe for progress pip fill sweep */}
+      <style>{`
+        @keyframes testimonialprogress {
+          from { width: 0%; }
+          to   { width: 100%; }
+        }
+      `}</style>
+      {/* Dot grid texture */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          inset: 0,
+          backgroundImage: 'radial-gradient(circle, rgba(5,46,22,0.04) 1px, transparent 1px)',
+          backgroundSize: '32px 32px',
+          pointerEvents: 'none',
+        }}
+      />
+
+      {/* Ghost watermark */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          fontFamily: "'Inter', sans-serif",
+          fontWeight: 900,
+          fontSize: 'clamp(80px, 14vw, 180px)',
+          color: 'rgba(5,46,22,0.03)',
+          letterSpacing: '-0.05em',
+          whiteSpace: 'nowrap',
+          userSelect: 'none',
+          pointerEvents: 'none',
+          lineHeight: 1,
+        }}
+      >
+        RAAH
+      </div>
+
+      {/* Corner glows */}
+      <div aria-hidden="true" style={{ position: 'absolute', top: '-60px', right: '-60px', width: '420px', height: '420px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(22,163,74,0.07) 0%, transparent 70%)', pointerEvents: 'none' }} />
+      <div aria-hidden="true" style={{ position: 'absolute', bottom: '-60px', left: '-60px', width: '360px', height: '360px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(22,163,74,0.06) 0%, transparent 70%)', pointerEvents: 'none' }} />
+
+      <div className="container-custom" style={{ position: 'relative', zIndex: 1 }}>
+
+        {/* Section header */}
+        <Reveal delay={0}>
+          <div style={{ textAlign: 'center', marginBottom: '72px' }}>
+
+            {/* Eyebrow */}
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
+              <div style={{ width: '32px', height: '1.5px', background: '#16a34a', borderRadius: '999px' }} />
+              <span
+                style={{
+                  fontFamily: "'Poppins', sans-serif",
+                  fontSize: '0.75rem',
+                  fontWeight: 600,
+                  letterSpacing: '0.2em',
+                  textTransform: 'uppercase',
+                  color: '#16a34a',
+                }}
+              >
+                Client Stories
+              </span>
+              <div style={{ width: '32px', height: '1.5px', background: '#16a34a', borderRadius: '999px' }} />
+            </div>
+
+            {/* Heading */}
+            <h2
+              style={{
+                fontFamily: "'Inter', sans-serif",
+                fontWeight: 900,
+                fontSize: 'clamp(2.25rem, 5vw, 3.75rem)',
+                letterSpacing: '-0.03em',
+                lineHeight: 1.08,
+                color: '#0f172a',
+                marginBottom: '20px',
+                maxWidth: '780px',
+                margin: '0 auto 20px',
+              }}
+            >
+              Trusted by{' '}
+              <span style={{ color: '#16a34a' }}>Leading Agencies</span>
+            </h2>
+
+            {/* Sub */}
+            <p
+              style={{
+                fontFamily: "'Poppins', sans-serif",
+                fontSize: 'clamp(1.1rem, 1.6vw, 1.3rem)',
+                fontWeight: 500,
+                lineHeight: 1.75,
+                color: '#374151',
+                maxWidth: '560px',
+                margin: '0 auto',
+              }}
+            >
+              Real results from real agencies. No case studies, no composites. Just the words of operators who switched to RAAH.
+            </p>
+
+          </div>
+        </Reveal>
+
+        {/* Carousel */}
+        <Reveal delay={150}>
+          <div style={{ position: 'relative' }}>
+
+            {/* Cards viewport */}
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(2, 1fr)',
+                gap: '24px',
+                alignItems: 'stretch',
+              }}
+              className="grid-cols-1 md:grid-cols-2"
+            >
+              {/* Card A */}
+              <div
+                style={{
+                  opacity: isAnimating ? 0 : 1,
+                  transform: isAnimating
+                    ? `translateX(${direction > 0 ? '-40px' : '40px'})`
+                    : 'translateX(0)',
+                  transition: 'opacity 0.45s ease, transform 0.45s cubic-bezier(0.22,1,0.36,1)',
+                }}
+              >
+                <TestimonialCard t={TESTIMONIALS[visibleA]} visible={true} />
+              </div>
+
+              {/* Card B — hidden on mobile */}
+              <div
+                className="hidden md:block"
+                style={{
+                  opacity: isAnimating ? 0 : 1,
+                  transform: isAnimating
+                    ? `translateX(${direction > 0 ? '40px' : '-40px'})`
+                    : 'translateX(0)',
+                  transition: 'opacity 0.45s ease 0.06s, transform 0.45s cubic-bezier(0.22,1,0.36,1) 0.06s',
+                }}
+              >
+                <TestimonialCard t={TESTIMONIALS[visibleB]} visible={true} />
+              </div>
+            </div>
+
+            {/* Controls row */}
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '16px',
+                marginTop: '48px',
+              }}
+            >
+              {/* Prev */}
+              <button
+                onClick={prev}
+                aria-label="Previous testimonials"
+                style={{
+                  width: '44px',
+                  height: '44px',
+                  borderRadius: '50%',
+                  border: '1.5px solid rgba(22,163,74,0.30)',
+                  background: 'transparent',
+                  color: '#16a34a',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                  flexShrink: 0,
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.background   = '#052e16';
+                  e.currentTarget.style.borderColor  = '#052e16';
+                  e.currentTarget.style.color        = '#ffffff';
+                  e.currentTarget.style.transform    = 'scale(1.1)';
+                  e.currentTarget.style.boxShadow    = '0 4px 16px rgba(5,46,22,0.20)';
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.background   = 'transparent';
+                  e.currentTarget.style.borderColor  = 'rgba(22,163,74,0.30)';
+                  e.currentTarget.style.color        = '#16a34a';
+                  e.currentTarget.style.transform    = 'scale(1)';
+                  e.currentTarget.style.boxShadow    = 'none';
+                }}
+              >
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M10 12L6 8L10 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </button>
+
+              {/* Progress dots — active pip has a fill sweep animation */}
+              <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                {TESTIMONIALS.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => goTo(i, i > current ? 1 : -1)}
+                    aria-label={`Go to testimonial ${i + 1}`}
+                    style={{
+                      width: i === current ? '36px' : '8px',
+                      height: '8px',
+                      borderRadius: '999px',
+                      background: i === current
+                        ? 'rgba(22,163,74,0.20)'
+                        : i === visibleB
+                          ? 'rgba(22,163,74,0.30)'
+                          : 'rgba(22,163,74,0.12)',
+                      border: 'none',
+                      cursor: 'pointer',
+                      padding: 0,
+                      position: 'relative',
+                      overflow: 'hidden',
+                      transition: 'all 0.35s cubic-bezier(0.22, 1, 0.36, 1)',
+                    }}
+                  >
+                    {i === current && (
+                      <span
+                        key={current}
+                        style={{
+                          position: 'absolute',
+                          top: 0, left: 0, bottom: 0,
+                          borderRadius: '999px',
+                          background: '#16a34a',
+                          animation: `testimonialprogress ${isPaused ? '0s' : '6s'} linear forwards`,
+                        }}
+                      />
+                    )}
+                  </button>
+                ))}
+              </div>
+
+              {/* Next */}
+              <button
+                onClick={next}
+                aria-label="Next testimonials"
+                style={{
+                  width: '44px',
+                  height: '44px',
+                  borderRadius: '50%',
+                  border: '1.5px solid rgba(22,163,74,0.30)',
+                  background: 'transparent',
+                  color: '#16a34a',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                  flexShrink: 0,
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.background   = '#16a34a';
+                  e.currentTarget.style.borderColor  = '#16a34a';
+                  e.currentTarget.style.color        = '#ffffff';
+                  e.currentTarget.style.transform    = 'scale(1.1)';
+                  e.currentTarget.style.boxShadow    = '0 4px 16px rgba(22,163,74,0.28)';
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.background   = 'transparent';
+                  e.currentTarget.style.borderColor  = 'rgba(22,163,74,0.30)';
+                  e.currentTarget.style.color        = '#16a34a';
+                  e.currentTarget.style.transform    = 'scale(1)';
+                  e.currentTarget.style.boxShadow    = 'none';
+                }}
+              >
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M6 4L10 8L6 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </button>
+
+            </div>
+
+            {/* Testimonial counter */}
+            <p
+              style={{
+                fontFamily: "'Poppins', sans-serif",
+                fontSize: '0.78rem',
+                fontWeight: 500,
+                color: '#94a3b8',
+                textAlign: 'center',
+                marginTop: '16px',
+                letterSpacing: '0.06em',
+              }}
+            >
+              {current + 1} / {total}
+            </p>
+
+          </div>
+        </Reveal>
+
+      </div>
+    </section>
+  );
+};
+
 // ─── Page ─────────────────────────────────────────────────────────────────────
 const HomePage = () => {
   const [sectionRef] = useInView(0.1);
@@ -1698,56 +2314,14 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* ── 4. Testimonials ── */}
-      <section className="py-24 bg-white">
-        <div className="container-custom">
-          <AnimatedSection animation="fade-in-up" className="text-center mb-16">
-            <h2 className="section-title">Trusted by Leading Agencies</h2>
-            <div className="section-divider" />
-          </AnimatedSection>
-          <div className="grid md:grid-cols-2 gap-10">
-            {[
-              {
-                quote: '"RAAH Technologies transformed our billing process. We reduced claim rejections by 90% in the first month and our cash flow has never been better. The support team is incredible."',
-                name: 'Sarah Johnson',
-                role: 'Director, Caring Hands Home Health',
-                initials: 'SJ',
-                animation: 'slide-in-left',
-              },
-              {
-                quote: '"The mobile app is incredibly easy for our caregivers to use. Training took almost no time at all, and compliance issues have virtually disappeared. Highly recommended!"',
-                name: 'Michael Chen',
-                role: 'Owner, BrightPath Services',
-                initials: 'MC',
-                animation: 'slide-in-right',
-              },
-            ].map((t, i) => (
-              <AnimatedSection key={i} animation={t.animation}>
-                <div className="bg-white p-10 rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl transition-all relative">
-                  <div className="absolute top-8 right-8 text-green-100">
-                    <svg width="60" height="60" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M14.017 21L14.017 18C14.017 16.8954 14.9124 16 16.017 16H19.017C19.5693 16 20.017 15.5523 20.017 15V9C20.017 8.44772 19.5693 8 19.017 8H15.017C14.4647 8 14.017 8.44772 14.017 9V11C14.017 11.5523 13.5693 12 13.017 12H12.017V5H22.017V15C22.017 18.3137 19.3307 21 16.017 21H14.017ZM5.0166 21L5.0166 18C5.0166 16.8954 5.91203 16 7.0166 16H10.0166C10.5689 16 11.0166 15.5523 11.0166 15V9C11.0166 8.44772 10.5689 8 10.0166 8H6.0166C5.46432 8 5.0166 8.44772 5.0166 9V11C5.0166 11.5523 4.56889 12 4.0166 12H3.0166V5H13.0166V15C13.0166 18.3137 10.3303 21 7.0166 21H5.0166Z" />
-                    </svg>
-                  </div>
-                  <div className="flex gap-1 text-yellow-400 mb-6">
-                    {[1,2,3,4,5].map(s => <span key={s} className="text-xl">★</span>)}
-                  </div>
-                  <p style={{ fontFamily: "'Poppins', sans-serif" }} className="text-gray-700 italic mb-8 text-lg leading-relaxed">{t.quote}</p>
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center font-bold text-gray-500">
-                      {t.initials}
-                    </div>
-                    <div>
-                      <p style={{ fontFamily: "'Inter', sans-serif", fontWeight: 700 }} className="text-gray-900 text-lg">{t.name}</p>
-                      <p style={{ fontFamily: "'Poppins', sans-serif" }} className="text-green-600">{t.role}</p>
-                    </div>
-                  </div>
-                </div>
-              </AnimatedSection>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* ══════════════════════════════════════════════════════════════
+          TESTIMONIALS — Trusted by Leading Agencies
+          White section, consistent with Why Choose Us + Workflow.
+          Auto-sliding carousel: 7 testimonials, 2 visible desktop,
+          1 mobile. Pauses on hover. Progress dots + prev/next.
+          No external deps — pure React state + CSS transitions.
+      ══════════════════════════════════════════════════════════════ */}
+      <TestimonialsSection />
 
       {/* ── 5. CTA Section ── */}
       <section className="py-28 bg-green-50 relative overflow-hidden">

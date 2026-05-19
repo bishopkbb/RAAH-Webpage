@@ -1,42 +1,80 @@
+/**
+ * App.css
+ *
+ * Global resets and overrides that extend Tailwind's base layer.
+ * All component tokens, animation keyframes, and @layer definitions
+ * live in index.css — this file handles only what Tailwind cannot.
+ *
+ * NOTE: The original Vite scaffold styles (#root max-width, logo-spin,
+ * .card, .read-the-docs) have been fully removed. They constrained
+ * the layout to 1280px centred with 2rem padding, which broke all
+ * full-width hero and section components.
+ */
+
+/* ─── Box Sizing ──────────────────────────────────────────────────────────── */
+/* Ensure every element respects padding/border in width calculations.        */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* ─── Root ────────────────────────────────────────────────────────────────── */
+/* No max-width or padding here. Layout is managed by Tailwind container      */
+/* utilities (.container-custom in index.css) on a per-section basis.         */
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+/* ─── Scroll Behaviour ────────────────────────────────────────────────────── */
+/* Smooth scrolling for in-page anchor links (e.g. #contact, #features).      */
+html {
+  scroll-behavior: smooth;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* ─── Body Defaults ───────────────────────────────────────────────────────── */
+/* Prevents horizontal overflow on mobile caused by animations or large imgs. */
+body {
+  overflow-x: hidden;
+  min-height: 100dvh;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+/* ─── Image Defaults ──────────────────────────────────────────────────────── */
+/* Prevents images from overflowing their containers unexpectedly.            */
+img {
+  max-width: 100%;
+  display: block;
 }
 
-.card {
-  padding: 2em;
+/* ─── Focus Styles ────────────────────────────────────────────────────────── */
+/* Remove default :focus outline; rely on :focus-visible for keyboard users.  */
+/* All interactive components must implement focus-visible styles explicitly. */
+:focus:not(:focus-visible) {
+  outline: none;
 }
 
-.read-the-docs {
-  color: #888;
+/* ─── Selection ───────────────────────────────────────────────────────────── */
+/* Brand-coloured text selection for a polished premium feel.                 */
+::selection {
+  background-color: #16a34a;
+  color: #ffffff;
+}
+
+/* ─── Scrollbar ───────────────────────────────────────────────────────────── */
+/* Thin, branded scrollbar for Webkit browsers (Chrome, Edge, Safari).        */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+::-webkit-scrollbar-thumb {
+  background: #86efac;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #16a34a;
 }

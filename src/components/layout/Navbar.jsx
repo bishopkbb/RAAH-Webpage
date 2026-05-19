@@ -1,169 +1,534 @@
+/**
+ * Navbar.jsx — RAAH Technologies
+ *
+ * heroMode={true}  → Used inside HeroCarousel on the homepage.
+ *                    The TOPBAR gets a semi-transparent dark green so it blends
+ *                    into the hero overlay. The MAIN NAV BAR is always solid
+ *                    white — brand consistency across every page.
+ *
+ * heroMode={false} → Inner pages. Sticky, always white, shadow on scroll.
+ *
+ * DESIGN RULES (non-negotiable):
+ *   ✦ Navbar background: always #ffffff — no exceptions.
+ *   ✦ Nav links: 17px Inter Bold, #0f172a (near-black). Green (#16a34a) on hover/active.
+ *   ✦ Underline: 2.5px green bar slides in from left on hover (scaleX transform).
+ *   ✦ CTAs: identical height (padding 13px 30px). Ghost = green border. Solid = green fill.
+ *     Both lift 2px + deepen shadow on hover.
+ *   ✦ Topbar: always dark green (#052e16) strip — white text, green-400 icons.
+ *   ✦ On scroll: white bar gains a subtle green-tinted shadow so it lifts
+ *     naturally without looking disconnected from the brand.
+ */
+
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Phone, MapPin, Clock, Facebook, Twitter, Linkedin } from 'lucide-react';
 
-const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
+const Navbar = ({ heroMode = false }) => {
+  const [isOpen,   setIsOpen]   = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
-  const logoUrl = "/raah.png"; 
+  const logoUrl  = '/raah.png';
 
   const navLinks = [
-    { name: 'Home', path: '/' },
-    { name: 'About', path: '/about' },
+    { name: 'Home',     path: '/' },
+    { name: 'About',    path: '/about' },
     { name: 'Services', path: '/services' },
-    { name: 'Contact', path: '/contact' },
+    { name: 'Contact',  path: '/contact' },
   ];
 
   const isActive = (path) => location.pathname === path;
 
-  // Handle scroll effect for navbar
+  // Scroll shadow — only meaningful on inner pages (sticky), but harmless on hero
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const onScroll = () => setScrolled(window.scrollY > 12);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // Prevent body scroll when mobile menu is open
+  // Lock body scroll when mobile menu open
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-    return () => { document.body.style.overflow = 'unset'; };
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
   }, [isOpen]);
 
-  // Close menu on route change
-  useEffect(() => {
-    setIsOpen(false);
-  }, [location]);
-
   return (
-    <nav className={`sticky top-0 z-50 transition-all duration-300 ${scrolled ? 'shadow-lg' : ''}`}>
-      
-      {/* Sophisticated Sub Header - Hidden on Mobile */}
-      <div className="bg-gradient-to-r from-green-900 to-green-800 text-green-50 py-2.5 px-4 text-xs md:text-sm hidden md:block border-b border-green-700">
-        <div className="container-custom flex justify-between items-center">
-          <div className="flex items-center gap-6">
-            <span className="flex items-center gap-2 hover:text-white transition cursor-pointer"><MapPin size={14} className="text-green-400" /> 13891 Oswego Street, Aurora CO</span>
-            <span className="flex items-center gap-2 hover:text-white transition cursor-pointer"><Phone size={14} className="text-green-400" /> +1 (0001) 2222-2890</span>
-            <span className="flex items-center gap-2 text-green-300"><Clock size={14} /> Mon - Fri: 8:00 AM - 6:00 PM</span>
-          </div>
-          <div className="flex items-center gap-6">
-            <div className="flex gap-3 pr-6 border-r border-green-700">
-              <Facebook size={14} className="hover:text-white cursor-pointer transition" />
-              <Twitter size={14} className="hover:text-white cursor-pointer transition" />
-              <Linkedin size={14} className="hover:text-white cursor-pointer transition" />
+    <>
+      {/* ── Sticky wrapper (inner pages) / static wrapper (hero) ── */}
+      <div
+        className={heroMode ? 'w-full' : 'sticky top-0 z-50'}
+        style={{
+          background: '#ffffff',
+          boxShadow: scrolled
+            ? '0 4px 40px rgba(5,46,22,0.09), 0 1px 0 rgba(22,163,74,0.10)'
+            : '0 1px 0 rgba(22,163,74,0.12)',
+          transition: 'box-shadow 0.35s ease',
+        }}
+      >
+
+        {/* ════════════════════════════════════════════════
+            TOPBAR — dark green strip with contact + socials
+            Always dark green (#052e16) — brand anchor.
+        ════════════════════════════════════════════════ */}
+        <div
+          className="hidden md:block"
+          style={{
+            background: '#052e16',
+            borderBottom: '1px solid rgba(74,222,128,0.10)',
+            fontFamily: "'Inter', sans-serif",
+          }}
+        >
+          <div className="container-custom flex justify-between items-center py-2.5">
+
+            {/* Contact details */}
+            <div className="flex items-center gap-7 text-xs">
+              <a
+                href="https://maps.google.com"
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center gap-2 transition-colors duration-200"
+                style={{ color: 'rgba(187,247,208,0.65)' }}
+                onMouseEnter={e => { e.currentTarget.style.color = '#ffffff'; }}
+                onMouseLeave={e => { e.currentTarget.style.color = 'rgba(187,247,208,0.65)'; }}
+              >
+                <MapPin size={13} style={{ color: '#4ade80', flexShrink: 0 }} />
+                13891 Oswego Street, Aurora CO
+              </a>
+              <a
+                href="tel:+10002222890"
+                className="flex items-center gap-2 transition-colors duration-200"
+                style={{ color: 'rgba(187,247,208,0.65)' }}
+                onMouseEnter={e => { e.currentTarget.style.color = '#ffffff'; }}
+                onMouseLeave={e => { e.currentTarget.style.color = 'rgba(187,247,208,0.65)'; }}
+              >
+                <Phone size={13} style={{ color: '#4ade80', flexShrink: 0 }} />
+                +1 (000) 222-2890
+              </a>
+              <span
+                className="flex items-center gap-2 select-none"
+                style={{ color: 'rgba(187,247,208,0.40)' }}
+              >
+                <Clock size={13} style={{ flexShrink: 0 }} />
+                Mon – Fri: 8:00 AM – 6:00 PM
+              </span>
             </div>
+
+            {/* Social icons */}
+            <div className="flex items-center gap-4">
+              {[Facebook, Twitter, Linkedin].map((SocialIcon, i) => (
+                <a
+                  key={i}
+                  href="#"
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{ color: 'rgba(187,247,208,0.40)', transition: 'color 0.2s' }}
+                  onMouseEnter={e => { e.currentTarget.style.color = '#ffffff'; }}
+                  onMouseLeave={e => { e.currentTarget.style.color = 'rgba(187,247,208,0.40)'; }}
+                >
+                  {React.createElement(SocialIcon, { size: 13 })}
+                </a>
+              ))}
+            </div>
+
           </div>
         </div>
-      </div>
 
-      {/* Main Header */}
-      <div className={`bg-white/95 backdrop-blur-sm transition-all duration-300 relative z-[60] ${scrolled ? 'py-2' : 'py-3 md:py-5'}`}>
-        <div className="container-custom">
-          <div className="nav-container relative flex justify-between items-center">
-            {/* Logo */}
-            <Link to="/" className="flex items-center gap-2 z-[60] group">
-              <img src={logoUrl} alt="RAAH" className="nav-logo h-15 w-auto object-contain" />
-              <div className="hidden xl:block ml-2">
-                <span className="text-2xl font-bold text-gray-800 font-serif leading-none block group-hover:text-green-700 transition"></span>
-                {/*<span className="text-xs text-green-600 font-sans tracking-widest uppercase block">Home Health</span>*/}
-              </div>
-            </Link>
+        {/* ════════════════════════════════════════════════
+            MAIN NAV BAR — white, always
+        ════════════════════════════════════════════════ */}
+        <div
+          style={{
+            padding: scrolled ? '10px 0' : '18px 0',
+            transition: 'padding 0.3s ease',
+          }}
+        >
+          <div className="container-custom">
+            <div className="flex items-center justify-between gap-6">
 
-            {/* Desktop Nav */}
-            <div className="hidden lg:flex items-center gap-8">
-              {navLinks.map((link) => (
-                <Link 
-                  key={link.name} 
-                  to={link.path}
-                  className={`relative font-semibold text-[15px] tracking-wide transition-colors py-2 group ${isActive(link.path) ? 'text-green-700' : 'text-gray-600 hover:text-green-700'}`}
+              {/* ── Logo ── */}
+              <Link
+                to="/"
+                className="shrink-0"
+                style={{ display: 'inline-flex', alignItems: 'center' }}
+                onMouseEnter={e => {
+                  e.currentTarget.querySelector('img').style.transform = 'scale(1.08)';
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.querySelector('img').style.transform = 'scale(1)';
+                }}
+              >
+                <img
+                  src={logoUrl}
+                  alt="RAAH Technologies"
+                  className="w-auto object-contain"
+                  style={{
+                    height: scrolled ? '52px' : '64px',   // bigger — was 40/50px
+                    display: 'block',
+                    transition: 'height 0.3s ease, transform 0.25s cubic-bezier(0.22, 1, 0.36, 1)',
+                    transformOrigin: 'left center',
+                  }}
+                />
+              </Link>
+
+              {/* ── Desktop nav links ── */}
+              <nav
+                className="hidden lg:flex items-center flex-1 justify-center"
+                style={{ gap: '2.5rem' }}
+                aria-label="Main navigation"
+              >
+                {navLinks.map((link) => {
+                  const active = isActive(link.path);
+                  return (
+                    <Link
+                      key={link.name}
+                      to={link.path}
+                      className="relative group select-none whitespace-nowrap"
+                      style={{
+                        fontFamily: "'Inter', sans-serif",
+                        fontWeight: 700,
+                        fontSize: '1.0625rem',       // 17px — confident, premium
+                        letterSpacing: '0.01em',
+                        color: active ? '#16a34a' : '#0f172a',
+                        padding: '6px 0',
+                        display: 'inline-block',
+                        transition: 'color 0.2s ease',
+                      }}
+                      onMouseEnter={e => {
+                        e.currentTarget.style.color = '#16a34a';
+                        const bar = e.currentTarget.querySelector('[data-underline]');
+                        if (bar) bar.style.transform = 'scaleX(1)';
+                      }}
+                      onMouseLeave={e => {
+                        e.currentTarget.style.color = active ? '#16a34a' : '#0f172a';
+                        if (!active) {
+                          const bar = e.currentTarget.querySelector('[data-underline]');
+                          if (bar) bar.style.transform = 'scaleX(0)';
+                        }
+                      }}
+                    >
+                      {link.name}
+
+                      {/* Green slide-in underline */}
+                      <span
+                        data-underline="true"
+                        aria-hidden="true"
+                        style={{
+                          position: 'absolute',
+                          bottom: '-1px',
+                          left: 0,
+                          width: '100%',
+                          height: '2.5px',
+                          borderRadius: '999px',
+                          background: '#16a34a',
+                          display: 'block',
+                          transform: active ? 'scaleX(1)' : 'scaleX(0)',
+                          transformOrigin: 'left center',
+                          transition: 'transform 0.25s cubic-bezier(0.22, 1, 0.36, 1)',
+                        }}
+                      />
+                    </Link>
+                  );
+                })}
+              </nav>
+
+              {/* ── Desktop CTAs ── */}
+              <div
+                className="hidden lg:flex items-center gap-3 shrink-0"
+                style={{
+                  paddingLeft: '1.75rem',
+                  borderLeft: '1px solid rgba(22,163,74,0.18)',
+                }}
+              >
+
+                {/* Ghost CTA — Get Pricing */}
+                <Link
+                  to="/pricing"
+                  className="inline-flex items-center justify-center whitespace-nowrap font-bold rounded-full"
+                  style={{
+                    fontFamily: "'Inter', sans-serif",
+                    fontSize: '0.875rem',
+                    fontWeight: 700,
+                    letterSpacing: '0.06em',
+                    textTransform: 'uppercase',
+                    padding: '13px 30px',           // ← bigger than before
+                    border: '2px solid #16a34a',
+                    color: '#16a34a',
+                    background: 'transparent',
+                    transition: 'all 0.22s ease',
+                    display: 'inline-flex',
+                  }}
+                  onMouseEnter={e => {
+                    e.currentTarget.style.background   = '#16a34a';
+                    e.currentTarget.style.color        = '#ffffff';
+                    e.currentTarget.style.transform    = 'translateY(-2px)';
+                    e.currentTarget.style.boxShadow    = '0 8px 24px rgba(22,163,74,0.28)';
+                  }}
+                  onMouseLeave={e => {
+                    e.currentTarget.style.background   = 'transparent';
+                    e.currentTarget.style.color        = '#16a34a';
+                    e.currentTarget.style.transform    = 'translateY(0)';
+                    e.currentTarget.style.boxShadow    = 'none';
+                  }}
                 >
-                  {link.name}
-                  <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-green-600 transform origin-left transition-transform duration-300 ${isActive(link.path) ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}`}></span>
+                  Get Pricing
                 </Link>
-              ))}
-              
-              <div className="flex items-center gap-3 ml-4 pl-4 border-l border-gray-200">
-                <Link to="/pricing" className="text-green-700 font-bold hover:bg-green-50 px-5 py-2.5 border-2 border-green-600 rounded-full transition-all text-sm uppercase tracking-wide">
-                  Pricing
-                </Link>
-                <Link to="/demo" className="btn-nav shadow-green-200 hover:shadow-green-300 uppercase text-xs tracking-wider px-6 py-3">
+
+                {/* Solid CTA — Request Demo */}
+                <Link
+                  to="/demo"
+                  className="inline-flex items-center justify-center whitespace-nowrap font-bold rounded-full text-white"
+                  style={{
+                    fontFamily: "'Inter', sans-serif",
+                    fontSize: '0.875rem',
+                    fontWeight: 700,
+                    letterSpacing: '0.06em',
+                    textTransform: 'uppercase',
+                    padding: '13px 30px',           // ← same as ghost — equal height
+                    background: '#16a34a',
+                    border: '2px solid #16a34a',    // same border-width keeps them equal height
+                    boxShadow: '0 4px 18px rgba(22,163,74,0.30)',
+                    transition: 'all 0.22s ease',
+                  }}
+                  onMouseEnter={e => {
+                    e.currentTarget.style.background  = '#ffffff';
+                    e.currentTarget.style.borderColor = '#16a34a';
+                    e.currentTarget.style.color       = '#16a34a';
+                    e.currentTarget.style.boxShadow   = '0 10px 32px rgba(22,163,74,0.22)';
+                    e.currentTarget.style.transform   = 'translateY(-2px)';
+                  }}
+                  onMouseLeave={e => {
+                    e.currentTarget.style.background  = '#16a34a';
+                    e.currentTarget.style.borderColor = '#16a34a';
+                    e.currentTarget.style.color       = '#ffffff';
+                    e.currentTarget.style.boxShadow   = '0 4px 18px rgba(22,163,74,0.30)';
+                    e.currentTarget.style.transform   = 'translateY(0)';
+                  }}
+                >
                   Request Demo
                 </Link>
-              </div>
-            </div>
 
-            {/* Mobile Toggle Button - EXPLICIT HIGH Z-INDEX */}
-            <button 
-              onClick={() => setIsOpen(!isOpen)} 
-              className="lg:hidden p-2 text-gray-700 hover:text-green-600 focus:outline-none z-[60] relative"
-              aria-label={isOpen ? "Close Menu" : "Open Menu"}
-            >
-              {isOpen ? <X size={28} /> : <Menu size={28} />}
-            </button>
+              </div>
+
+              {/* ── Mobile hamburger ── */}
+              <button
+                onClick={() => setIsOpen(p => !p)}
+                className="lg:hidden p-2 rounded-lg transition-all duration-200 relative z-[60]"
+                style={{
+                  color: '#0f172a',
+                  background: isOpen ? '#f0fdf4' : 'transparent',
+                }}
+                aria-label={isOpen ? 'Close menu' : 'Open menu'}
+                aria-expanded={isOpen}
+              >
+                {isOpen
+                  ? <X    size={26} strokeWidth={2} />
+                  : <Menu size={26} strokeWidth={2} />
+                }
+              </button>
+
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Mobile Menu Overlay */}
-      {/* Uses fixed positioning to cover entire screen, top-0 left-0 */}
-      <div 
-        className={`lg:hidden fixed inset-0 bg-white z-50 transition-transform duration-300 ease-in-out transform ${
+      </div>{/* end sticky wrapper */}
+
+
+      {/* ════════════════════════════════════════════════════════
+          MOBILE MENU — full-screen slide-in from right
+      ════════════════════════════════════════════════════════ */}
+      <div
+        className={`lg:hidden fixed inset-0 z-50 transition-transform duration-300 ease-in-out ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
-        style={{ height: '100dvh', width: '100vw' }} // Dynamic viewport height
+        style={{ background: '#ffffff', height: '100dvh' }}
+        aria-hidden={!isOpen}
       >
-        <div className="flex flex-col h-full overflow-y-auto">
-          {/* Spacer for the top header area so content doesn't sit under the logo/close button */}
-          <div className="h-20 shrink-0"></div>
 
-          <div className="px-6 py-4 flex flex-col gap-6">
-            {navLinks.map((link) => (
-              <Link 
-                key={link.name} 
-                to={link.path} 
+        {/* Menu header — aligned to navbar height */}
+        <div
+          className="flex items-center justify-between px-6 shrink-0"
+          style={{
+            height: '72px',
+            borderBottom: '1px solid #f0fdf4',
+            background: '#ffffff',
+          }}
+        >
+          <Link to="/" onClick={() => setIsOpen(false)}>
+            <img src={logoUrl} alt="RAAH Technologies" style={{ height: '40px' }} />
+          </Link>
+          <button
+            onClick={() => setIsOpen(false)}
+            className="p-2 rounded-lg transition-colors duration-200"
+            style={{ color: '#6b7280' }}
+            onMouseEnter={e => {
+              e.currentTarget.style.color      = '#16a34a';
+              e.currentTarget.style.background = '#f0fdf4';
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.color      = '#6b7280';
+              e.currentTarget.style.background = 'transparent';
+            }}
+            aria-label="Close menu"
+          >
+            <X size={26} strokeWidth={2} />
+          </button>
+        </div>
+
+        {/* Scrollable body */}
+        <div className="overflow-y-auto" style={{ height: 'calc(100dvh - 72px)' }}>
+          <div className="px-6 pt-4 pb-16 flex flex-col">
+
+            {/* Nav links */}
+            <nav className="flex flex-col" aria-label="Mobile navigation">
+              {navLinks.map((link) => {
+                const active = isActive(link.path);
+                return (
+                  <Link
+                    key={link.name}
+                    to={link.path}
+                    onClick={() => setIsOpen(false)}
+                    className="flex items-center justify-between py-4 font-bold"
+                    style={{
+                      fontFamily: "'Inter', sans-serif",
+                      fontSize: '1.25rem',
+                      fontWeight: 700,
+                      borderBottom: '1px solid #f8fffe',
+                      color: active ? '#16a34a' : '#0f172a',
+                      paddingLeft: active ? '14px' : '2px',
+                      borderLeft: `3px solid ${active ? '#16a34a' : 'transparent'}`,
+                      transition: 'all 0.2s ease',
+                    }}
+                  >
+                    {link.name}
+                    {active && (
+                      <span
+                        style={{
+                          fontSize: '0.65rem',
+                          fontWeight: 700,
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.1em',
+                          padding: '3px 10px',
+                          borderRadius: '999px',
+                          background: '#f0fdf4',
+                          color: '#16a34a',
+                        }}
+                      >
+                        Current
+                      </span>
+                    )}
+                  </Link>
+                );
+              })}
+            </nav>
+
+            {/* Mobile CTAs */}
+            <div className="flex flex-col gap-3 mt-8">
+              <Link
+                to="/pricing"
                 onClick={() => setIsOpen(false)}
-                className={`text-2xl font-serif font-bold py-3 border-b border-gray-100 ${isActive(link.path) ? 'text-green-700 pl-4 border-l-4 border-green-600 bg-green-50' : 'text-gray-800'}`}
-              >
-                {link.name}
-              </Link>
-            ))}
-            
-            <div className="flex flex-col gap-4 mt-4">
-              <Link 
-                to="/pricing" 
-                onClick={() => setIsOpen(false)}
-                className="text-green-700 font-bold border-2 border-green-600 py-4 rounded-xl w-full text-center text-lg hover:bg-green-50 transition"
+                className="w-full text-center font-bold rounded-2xl"
+                style={{
+                  fontFamily: "'Inter', sans-serif",
+                  fontSize: '0.95rem',
+                  fontWeight: 700,
+                  letterSpacing: '0.06em',
+                  textTransform: 'uppercase',
+                  padding: '16px 24px',
+                  border: '2px solid #16a34a',
+                  color: '#16a34a',
+                  background: 'transparent',
+                  display: 'block',
+                }}
               >
                 Get Pricing
               </Link>
-              <Link 
-                to="/demo" 
+              <Link
+                to="/demo"
                 onClick={() => setIsOpen(false)}
-                className="bg-green-600 text-white py-4 rounded-xl font-bold w-full text-center text-lg shadow-lg hover:bg-green-700 transition"
+                className="w-full text-center font-bold rounded-2xl text-white"
+                style={{
+                  fontFamily: "'Inter', sans-serif",
+                  fontSize: '0.95rem',
+                  fontWeight: 700,
+                  letterSpacing: '0.06em',
+                  textTransform: 'uppercase',
+                  padding: '16px 24px',
+                  background: '#16a34a',
+                  border: '2px solid #16a34a',
+                  boxShadow: '0 6px 24px rgba(22,163,74,0.28)',
+                  display: 'block',
+                }}
               >
                 Request Demo
               </Link>
             </div>
-            
-            {/* Mobile Contact Info */}
-            <div className="mt-8 pt-8 border-t border-gray-200 pb-10">
-              <h4 className="text-gray-400 uppercase text-xs font-bold tracking-widest mb-6">Contact Info</h4>
-              <div className="space-y-4 text-gray-600">
-                <p className="flex items-center gap-4 text-lg"><Phone size={20} className="text-green-600" /> +1 (0001) 2222-2890</p>
-                <p className="flex items-start gap-4 text-lg"><MapPin size={20} className="text-green-600 mt-1" /> 13891 Oswego Street, Aurora CO </p>
-                <p className="flex items-center gap-4 text-lg"><Clock size={20} className="text-green-600" /> Mon - Fri: 8am - 6pm</p>
-              </div>
+
+            {/* Contact block */}
+            <div
+              className="mt-10 pt-8 flex flex-col gap-5"
+              style={{ borderTop: '1px solid #f0fdf4' }}
+            >
+              <p
+                style={{
+                  fontFamily: "'Inter', sans-serif",
+                  fontSize: '0.68rem',
+                  fontWeight: 700,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.12em',
+                  color: '#9ca3af',
+                }}
+              >
+                Contact
+              </p>
+              {[
+                { icon: Phone,  text: '+1 (000) 222-2890',          href: 'tel:+10002222890' },
+                { icon: MapPin, text: '13891 Oswego St, Aurora CO', href: '#'                },
+                { icon: Clock,  text: 'Mon – Fri: 8am – 6pm',       href: null               },
+              ].map(({ icon, text, href }) => (
+                <div key={text} className="flex items-center gap-4">
+                  <div
+                    className="shrink-0 flex items-center justify-center rounded-full"
+                    style={{ width: '36px', height: '36px', background: '#f0fdf4' }}
+                  >
+                    {React.createElement(icon, { size: 16, className: 'text-green-600' })}
+                  </div>
+                  {href
+                    ? (
+                      <a
+                        href={href}
+                        style={{
+                          fontFamily: "'Inter', sans-serif",
+                          fontSize: '0.9375rem',
+                          fontWeight: 500,
+                          color: '#4b5563',
+                          transition: 'color 0.2s',
+                        }}
+                        onMouseEnter={e => { e.currentTarget.style.color = '#16a34a'; }}
+                        onMouseLeave={e => { e.currentTarget.style.color = '#4b5563'; }}
+                      >
+                        {text}
+                      </a>
+                    )
+                    : (
+                      <span
+                        style={{
+                          fontFamily: "'Inter', sans-serif",
+                          fontSize: '0.9375rem',
+                          fontWeight: 500,
+                          color: '#9ca3af',
+                        }}
+                      >
+                        {text}
+                      </span>
+                    )
+                  }
+                </div>
+              ))}
             </div>
+
           </div>
         </div>
       </div>
-    </nav>
+    </>
   );
 };
 

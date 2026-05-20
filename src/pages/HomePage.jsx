@@ -15,7 +15,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import Layout from '../components/layout/Layout';
 import HeroCarousel from '../components/home/HeroCarousel';
 import Navbar from '../components/layout/Navbar';
-import { ArrowRight, BarChart3, Users } from 'lucide-react';
+import { ArrowRight, BarChart3 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 // ─── Scroll animation hook ────────────────────────────────────────────────────
@@ -2094,7 +2094,7 @@ const HomePage = () => {
           style={{
             position: 'absolute',
             inset: 0,
-            backgroundImage: 'radial-gradient(circle, rgba(74,222,128,0.06) 1px, transparent 1px)',
+            backgroundImage: 'radial-gradient(circle, rgba(5,46,22,0.04) 1px, transparent 1px)',
             backgroundSize: '32px 32px',
             pointerEvents: 'none',
           }}
@@ -2323,29 +2323,304 @@ const HomePage = () => {
       ══════════════════════════════════════════════════════════════ */}
       <TestimonialsSection />
 
-      {/* ── 5. CTA Section ── */}
-      <section className="py-28 bg-green-50 relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-green-300 via-green-500 to-green-300" />
-        <div className="container-custom relative z-10 text-center">
-          <AnimatedSection animation="zoom-in">
+      {/* ══════════════════════════════════════════════════════════════
+          CTA — Ready to Transform Your Agency?
+          White background — clean close before the green footer.
+          Testimonials (white) -> CTA (white) -> Footer (green) flows correctly.
+          Three stat callouts above CTAs: social proof at decision moment.
+      ══════════════════════════════════════════════════════════════ */}
+      <section
+        style={{
+          background: '#ffffff',
+          padding: '130px 0 140px',
+          position: 'relative',
+          overflow: 'hidden',
+        }}
+      >
+        {/* Dot grid */}
+        <div
+          aria-hidden="true"
+          style={{
+            position: 'absolute',
+            inset: 0,
+            backgroundImage: 'radial-gradient(circle, rgba(5,46,22,0.04) 1px, transparent 1px)',
+            backgroundSize: '32px 32px',
+            pointerEvents: 'none',
+          }}
+        />
+
+        {/* Ghost watermark */}
+        <div
+          aria-hidden="true"
+          style={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            fontFamily: "'Inter', sans-serif",
+            fontWeight: 900,
+            fontSize: 'clamp(80px, 14vw, 180px)',
+            color: 'rgba(5,46,22,0.03)',
+            letterSpacing: '-0.05em',
+            whiteSpace: 'nowrap',
+            userSelect: 'none',
+            pointerEvents: 'none',
+            lineHeight: 1,
+          }}
+        >
+          RAAH
+        </div>
+
+        {/* Radial glow — top right */}
+        <div
+          aria-hidden="true"
+          style={{
+            position: 'absolute',
+            top: '-100px', right: '-100px',
+            width: '600px', height: '600px',
+            borderRadius: '50%',
+            background: 'radial-gradient(circle, rgba(22,163,74,0.07) 0%, transparent 70%)',
+            pointerEvents: 'none',
+          }}
+        />
+        {/* Radial glow — bottom left */}
+        <div
+          aria-hidden="true"
+          style={{
+            position: 'absolute',
+            bottom: '-100px', left: '-100px',
+            width: '500px', height: '500px',
+            borderRadius: '50%',
+            background: 'radial-gradient(circle, rgba(22,163,74,0.06) 0%, transparent 70%)',
+            pointerEvents: 'none',
+          }}
+        />
+
+        <div className="container-custom" style={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
+
+          {/* Eyebrow */}
+          <Reveal delay={0}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', marginBottom: '28px' }}>
+              <div style={{ width: '32px', height: '1.5px', background: '#16a34a', borderRadius: '999px' }} />
+              <span
+                style={{
+                  fontFamily: "'Poppins', sans-serif",
+                  fontSize: '0.75rem',
+                  fontWeight: 600,
+                  letterSpacing: '0.2em',
+                  textTransform: 'uppercase',
+                  color: '#16a34a',
+                }}
+              >
+                Get Started
+              </span>
+              <div style={{ width: '32px', height: '1.5px', background: '#16a34a', borderRadius: '999px' }} />
+            </div>
+          </Reveal>
+
+          {/* Heading */}
+          <Reveal delay={80}>
             <h2
-              style={{ fontFamily: "'Inter', sans-serif", fontWeight: 900 }}
-              className="text-4xl md:text-5xl text-gray-900 mb-8 leading-tight"
+              style={{
+                fontFamily: "'Inter', sans-serif",
+                fontWeight: 900,
+                fontSize: 'clamp(2.25rem, 5vw, 3.75rem)',
+                letterSpacing: '-0.03em',
+                lineHeight: 1.08,
+                color: '#0f172a',
+                marginBottom: '20px',
+                maxWidth: '820px',
+                margin: '0 auto 20px',
+              }}
             >
-              Ready to Transform Your Agency?
+              Ready to{' '}
+              <span style={{ color: '#16a34a' }}>Transform</span>{' '}
+              Your Agency?
             </h2>
-            <p style={{ fontFamily: "'Poppins', sans-serif" }} className="text-xl text-gray-600 mb-12 max-w-2xl mx-auto">
-              Get started with a personalised demo today. See exactly how RAAH can solve your specific challenges. No commitment required.
+          </Reveal>
+
+          {/* Body */}
+          <Reveal delay={150}>
+            <p
+              style={{
+                fontFamily: "'Poppins', sans-serif",
+                fontSize: 'clamp(1.1rem, 1.6vw, 1.3rem)',
+                fontWeight: 500,
+                lineHeight: 1.75,
+                color: '#374151',
+                maxWidth: '580px',
+                margin: '0 auto 64px',
+              }}
+            >
+              Book a personalised demo today. See exactly how RAAH solves your specific challenges with no commitment required.
             </p>
-            <div className="flex flex-col sm:flex-row justify-center gap-6">
-              <Link to="/demo" className="btn-primary text-xl px-12 py-5 shadow-2xl">
-                Schedule Demo <Users size={20} />
+          </Reveal>
+
+          {/* Stat callouts — social proof at the decision moment */}
+          <Reveal delay={220}>
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                flexWrap: 'wrap',
+                gap: '0',
+                marginBottom: '56px',
+                maxWidth: '680px',
+                margin: '0 auto 56px',
+              }}
+            >
+              {[
+                { value: '99.2%', label: 'Billing Accuracy' },
+                { value: '90%',   label: 'Fewer Claim Rejections' },
+                { value: '< 5min', label: 'Visit Documentation' },
+              ].map((stat, i) => (
+                <div
+                  key={stat.label}
+                  style={{
+                    flex: '1',
+                    minWidth: '160px',
+                    padding: '28px 24px',
+                    borderRight: i < 2 ? '1px solid rgba(22,163,74,0.15)' : 'none',
+                    textAlign: 'center',
+                  }}
+                >
+                  <p
+                    style={{
+                      fontFamily: "'Inter', sans-serif",
+                      fontWeight: 900,
+                      fontSize: 'clamp(2rem, 3.5vw, 2.75rem)',
+                      letterSpacing: '-0.03em',
+                      color: '#052e16',
+                      lineHeight: 1,
+                      marginBottom: '8px',
+                    }}
+                  >
+                    {stat.value}
+                  </p>
+                  <p
+                    style={{
+                      fontFamily: "'Poppins', sans-serif",
+                      fontSize: '0.78rem',
+                      fontWeight: 500,
+                      color: '#64748b',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.12em',
+                    }}
+                  >
+                    {stat.label}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </Reveal>
+
+          {/* CTAs */}
+          <Reveal delay={300}>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '16px',
+              }}
+              className="sm:flex-row sm:justify-center"
+            >
+              {/* Primary — Schedule Demo */}
+              <Link
+                to="/demo"
+                style={{
+                  fontFamily: "'Inter', sans-serif",
+                  fontWeight: 700,
+                  fontSize: '0.9375rem',
+                  letterSpacing: '0.07em',
+                  textTransform: 'uppercase',
+                  padding: '18px 44px',
+                  borderRadius: '999px',
+                  background: '#16a34a',
+                  color: '#ffffff',
+                  border: '2px solid #16a34a',
+                  boxShadow: '0 8px 32px rgba(22,163,74,0.40)',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '10px',
+                  textDecoration: 'none',
+                  transition: 'all 0.25s ease',
+                  whiteSpace: 'nowrap',
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.background  = 'transparent';
+                  e.currentTarget.style.color       = '#16a34a';
+                  e.currentTarget.style.borderColor = '#16a34a';
+                  e.currentTarget.style.transform   = 'translateY(-3px)';
+                  e.currentTarget.style.boxShadow   = 'none';
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.background  = '#16a34a';
+                  e.currentTarget.style.color       = '#ffffff';
+                  e.currentTarget.style.borderColor = '#16a34a';
+                  e.currentTarget.style.transform   = 'translateY(0)';
+                  e.currentTarget.style.boxShadow   = '0 8px 32px rgba(22,163,74,0.35)';
+                }}
+              >
+                Schedule a Demo
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
               </Link>
-              <Link to="/contact" className="btn-secondary text-xl px-12 py-5 border-2">
-                Contact Sales
+
+              {/* Secondary — Contact Sales */}
+              <Link
+                to="/contact"
+                style={{
+                  fontFamily: "'Inter', sans-serif",
+                  fontWeight: 700,
+                  fontSize: '0.9375rem',
+                  letterSpacing: '0.07em',
+                  textTransform: 'uppercase',
+                  padding: '18px 44px',
+                  borderRadius: '999px',
+                  background: 'transparent',
+                  color: '#16a34a',
+                  border: '2px solid #16a34a',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '10px',
+                  textDecoration: 'none',
+                  transition: 'all 0.25s ease',
+                  whiteSpace: 'nowrap',
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.background  = '#16a34a';
+                  e.currentTarget.style.borderColor = '#16a34a';
+                  e.currentTarget.style.color       = '#ffffff';
+                  e.currentTarget.style.transform   = 'translateY(-3px)';
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.background  = 'transparent';
+                  e.currentTarget.style.borderColor = '#16a34a';
+                  e.currentTarget.style.color       = '#16a34a';
+                  e.currentTarget.style.transform   = 'translateY(0)';
+                }}
+              >
+                Talk to Sales
               </Link>
             </div>
-          </AnimatedSection>
+
+            {/* No-commitment reassurance */}
+            <p
+              style={{
+                fontFamily: "'Poppins', sans-serif",
+                fontSize: '0.8rem',
+                fontWeight: 400,
+                color: 'rgba(22,163,74,0.55)',
+                marginTop: '24px',
+                letterSpacing: '0.04em',
+              }}
+            >
+              No credit card required. Setup in under 24 hours.
+            </p>
+          </Reveal>
+
         </div>
       </section>
 

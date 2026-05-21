@@ -56,7 +56,7 @@ const Reveal = ({ children, delay = 0, className = '' }) => {
 };
 
 // ─── Shared decorations ───────────────────────────────────────────────────────
-const DotGrid = ({ color = 'rgba(5,46,22,0.08)' }) => (
+const DotGrid = ({ color = 'rgba(5,46,22,0.06)' }) => (
   <div aria-hidden="true" style={{
     position: 'absolute', inset: 0,
     backgroundImage: `radial-gradient(circle, ${color} 1px, transparent 1px)`,
@@ -64,7 +64,7 @@ const DotGrid = ({ color = 'rgba(5,46,22,0.08)' }) => (
   }} />
 );
 
-const Watermark = ({ color = 'rgba(5,46,22,0.06)' }) => (
+const Watermark = ({ color = 'transparent' }) => (
   <div aria-hidden="true" style={{
     position: 'absolute', top: '50%', left: '50%',
     transform: 'translate(-50%, -50%)',
@@ -86,16 +86,16 @@ const RadialGlow = ({ top, right, bottom, left, size = 420, opacity = 0.07 }) =>
 
 const Eyebrow = ({ label, light = false }) => (
   <div style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
-    <div style={{ width: '32px', height: '1.5px', background: light ? '#4ade80' : '#16a34a', borderRadius: '999px' }} />
-    <span style={{ fontFamily: FP, fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: light ? '#4ade80' : '#16a34a' }}>
+    <div style={{ width: '32px', height: '1.5px', background: light ? '#ffffff' : '#16a34a', borderRadius: '999px' }} />
+    <span style={{ fontFamily: FP, fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: light ? '#ffffff' : '#16a34a' }}>
       {label}
     </span>
-    <div style={{ width: '32px', height: '1.5px', background: light ? '#4ade80' : '#16a34a', borderRadius: '999px' }} />
+    <div style={{ width: '32px', height: '1.5px', background: light ? '#ffffff' : '#16a34a', borderRadius: '999px' }} />
   </div>
 );
 
 const WaveDivider = ({ topColor, bottomColor, flip = false }) => (
-  <div style={{ position: 'relative', height: 'clamp(40px, 6vw, 80px)', overflow: 'hidden', background: topColor, marginBottom: '-1px' }}>
+  <div style={{ position: 'relative', height: '80px', overflow: 'hidden', background: topColor, marginBottom: '-1px' }}>
     <svg viewBox="0 0 1440 80" preserveAspectRatio="none" style={{
       position: 'absolute', bottom: 0, left: 0, width: '100%', height: '100%',
       transform: flip ? 'scaleX(-1)' : 'none',
@@ -313,22 +313,20 @@ const ServiceCard = ({ service, delay }) => {
         onMouseLeave={() => setHovered(false)}
         style={{
           background: hovered
-            ? 'linear-gradient(145deg, #15803d 0%, #166534 60%, #14532d 100%)'
-            : 'linear-gradient(145deg, #166534 0%, #14532d 60%, #052e16 100%)',
+            ? 'linear-gradient(145deg, #1db954 0%, #16a34a 60%, #0d8a3e 100%)'
+            : '#ffffff',
           borderRadius: '20px', overflow: 'hidden',
           position: 'relative', height: '100%',
           boxShadow: hovered
             ? '0 24px 64px rgba(5,46,22,0.28), 0 4px 16px rgba(22,163,74,0.20), inset 0 1px 0 rgba(74,222,128,0.15)'
-            : '0 4px 20px rgba(5,46,22,0.12), inset 0 1px 0 rgba(74,222,128,0.08)',
+            : '0 4px 20px rgba(5,46,22,0.08)',
           transform: hovered ? 'translateY(-8px) scale(1.01)' : 'translateY(0) scale(1)',
           transition: 'all 0.4s cubic-bezier(0.22, 1, 0.36, 1)',
           border: '1px solid',
-          borderColor: hovered ? 'rgba(74,222,128,0.30)' : 'rgba(74,222,128,0.12)',
-          width: '100%',
-          maxWidth: '420px',
-          margin: '0 auto',
+          borderColor: hovered ? 'rgba(74,222,128,0.30)' : 'rgba(22,163,74,0.14)',
         }}
       >
+        {/* Shimmer */}
         <div aria-hidden="true" style={{
           position: 'absolute', top: 0,
           left: hovered ? '120%' : '-60%',
@@ -338,47 +336,52 @@ const ServiceCard = ({ service, delay }) => {
           transition: 'left 0.7s cubic-bezier(0.22, 1, 0.36, 1)',
           pointerEvents: 'none',
         }} />
+        {/* Top accent line */}
         <div style={{
           height: '2px',
           background: hovered
             ? 'linear-gradient(to right, #4ade80, #86efac, #4ade80)'
-            : 'linear-gradient(to right, rgba(74,222,128,0.40), rgba(74,222,128,0.15))',
+            : 'linear-gradient(to right, #16a34a, #22c55e)',
           transition: 'background 0.4s ease',
         }} />
         <div style={{ padding: '36px 32px 32px', position: 'relative', zIndex: 1 }}>
+          {/* Icon */}
           <div style={{
             width: '72px', height: '72px', borderRadius: '18px',
             background: '#ffffff',
             border: `1.5px solid ${hovered ? 'rgba(22,163,74,0.35)' : 'rgba(22,163,74,0.25)'}`,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             marginBottom: '28px', position: 'relative', transition: 'all 0.35s ease',
-            margin: '0 auto 28px',
           }}>
             <div aria-hidden="true" style={{
               position: 'absolute', inset: '-10px', borderRadius: '26px',
               background: hovered
                 ? 'radial-gradient(circle, rgba(74,222,128,0.20) 0%, transparent 70%)'
-                : 'radial-gradient(circle, rgba(74,222,128,0.08) 0%, transparent 70%)',
+                : 'radial-gradient(circle, rgba(22,163,74,0.10) 0%, transparent 70%)',
               pointerEvents: 'none', transition: 'background 0.4s ease',
             }} />
             <Icon />
           </div>
-          <p style={{ fontFamily: FP, fontSize: '0.78rem', fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', color: hovered ? '#86efac' : '#4ade80', marginBottom: '8px', transition: 'color 0.3s ease', textAlign: 'center' }}>
+          {/* Label */}
+          <p style={{ fontFamily: FP, fontSize: '0.78rem', fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', color: hovered ? '#ffffff' : '#16a34a', marginBottom: '8px', transition: 'color 0.3s ease' }}>
             {label}
           </p>
-          <h3 style={{ fontFamily: FI, fontSize: '1.375rem', fontWeight: 800, letterSpacing: '-0.02em', color: '#ffffff', marginBottom: '14px', lineHeight: 1.25, textAlign: 'center' }}>
+          {/* Title */}
+          <h3 style={{ fontFamily: FI, fontSize: '1.375rem', fontWeight: 800, letterSpacing: '-0.02em', color: hovered ? '#ffffff' : '#16a34a', marginBottom: '14px', lineHeight: 1.25, transition: 'color 0.3s ease' }}>
             {title}
           </h3>
-          <p style={{ fontFamily: FP, fontSize: '1rem', fontWeight: 400, lineHeight: 1.80, color: hovered ? '#ffffff' : 'rgba(255,255,255,0.88)', marginBottom: '28px', transition: 'color 0.3s ease', textAlign: 'center' }}>
+          {/* Desc */}
+          <p style={{ fontFamily: FP, fontSize: '1rem', fontWeight: 400, lineHeight: 1.80, color: hovered ? '#ffffff' : '#1a1a1a', marginBottom: '28px', transition: 'color 0.3s ease' }}>
             {desc}
           </p>
-          <div style={{ paddingTop: '20px', borderTop: `1px solid ${hovered ? 'rgba(74,222,128,0.25)' : 'rgba(74,222,128,0.12)'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '14px', transition: 'all 0.35s ease' }}>
-            <div style={{ width: '4px', height: '36px', borderRadius: '999px', background: hovered ? 'linear-gradient(to bottom, #86efac, #4ade80)' : 'linear-gradient(to bottom, #4ade80, rgba(74,222,128,0.40))', flexShrink: 0, transition: 'background 0.35s ease' }} />
+          {/* Metric */}
+          <div style={{ paddingTop: '20px', borderTop: `1px solid ${hovered ? 'rgba(255,255,255,0.25)' : 'rgba(22,163,74,0.15)'}`, display: 'flex', alignItems: 'center', gap: '14px', transition: 'all 0.35s ease' }}>
+            <div style={{ width: '4px', height: '36px', borderRadius: '999px', background: hovered ? 'linear-gradient(to bottom, #86efac, #4ade80)' : 'linear-gradient(to bottom, #16a34a, rgba(22,163,74,0.40))', flexShrink: 0, transition: 'background 0.35s ease' }} />
             <div>
-              <p style={{ fontFamily: FI, fontSize: '1.625rem', fontWeight: 900, color: hovered ? '#ffffff' : 'rgba(255,255,255,0.90)', lineHeight: 1, letterSpacing: '-0.02em', transition: 'color 0.3s ease' }}>
+              <p style={{ fontFamily: FI, fontSize: '1.625rem', fontWeight: 900, color: hovered ? '#ffffff' : '#0a6b30', lineHeight: 1, letterSpacing: '-0.02em', transition: 'color 0.3s ease' }}>
                 {metric}
               </p>
-              <p style={{ fontFamily: FP, fontSize: '0.78rem', fontWeight: 500, color: hovered ? '#86efac' : 'rgba(74,222,128,0.65)', textTransform: 'uppercase', letterSpacing: '0.1em', marginTop: '3px', transition: 'color 0.3s ease' }}>
+              <p style={{ fontFamily: FP, fontSize: '0.78rem', fontWeight: 500, color: hovered ? '#ffffff' : '#16a34a', textTransform: 'uppercase', letterSpacing: '0.1em', marginTop: '3px', transition: 'color 0.3s ease' }}>
                 {metricLabel}
               </p>
             </div>
@@ -429,7 +432,7 @@ const ServicesPage = () => (
   <Layout>
 
     {/* ══ 1. HERO ══ */}
-    <section style={{ position: 'relative', minHeight: '60vh', display: 'flex', alignItems: 'center', overflow: 'hidden' }}>
+    <section style={{ position: 'relative', minHeight: '65vh', display: 'flex', alignItems: 'center', overflow: 'hidden' }}>
       <img
         src="https://images.unsplash.com/photo-1504813184591-01572f98c85f?auto=format&fit=crop&q=80&w=2000&h=900&crop=top"
         alt="RAAH platform services"
@@ -439,12 +442,12 @@ const ServicesPage = () => (
       <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent 40%, rgba(5,46,22,0.60) 100%)' }} aria-hidden="true" />
       <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle, rgba(74,222,128,0.07) 1px, transparent 1px)', backgroundSize: '32px 32px', pointerEvents: 'none' }} aria-hidden="true" />
 
-      <div className="container-custom" style={{ position: 'relative', zIndex: 1, textAlign: 'center', padding: 'clamp(60px, 10vw, 120px) 24px' }}>
+      <div className="container-custom" style={{ position: 'relative', zIndex: 1, textAlign: 'center', padding: '120px 24px' }}>
         <Reveal delay={0}><Eyebrow label="The Platform" light /></Reveal>
         <Reveal delay={80}>
           <h1 style={{ fontFamily: FI, fontWeight: 900, fontSize: 'clamp(2.5rem, 6vw, 5rem)', letterSpacing: '-0.03em', lineHeight: 1.05, color: '#ffffff', maxWidth: '900px', margin: '0 auto 24px' }}>
             Every Tool Your Agency{' '}
-            <span style={{ color: '#4ade80' }}>Needs to Thrive</span>
+            <span style={{ color: '#ffffff', textDecoration: 'underline', textDecorationColor: 'rgba(255,255,255,0.40)', textUnderlineOffset: '6px' }}>Needs to Thrive</span>
           </h1>
         </Reveal>
         <Reveal delay={160}>
@@ -464,30 +467,17 @@ const ServicesPage = () => (
       </div>
     </section>
 
-    <WaveDivider topColor="rgba(5,46,22,0.65)" bottomColor="#ffffff" />
+    <WaveDivider topColor="rgba(5,46,22,0.65)" bottomColor="#dff0df" />
 
     {/* ══ 2. PLATFORM OVERVIEW ══ */}
-    <section style={{ background: '#ffffff', padding: 'clamp(60px, 10vw, 120px) 0', position: 'relative', overflow: 'hidden' }}>
+    <section style={{ background: '#dff0df', padding: '120px 0', position: 'relative', overflow: 'hidden' }}>
       <DotGrid />
       <Watermark />
       <RadialGlow top="-60px" right="-60px" size={420} opacity={0.07} />
       <RadialGlow bottom="-60px" left="-60px" size={360} opacity={0.06} />
 
       <div className="container-custom" style={{ position: 'relative', zIndex: 1 }}>
-        <style>{`
-          .platform-grid {
-            display: grid;
-            gap: 48px;
-            align-items: center;
-          }
-          @media (min-width: 768px) {
-            .platform-grid {
-              grid-template-columns: repeat(2, 1fr);
-              gap: 80px;
-            }
-          }
-        `}</style>
-        <div className="platform-grid">
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', alignItems: 'center' }} className="grid-cols-1 md:grid-cols-2">
 
           <Reveal delay={0}>
             <div>
@@ -514,17 +504,7 @@ const ServicesPage = () => (
 
           {/* Capability pills */}
           <Reveal delay={150}>
-            <style>{`
-              .pills-grid {
-                display: grid;
-                gap: 12px;
-                grid-template-columns: 1fr;
-              }
-              @media (min-width: 480px) {
-                .pills-grid { grid-template-columns: repeat(2, 1fr); }
-              }
-            `}</style>
-            <div className="pills-grid">
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
               {[
                 { label: 'Referral to Intake',      sub: 'Electronic referral acceptance' },
                 { label: 'Scheduling',               sub: 'Conflict detection and matching' },
@@ -555,10 +535,10 @@ const ServicesPage = () => (
       </div>
     </section>
 
-    <WaveDivider topColor="#ffffff" bottomColor="#052e16" flip />
+    <WaveDivider topColor="#dff0df" bottomColor="#0d7a3e" flip />
 
     {/* ══ 3. SERVICES GRID ══ */}
-    <section style={{ background: 'linear-gradient(160deg, #052e16 0%, #064e3b 55%, #052e16 100%)', padding: 'clamp(60px, 10vw, 120px) 0 clamp(70px, 12vw, 140px)', position: 'relative', overflow: 'hidden' }}>
+    <section style={{ background: 'linear-gradient(160deg, #0d7a3e 0%, #16a34a 55%, #0d7a3e 100%)', padding: '120px 0 140px', position: 'relative', overflow: 'hidden' }}>
       <DotGrid color="rgba(74,222,128,0.08)" />
       <Watermark color="rgba(255,255,255,0.03)" />
       <RadialGlow top="-80px" right="-80px" size={500} opacity={0.14} />
@@ -570,29 +550,15 @@ const ServicesPage = () => (
             <Eyebrow label="All Services" light />
             <h2 style={{ fontFamily: FI, fontWeight: 900, fontSize: 'clamp(2.25rem, 5vw, 3.75rem)', letterSpacing: '-0.03em', lineHeight: 1.08, color: '#ffffff', maxWidth: '780px', margin: '0 auto 20px' }}>
               Nine Modules.{' '}
-              <span style={{ color: '#4ade80' }}>Zero Compromises.</span>
+              <span style={{ color: '#ffffff', textDecoration: 'underline', textDecorationColor: 'rgba(255,255,255,0.40)', textUnderlineOffset: '6px' }}>Zero Compromises.</span>
             </h2>
-            <p style={{ fontFamily: FP, fontSize: 'clamp(1.1rem, 1.6vw, 1.3rem)', fontWeight: 500, lineHeight: 1.75, color: 'rgba(220,252,231,0.85)', maxWidth: '580px', margin: '0 auto' }}>
+            <p style={{ fontFamily: FP, fontSize: 'clamp(1.1rem, 1.6vw, 1.3rem)', fontWeight: 500, lineHeight: 1.75, color: 'rgba(255,255,255,0.90)', maxWidth: '580px', margin: '0 auto' }}>
               Every module is purpose-built for home health. Every metric below is from agencies running on RAAH today.
             </p>
           </div>
         </Reveal>
 
-        <style>{`
-          .services-grid {
-            display: grid;
-            gap: 24px;
-            justify-items: center;
-            grid-template-columns: 1fr;
-          }
-          @media (min-width: 640px) {
-            .services-grid { grid-template-columns: repeat(2, 1fr); }
-          }
-          @media (min-width: 1024px) {
-            .services-grid { grid-template-columns: repeat(3, 1fr); }
-          }
-        `}</style>
-        <div className="services-grid">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px', alignItems: 'stretch' }} className="grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           {SERVICES.map((service, i) => (
             <ServiceCard key={service.title} service={service} delay={80 + i * 60} />
           ))}
@@ -600,10 +566,10 @@ const ServicesPage = () => (
       </div>
     </section>
 
-    <WaveDivider topColor="#052e16" bottomColor="#ffffff" />
+    <WaveDivider topColor="#0d7a3e" bottomColor="#dff0df" />
 
     {/* ══ 4. COMPARISON TABLE ══ */}
-    <section style={{ background: '#ffffff', padding: 'clamp(60px, 10vw, 120px) 0', position: 'relative', overflow: 'hidden' }}>
+    <section style={{ background: '#dff0df', padding: '120px 0', position: 'relative', overflow: 'hidden' }}>
       <DotGrid />
       <Watermark color="rgba(5,46,22,0.06)" />
       <RadialGlow top="-60px" right="-60px" size={420} opacity={0.07} />
@@ -623,65 +589,62 @@ const ServicesPage = () => (
         </Reveal>
 
         <Reveal delay={100}>
-          {/* ✅ Responsive table wrapper: horizontal scroll on mobile */}
-          <div style={{ borderRadius: '20px', overflow: 'hidden', border: '1px solid rgba(22,163,74,0.15)', boxShadow: '0 4px 24px rgba(5,46,22,0.08)', overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
-            <div style={{ minWidth: '720px' }}>
-              {/* Table header */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 180px 180px', background: '#052e16' }}>
-                <div style={{ padding: '20px 28px' }}>
-                  <p style={{ fontFamily: FP, fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(74,222,128,0.70)' }}>Feature</p>
-                </div>
-                <div style={{ padding: '20px 0', textAlign: 'center', borderLeft: '1px solid rgba(74,222,128,0.10)' }}>
-                  <p style={{ fontFamily: FI, fontWeight: 800, fontSize: '0.9375rem', color: '#4ade80' }}>RAAH</p>
-                </div>
-                <div style={{ padding: '20px 0', textAlign: 'center', borderLeft: '1px solid rgba(74,222,128,0.10)' }}>
-                  <p style={{ fontFamily: FI, fontWeight: 700, fontSize: '0.9375rem', color: 'rgba(255,255,255,0.50)' }}>Legacy Tools</p>
-                </div>
+          <div style={{ borderRadius: '20px', overflow: 'hidden', border: '1px solid rgba(22,163,74,0.15)', boxShadow: '0 4px 24px rgba(5,46,22,0.08)' }}>
+            {/* Table header */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 180px 180px', background: '#052e16' }}>
+              <div style={{ padding: '20px 28px' }}>
+                <p style={{ fontFamily: FP, fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(74,222,128,0.70)' }}>Feature</p>
               </div>
+              <div style={{ padding: '20px 0', textAlign: 'center', borderLeft: '1px solid rgba(74,222,128,0.10)' }}>
+                <p style={{ fontFamily: FI, fontWeight: 800, fontSize: '0.9375rem', color: '#4ade80' }}>RAAH</p>
+              </div>
+              <div style={{ padding: '20px 0', textAlign: 'center', borderLeft: '1px solid rgba(74,222,128,0.10)' }}>
+                <p style={{ fontFamily: FI, fontWeight: 700, fontSize: '0.9375rem', color: 'rgba(255,255,255,0.50)' }}>Legacy Tools</p>
+              </div>
+            </div>
 
-              {/* Rows */}
-              {COMPARISON.map((row, i) => (
-                <Reveal key={row.feature} delay={i * 30}>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 180px 180px', background: i % 2 === 0 ? '#ffffff' : 'rgba(22,163,74,0.02)', borderTop: '1px solid rgba(22,163,74,0.08)', transition: 'background 0.2s ease' }}
-                    onMouseEnter={e => { e.currentTarget.style.background = 'rgba(22,163,74,0.05)'; }}
-                    onMouseLeave={e => { e.currentTarget.style.background = i % 2 === 0 ? '#ffffff' : 'rgba(22,163,74,0.02)'; }}
-                  >
-                    <div style={{ padding: '18px 28px', display: 'flex', alignItems: 'center' }}>
-                      <p style={{ fontFamily: FP, fontSize: '0.9375rem', fontWeight: 500, color: '#374151' }}>{row.feature}</p>
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', borderLeft: '1px solid rgba(22,163,74,0.08)' }}>
-                      <CheckIcon />
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', borderLeft: '1px solid rgba(22,163,74,0.08)' }}>
-                      {row.legacy === true ? <CheckIcon /> : row.legacy === 'partial' ? <PartialIcon /> : <CrossIcon />}
-                    </div>
+            {/* Rows */}
+            {COMPARISON.map((row, i) => (
+              <Reveal key={row.feature} delay={i * 30}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 180px 180px', background: i % 2 === 0 ? '#ffffff' : 'rgba(22,163,74,0.02)', borderTop: '1px solid rgba(22,163,74,0.08)', transition: 'background 0.2s ease' }}
+                  onMouseEnter={e => { e.currentTarget.style.background = 'rgba(22,163,74,0.05)'; }}
+                  onMouseLeave={e => { e.currentTarget.style.background = i % 2 === 0 ? '#ffffff' : 'rgba(22,163,74,0.02)'; }}
+                >
+                  <div style={{ padding: '18px 28px', display: 'flex', alignItems: 'center' }}>
+                    <p style={{ fontFamily: FP, fontSize: '0.9375rem', fontWeight: 500, color: '#374151' }}>{row.feature}</p>
                   </div>
-                </Reveal>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', borderLeft: '1px solid rgba(22,163,74,0.08)' }}>
+                    <CheckIcon />
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', borderLeft: '1px solid rgba(22,163,74,0.08)' }}>
+                    {row.legacy === true ? <CheckIcon /> : row.legacy === 'partial' ? <PartialIcon /> : <CrossIcon />}
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+
+            {/* Legend */}
+            <div style={{ padding: '16px 28px', background: 'rgba(22,163,74,0.03)', borderTop: '1px solid rgba(22,163,74,0.08)', display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
+              {[
+                { icon: <CheckIcon />, label: 'Fully supported' },
+                { icon: <PartialIcon />, label: 'Partial or add-on cost' },
+                { icon: <CrossIcon />, label: 'Not supported' },
+              ].map(({ icon, label }) => (
+                <div key={label} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  {icon}
+                  <span style={{ fontFamily: FP, fontSize: '0.78rem', color: '#64748b' }}>{label}</span>
+                </div>
               ))}
-
-              {/* Legend */}
-              <div style={{ padding: '16px 28px', background: 'rgba(22,163,74,0.03)', borderTop: '1px solid rgba(22,163,74,0.08)', display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
-                {[
-                  { icon: <CheckIcon />, label: 'Fully supported' },
-                  { icon: <PartialIcon />, label: 'Partial or add-on cost' },
-                  { icon: <CrossIcon />, label: 'Not supported' },
-                ].map(({ icon, label }) => (
-                  <div key={label} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    {icon}
-                    <span style={{ fontFamily: FP, fontSize: '0.78rem', color: '#64748b' }}>{label}</span>
-                  </div>
-                ))}
-              </div>
             </div>
           </div>
         </Reveal>
       </div>
     </section>
 
-    <WaveDivider topColor="#ffffff" bottomColor="#052e16" flip />
+    <WaveDivider topColor="#dff0df" bottomColor="#0d7a3e" flip />
 
     {/* ══ 5. CTA ══ */}
-    <section style={{ background: 'linear-gradient(160deg, #052e16 0%, #064e3b 55%, #052e16 100%)', padding: 'clamp(60px, 10vw, 120px) 0 clamp(70px, 12vw, 140px)', position: 'relative', overflow: 'hidden' }}>
+    <section style={{ background: 'linear-gradient(160deg, #0d7a3e 0%, #16a34a 55%, #0d7a3e 100%)', padding: '120px 0 140px', position: 'relative', overflow: 'hidden' }}>
       <DotGrid color="rgba(74,222,128,0.08)" />
       <Watermark color="rgba(255,255,255,0.055)" />
       <RadialGlow top="-80px" right="-80px" size={500} opacity={0.14} />
@@ -692,16 +655,16 @@ const ServicesPage = () => (
         <Reveal delay={80}>
           <h2 style={{ fontFamily: FI, fontWeight: 900, fontSize: 'clamp(2.25rem, 5vw, 3.75rem)', letterSpacing: '-0.03em', lineHeight: 1.08, color: '#ffffff', maxWidth: '820px', margin: '0 auto 20px' }}>
             See All Nine Modules{' '}
-            <span style={{ color: '#4ade80' }}>Working Together</span>
+            <span style={{ color: '#ffffff', textDecoration: 'underline', textDecorationColor: 'rgba(255,255,255,0.40)', textUnderlineOffset: '6px' }}>Working Together</span>
           </h2>
         </Reveal>
         <Reveal delay={150}>
-          <p style={{ fontFamily: FP, fontSize: 'clamp(1.1rem, 1.6vw, 1.3rem)', fontWeight: 500, lineHeight: 1.75, color: 'rgba(220,252,231,0.85)', maxWidth: '560px', margin: '0 auto 48px' }}>
+          <p style={{ fontFamily: FP, fontSize: 'clamp(1.1rem, 1.6vw, 1.3rem)', fontWeight: 500, lineHeight: 1.75, color: 'rgba(255,255,255,0.90)', maxWidth: '560px', margin: '0 auto 48px' }}>
             Book a personalised walkthrough built around your specific payer mix, state EVV requirements, and agency size. No commitment required.
           </p>
         </Reveal>
         <Reveal delay={220}>
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px' }} className="sm:flex-row sm:justify-center">
+          <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '14px' }}>
             <Link to="/demo" style={{ fontFamily: FI, fontWeight: 700, fontSize: '0.9375rem', letterSpacing: '0.07em', textTransform: 'uppercase', padding: '18px 44px', borderRadius: '999px', background: '#16a34a', color: '#ffffff', border: '2px solid #16a34a', boxShadow: '0 8px 32px rgba(22,163,74,0.40)', display: 'inline-flex', alignItems: 'center', gap: '10px', textDecoration: 'none', transition: 'all 0.25s ease', whiteSpace: 'nowrap' }}
               onMouseEnter={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#4ade80'; e.currentTarget.style.borderColor = '#4ade80'; e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = 'none'; }}
               onMouseLeave={e => { e.currentTarget.style.background = '#16a34a'; e.currentTarget.style.color = '#ffffff'; e.currentTarget.style.borderColor = '#16a34a'; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(22,163,74,0.40)'; }}
@@ -716,7 +679,7 @@ const ServicesPage = () => (
               View Pricing
             </Link>
           </div>
-          <p style={{ fontFamily: FP, fontSize: '0.8rem', fontWeight: 400, color: 'rgba(74,222,128,0.50)', marginTop: '24px', letterSpacing: '0.04em' }}>
+          <p style={{ fontFamily: FP, fontSize: '0.8rem', fontWeight: 400, color: 'rgba(255,255,255,0.60)', marginTop: '24px', letterSpacing: '0.04em' }}>
             No credit card required. Live in under 24 hours.
           </p>
         </Reveal>

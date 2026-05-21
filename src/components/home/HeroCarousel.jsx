@@ -7,6 +7,8 @@
  *
  * Typography: Inter Bold throughout.
  * Animation: Framer Motion 12.
+ *
+ * Autoplay: Continuous 7-second loop. No pause on hover.
  */
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
@@ -85,14 +87,13 @@ const fadeUp = {
 
 const HeroCarousel = ({ navbar }) => {
   const [slideIndex, setSlideIndex] = useState(0);
-  const [isPaused,   setIsPaused]   = useState(false);
   const [progress,   setProgress]   = useState(0);
 
   const progressRef = useRef(null);
   const slideRef    = useRef(null);
 
+  // Continuous autoplay — no pause on hover
   useEffect(() => {
-    if (isPaused) return;
     const start = Date.now();
 
     progressRef.current = setInterval(() => {
@@ -107,8 +108,9 @@ const HeroCarousel = ({ navbar }) => {
       clearInterval(progressRef.current);
       clearTimeout(slideRef.current);
     };
-  }, [slideIndex, isPaused]);
+  }, [slideIndex]);
 
+  // Manual navigation resets the timer cleanly
   const goToSlide = useCallback((i) => {
     clearInterval(progressRef.current);
     clearTimeout(slideRef.current);
@@ -125,8 +127,6 @@ const HeroCarousel = ({ navbar }) => {
     <section
       className="relative w-full overflow-hidden"
       style={{ minHeight: '100dvh' }}
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
       role="region"
       aria-label="RAAH Technologies Hero"
       aria-roledescription="carousel"
@@ -339,7 +339,6 @@ const HeroCarousel = ({ navbar }) => {
                   textDecoration: 'none',
                 }}
                 onMouseEnter={e => {
-                  // Takes ghost properties on hover
                   e.currentTarget.style.background  = 'transparent';
                   e.currentTarget.style.color       = 'rgba(255,255,255,0.90)';
                   e.currentTarget.style.borderColor = 'rgba(255,255,255,0.38)';
@@ -378,7 +377,6 @@ const HeroCarousel = ({ navbar }) => {
                   textDecoration: 'none',
                 }}
                 onMouseEnter={e => {
-                  // Takes solid properties on hover
                   e.currentTarget.style.background  = '#16a34a';
                   e.currentTarget.style.color       = '#ffffff';
                   e.currentTarget.style.borderColor = '#16a34a';

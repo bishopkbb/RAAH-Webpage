@@ -51,7 +51,7 @@ const Reveal = ({ children, delay = 0, className = '' }) => {
 };
 
 // ─── Shared decorations ───────────────────────────────────────────────────────
-const DotGrid = ({ color = 'rgba(5,46,22,0.08)' }) => (
+const DotGrid = ({ color = 'rgba(5,46,22,0.06)' }) => (
   <div aria-hidden="true" style={{
     position: 'absolute', inset: 0,
     backgroundImage: `radial-gradient(circle, ${color} 1px, transparent 1px)`,
@@ -59,7 +59,7 @@ const DotGrid = ({ color = 'rgba(5,46,22,0.08)' }) => (
   }} />
 );
 
-const Watermark = ({ color = 'rgba(5,46,22,0.06)' }) => (
+const Watermark = ({ color = 'transparent' }) => (
   <div aria-hidden="true" style={{
     position: 'absolute', top: '50%', left: '50%',
     transform: 'translate(-50%, -50%)',
@@ -82,16 +82,16 @@ const RadialGlow = ({ top, right, bottom, left, size = 420, opacity = 0.07 }) =>
 
 const Eyebrow = ({ label, light = false }) => (
   <div style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
-    <div style={{ width: '32px', height: '1.5px', background: light ? '#4ade80' : '#16a34a', borderRadius: '999px' }} />
-    <span style={{ fontFamily: FP, fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: light ? '#4ade80' : '#16a34a' }}>
+    <div style={{ width: '32px', height: '1.5px', background: light ? '#ffffff' : '#16a34a', borderRadius: '999px' }} />
+    <span style={{ fontFamily: FP, fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: light ? '#ffffff' : '#16a34a' }}>
       {label}
     </span>
-    <div style={{ width: '32px', height: '1.5px', background: light ? '#4ade80' : '#16a34a', borderRadius: '999px' }} />
+    <div style={{ width: '32px', height: '1.5px', background: light ? '#ffffff' : '#16a34a', borderRadius: '999px' }} />
   </div>
 );
 
 const WaveDivider = ({ topColor, bottomColor, flip = false }) => (
-  <div style={{ position: 'relative', height: 'clamp(40px, 6vw, 80px)', overflow: 'hidden', background: topColor, marginBottom: '-1px' }}>
+  <div style={{ position: 'relative', height: '80px', overflow: 'hidden', background: topColor, marginBottom: '-1px' }}>
     <svg viewBox="0 0 1440 80" preserveAspectRatio="none" style={{
       position: 'absolute', bottom: 0, left: 0, width: '100%', height: '100%',
       transform: flip ? 'scaleX(-1)' : 'none',
@@ -111,59 +111,57 @@ const InfoCard = ({ icon, title, lines, link, linkLabel, delay }) => {
         onMouseLeave={() => setHovered(false)}
         style={{
           background: '#ffffff',
-          borderRadius: '16px',
-          padding: 'clamp(20px, 4vw, 28px) clamp(16px, 3vw, 24px)',
+          borderRadius: '18px',
+          padding: '24px 28px',
           display: 'flex',
           alignItems: 'flex-start',
-          gap: 'clamp(12px, 2vw, 18px)',
+          gap: '20px',
           border: '1px solid',
-          borderColor: hovered ? 'rgba(22,163,74,0.28)' : 'rgba(22,163,74,0.10)',
+          borderColor: hovered ? 'rgba(22,163,74,0.30)' : 'rgba(22,163,74,0.12)',
           boxShadow: hovered
-            ? '0 16px 48px rgba(5,46,22,0.12), 0 4px 12px rgba(22,163,74,0.08)'
-            : '0 2px 12px rgba(5,46,22,0.06)',
-          transform: hovered ? 'translateY(-4px)' : 'translateY(0)',
+            ? '0 20px 56px rgba(5,46,22,0.14), 0 4px 16px rgba(22,163,74,0.10)'
+            : '0 3px 16px rgba(5,46,22,0.08)',
+          transform: hovered ? 'translateY(-5px)' : 'translateY(0)',
           transition: 'all 0.35s cubic-bezier(0.22, 1, 0.36, 1)',
-          width: '100%',
-          maxWidth: '420px',
-          margin: '0 auto',
         }}
       >
         {/* Icon square */}
         <div style={{
-          width: 'clamp(44px, 8vw, 52px)', height: 'clamp(44px, 8vw, 52px)', borderRadius: '13px', flexShrink: 0,
+          width: '60px', height: '60px', borderRadius: '15px', flexShrink: 0,
           background: hovered ? '#16a34a' : 'rgba(22,163,74,0.08)',
           border: `1.5px solid ${hovered ? '#16a34a' : 'rgba(22,163,74,0.18)'}`,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           transition: 'all 0.3s ease',
         }}>
           {React.createElement(icon, {
-            size: 22,
+            size: 24,
             color: hovered ? '#ffffff' : '#16a34a',
             strokeWidth: 1.75,
             style: { transition: 'color 0.3s ease' },
           })}
         </div>
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <p style={{ fontFamily: FI, fontWeight: 700, fontSize: 'clamp(0.9375rem, 2vw, 1rem)', color: '#0f172a', marginBottom: '6px', lineHeight: 1.2 }}>
+        <div style={{ flex: 1 }}>
+          <p style={{ fontFamily: FI, fontWeight: 800, fontSize: '1.0625rem', color: '#0f172a', marginBottom: '7px', lineHeight: 1.2 }}>
             {title}
           </p>
           {lines.map((line, i) => (
-            <p key={i} style={{ fontFamily: FP, fontSize: 'clamp(0.85rem, 1.8vw, 0.9rem)', color: '#475569', lineHeight: 1.6 }}>
+            <p key={i} style={{ fontFamily: FP, fontSize: '0.9375rem', color: '#374151', lineHeight: 1.65 }}>
               {line}
             </p>
           ))}
           {link && (
             <a href={link} style={{
-              fontFamily: FI, fontWeight: 600, fontSize: 'clamp(0.75rem, 1.5vw, 0.8rem)',
+              fontFamily: FI, fontWeight: 700, fontSize: '0.8125rem',
               color: '#16a34a', textDecoration: 'none',
-              letterSpacing: '0.04em', marginTop: '6px',
-              display: 'inline-block', transition: 'opacity 0.2s ease',
-              wordBreak: 'break-word',
+              letterSpacing: '0.03em', marginTop: '9px',
+              display: 'inline-flex', alignItems: 'center', gap: '5px',
+              transition: 'gap 0.2s ease',
             }}
-              onMouseEnter={e => { e.currentTarget.style.opacity = '0.70'; }}
-              onMouseLeave={e => { e.currentTarget.style.opacity = '1'; }}
+              onMouseEnter={e => { e.currentTarget.style.gap = '8px'; }}
+              onMouseLeave={e => { e.currentTarget.style.gap = '5px'; }}
             >
               {linkLabel}
+              <svg viewBox="0 0 12 12" fill="none" width="11" height="11"><path d="M2 6H10M10 6L7 3M10 6L7 9" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
             </a>
           )}
         </div>
@@ -221,25 +219,25 @@ const ContactForm = () => {
   };
 
   const inputStyle = {
-    width: '100%', fontFamily: FP, fontSize: 'clamp(0.875rem, 2vw, 0.9375rem)', fontWeight: 400,
-    padding: 'clamp(12px, 2.5vw, 14px) clamp(14px, 3vw, 16px)', borderRadius: '10px', outline: 'none',
-    border: '1.5px solid rgba(22,163,74,0.18)',
+    width: '100%', fontFamily: FP, fontSize: '1rem', fontWeight: 400,
+    padding: '15px 18px', borderRadius: '12px', outline: 'none',
+    border: '1.5px solid rgba(22,163,74,0.20)',
     color: '#0f172a', background: '#fafffe',
     transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
     boxSizing: 'border-box',
   };
 
   const labelStyle = {
-    fontFamily: FI, fontSize: 'clamp(0.75rem, 1.5vw, 0.8125rem)', fontWeight: 600,
-    color: '#374151', marginBottom: '6px', display: 'block',
-    letterSpacing: '0.01em',
+    fontFamily: FI, fontSize: '0.8rem', fontWeight: 700,
+    color: '#0f172a', marginBottom: '8px', display: 'block',
+    letterSpacing: '0.06em', textTransform: 'uppercase',
   };
 
   if (submitted) {
     return (
-      <div style={{ textAlign: 'center', padding: 'clamp(40px, 8vw, 60px) clamp(24px, 5vw, 32px)' }}>
+      <div style={{ textAlign: 'center', padding: '60px 32px' }}>
         <div style={{
-          width: 'clamp(60px, 12vw, 72px)', height: 'clamp(60px, 12vw, 72px)', borderRadius: '50%',
+          width: '72px', height: '72px', borderRadius: '50%',
           background: 'linear-gradient(135deg, #052e16 0%, #16a34a 100%)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           margin: '0 auto 24px',
@@ -249,15 +247,15 @@ const ContactForm = () => {
             <path d="M5 13l4 4L19 7" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         </div>
-        <h3 style={{ fontFamily: FI, fontWeight: 800, fontSize: 'clamp(1.25rem, 3vw, 1.5rem)', color: '#0f172a', marginBottom: '12px' }}>
+        <h3 style={{ fontFamily: FI, fontWeight: 800, fontSize: '1.5rem', color: '#0f172a', marginBottom: '12px' }}>
           Message Received
         </h3>
-        <p style={{ fontFamily: FP, fontSize: 'clamp(0.9375rem, 2vw, 1rem)', color: '#475569', lineHeight: 1.7, maxWidth: '320px', margin: '0 auto 28px' }}>
+        <p style={{ fontFamily: FP, fontSize: '1rem', color: '#475569', lineHeight: 1.7, maxWidth: '320px', margin: '0 auto 28px' }}>
           Thank you for reaching out. A member of our team will be in touch within one business day.
         </p>
         <button
           onClick={() => { setSubmitted(false); setFields({ name: '', email: '', agency: '', phone: '', subject: '', message: '' }); }}
-          style={{ fontFamily: FI, fontWeight: 700, fontSize: 'clamp(0.8rem, 1.5vw, 0.85rem)', letterSpacing: '0.06em', textTransform: 'uppercase', padding: 'clamp(10px, 2vw, 12px) clamp(24px, 4vw, 28px)', borderRadius: '999px', background: 'transparent', color: '#16a34a', border: '2px solid #16a34a', cursor: 'pointer', transition: 'all 0.22s ease' }}
+          style={{ fontFamily: FI, fontWeight: 700, fontSize: '0.85rem', letterSpacing: '0.06em', textTransform: 'uppercase', padding: '12px 28px', borderRadius: '999px', background: 'transparent', color: '#16a34a', border: '2px solid #16a34a', cursor: 'pointer', transition: 'all 0.22s ease' }}
           onMouseEnter={e => { e.currentTarget.style.background = '#16a34a'; e.currentTarget.style.color = '#ffffff'; }}
           onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#16a34a'; }}
         >
@@ -268,26 +266,16 @@ const ContactForm = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit} style={{ padding: 'clamp(32px, 6vw, 40px)' }}>
-      <h3 style={{ fontFamily: FI, fontWeight: 800, fontSize: 'clamp(1.25rem, 3vw, 1.375rem)', color: '#0f172a', marginBottom: '6px' }}>
+    <form onSubmit={handleSubmit} style={{ padding: '48px 48px 44px' }}>
+      <h3 style={{ fontFamily: FI, fontWeight: 900, fontSize: '1.625rem', color: '#0f172a', marginBottom: '8px', letterSpacing: '-0.02em' }}>
         Send Us a Message
       </h3>
-      <p style={{ fontFamily: FP, fontSize: 'clamp(0.85rem, 1.8vw, 0.9rem)', color: '#64748b', marginBottom: 'clamp(24px, 5vw, 32px)', lineHeight: 1.6 }}>
+      <p style={{ fontFamily: FP, fontSize: '0.9375rem', color: '#475569', marginBottom: '36px', lineHeight: 1.65 }}>
         We respond to all enquiries within one business day.
       </p>
 
       {/* Row: Name + Agency */}
-      <style>{`
-        .form-row {
-          display: grid;
-          gap: 16px;
-          grid-template-columns: 1fr;
-        }
-        @media (min-width: 480px) {
-          .form-row { grid-template-columns: repeat(2, 1fr); }
-        }
-      `}</style>
-      <div className="form-row" style={{ marginBottom: '16px' }}>
+      <div style={{ display: 'grid', gap: '16px', marginBottom: '20px' }} className="contact-form-row">
         <div>
           <label style={labelStyle} htmlFor="name">Full Name *</label>
           <input id="name" name="name" type="text" required placeholder="Sarah Johnson" value={fields.name} onChange={handleChange} style={inputStyle}
@@ -305,7 +293,7 @@ const ContactForm = () => {
       </div>
 
       {/* Row: Email + Phone */}
-      <div className="form-row" style={{ marginBottom: '16px' }}>
+      <div style={{ display: 'grid', gap: '16px', marginBottom: '20px' }} className="contact-form-row">
         <div>
           <label style={labelStyle} htmlFor="email">Email Address *</label>
           <input id="email" name="email" type="email" required placeholder="sarah@caringhands.org" value={fields.email} onChange={handleChange} style={inputStyle}
@@ -323,7 +311,7 @@ const ContactForm = () => {
       </div>
 
       {/* Subject */}
-      <div style={{ marginBottom: '16px' }}>
+      <div style={{ marginBottom: '20px' }}>
         <label style={labelStyle} htmlFor="subject">Subject *</label>
         <select id="subject" name="subject" required value={fields.subject} onChange={handleChange}
           style={{ ...inputStyle, cursor: 'pointer', color: fields.subject ? '#0f172a' : '#94a3b8' }}
@@ -342,10 +330,10 @@ const ContactForm = () => {
       </div>
 
       {/* Message */}
-      <div style={{ marginBottom: 'clamp(20px, 4vw, 28px)' }}>
+      <div style={{ marginBottom: '32px' }}>
         <label style={labelStyle} htmlFor="message">Message *</label>
         <textarea id="message" name="message" required rows={4} placeholder="Tell us about your agency, what you are looking for, or any questions you have..." value={fields.message} onChange={handleChange}
-          style={{ ...inputStyle, resize: 'vertical', minHeight: 'clamp(100px, 20vw, 120px)' }}
+          style={{ ...inputStyle, resize: 'vertical', minHeight: '140px' }}
           onFocus={e => { e.target.style.borderColor = '#16a34a'; e.target.style.boxShadow = '0 0 0 3px rgba(22,163,74,0.10)'; }}
           onBlur={e => { e.target.style.borderColor = 'rgba(22,163,74,0.18)'; e.target.style.boxShadow = 'none'; }}
         />
@@ -353,9 +341,9 @@ const ContactForm = () => {
 
       {/* Submit */}
       <button type="submit" disabled={submitting} style={{
-        width: '100%', fontFamily: FI, fontWeight: 700, fontSize: 'clamp(0.85rem, 1.8vw, 0.9rem)',
+        width: '100%', fontFamily: FI, fontWeight: 700, fontSize: '0.9375rem',
         letterSpacing: '0.07em', textTransform: 'uppercase',
-        padding: 'clamp(14px, 3vw, 16px) clamp(24px, 5vw, 32px)', borderRadius: '999px',
+        padding: '18px 32px', borderRadius: '999px',
         background: submitting ? '#15803d' : '#16a34a',
         color: '#ffffff', border: '2px solid #16a34a',
         boxShadow: '0 6px 24px rgba(22,163,74,0.30)',
@@ -363,7 +351,7 @@ const ContactForm = () => {
         transition: 'all 0.25s ease',
         display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px',
       }}
-        onMouseEnter={e => { if (!submitting) { e.currentTarget.style.background = '#052e16'; e.currentTarget.style.borderColor = '#052e16'; e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 10px 32px rgba(5,46,22,0.22)'; } }}
+        onMouseEnter={e => { if (!submitting) { e.currentTarget.style.background = '#0d7a3e'; e.currentTarget.style.borderColor = '#0d7a3e'; e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 10px 32px rgba(5,46,22,0.22)'; } }}
         onMouseLeave={e => { e.currentTarget.style.background = '#16a34a'; e.currentTarget.style.borderColor = '#16a34a'; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 6px 24px rgba(22,163,74,0.30)'; }}
       >
         {submitting ? (
@@ -384,12 +372,15 @@ const ContactForm = () => {
         )}
       </button>
 
-      <p style={{ fontFamily: FP, fontSize: 'clamp(0.72rem, 1.5vw, 0.78rem)', color: '#94a3b8', textAlign: 'center', marginTop: '16px' }}>
+      <p style={{ fontFamily: FP, fontSize: '0.8125rem', color: '#64748b', textAlign: 'center', marginTop: '18px' }}>
         We respect your privacy. Your information will never be shared.
       </p>
 
-      {/* Spin keyframe */}
-      <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
+      <style>{`
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .contact-form-row { grid-template-columns: 1fr 1fr; }
+        @media (max-width: 560px) { .contact-form-row { grid-template-columns: 1fr !important; } }
+      `}</style>
     </form>
   );
 };
@@ -435,10 +426,10 @@ const ArrowSvg = () => (
 const SupportCard = ({ icon, title, body, action, href, isInternal, delay }) => {
   const [hovered, setHovered] = useState(false);
   const ctaStyle = {
-    fontFamily: FI, fontWeight: 700, fontSize: 'clamp(0.75rem, 1.5vw, 0.8rem)', letterSpacing: '0.07em',
-    textTransform: 'uppercase', padding: 'clamp(10px, 2vw, 12px) clamp(18px, 3vw, 22px)', borderRadius: '999px',
-    background: 'rgba(74,222,128,0.12)', color: '#4ade80',
-    border: '1.5px solid rgba(74,222,128,0.30)',
+    fontFamily: FI, fontWeight: 700, fontSize: '0.8rem', letterSpacing: '0.07em',
+    textTransform: 'uppercase', padding: '12px 22px', borderRadius: '999px',
+    background: 'rgba(255,255,255,0.15)', color: '#ffffff',
+    border: '1.5px solid rgba(255,255,255,0.40)',
     display: 'inline-flex', alignItems: 'center', gap: '8px',
     textDecoration: 'none', transition: 'all 0.22s ease', alignSelf: 'flex-start',
   };
@@ -449,46 +440,41 @@ const SupportCard = ({ icon, title, body, action, href, isInternal, delay }) => 
         onMouseLeave={() => setHovered(false)}
         style={{
           background: hovered
-            ? 'linear-gradient(145deg, #15803d 0%, #166534 60%, #14532d 100%)'
-            : 'linear-gradient(145deg, #166534 0%, #14532d 60%, #052e16 100%)',
+            ? 'linear-gradient(145deg, #1db954 0%, #16a34a 60%, #0d8a3e 100%)'
+            : 'linear-gradient(145deg, #16a34a 0%, #0d8a3e 60%, #0a6b30 100%)',
           borderRadius: '20px', overflow: 'hidden', position: 'relative', height: '100%',
           boxShadow: hovered ? '0 24px 64px rgba(5,46,22,0.28)' : '0 4px 20px rgba(5,46,22,0.12)',
           transform: hovered ? 'translateY(-6px)' : 'translateY(0)',
           transition: 'all 0.4s cubic-bezier(0.22, 1, 0.36, 1)',
           border: '1px solid', borderColor: hovered ? 'rgba(74,222,128,0.30)' : 'rgba(74,222,128,0.12)',
-          width: '100%',
-          maxWidth: '420px',
-          margin: '0 auto',
         }}
       >
         {/* Shimmer */}
         <div aria-hidden="true" style={{ position: 'absolute', top: 0, left: hovered ? '120%' : '-60%', width: '50%', height: '100%', background: 'linear-gradient(105deg, transparent 20%, rgba(255,255,255,0.06) 50%, transparent 80%)', transform: 'skewX(-15deg)', transition: 'left 0.7s cubic-bezier(0.22, 1, 0.36, 1)', pointerEvents: 'none' }} />
         {/* Top accent line */}
-        <div style={{ height: '2px', background: hovered ? 'linear-gradient(to right, #4ade80, #86efac, #4ade80)' : 'linear-gradient(to right, rgba(74,222,128,0.40), rgba(74,222,128,0.15))', transition: 'background 0.4s ease' }} />
-        <div style={{ padding: 'clamp(28px, 5vw, 36px) clamp(24px, 4vw, 32px) clamp(24px, 4vw, 32px)', display: 'flex', flexDirection: 'column', height: 'calc(100% - 2px)' }}>
+        <div style={{ height: '2px', background: hovered ? 'linear-gradient(to right, #4ade80, #86efac, #4ade80)' : 'linear-gradient(to right, rgba(255,255,255,0.25), rgba(255,255,255,0.10))', transition: 'background 0.4s ease' }} />
+        <div style={{ padding: '36px 32px 32px', display: 'flex', flexDirection: 'column', height: 'calc(100% - 2px)' }}>
           {/* White icon container */}
-          <div style={{ width: 'clamp(52px, 10vw, 60px)', height: 'clamp(52px, 10vw, 60px)', borderRadius: '15px', background: '#ffffff', border: `1.5px solid ${hovered ? 'rgba(22,163,74,0.35)' : 'rgba(22,163,74,0.25)'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 'clamp(16px, 3vw, 24px)', flexShrink: 0, transition: 'border-color 0.35s ease' }}>
+          <div style={{ width: '60px', height: '60px', borderRadius: '15px', background: '#ffffff', border: `1.5px solid ${hovered ? 'rgba(22,163,74,0.35)' : 'rgba(22,163,74,0.25)'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '24px', flexShrink: 0, transition: 'border-color 0.35s ease' }}>
             {React.createElement(icon, { size: 22, color: '#16a34a', strokeWidth: 1.75 })}
           </div>
-          <h3 style={{ fontFamily: FI, fontWeight: 800, fontSize: 'clamp(1.125rem, 3vw, 1.25rem)', letterSpacing: '-0.02em', color: '#ffffff', marginBottom: '12px', lineHeight: 1.2, textAlign: 'center' }}>{title}</h3>
-          <p style={{ fontFamily: FP, fontSize: 'clamp(0.875rem, 2vw, 0.9375rem)', fontWeight: 400, lineHeight: 1.75, color: hovered ? 'rgba(220,252,231,0.92)' : 'rgba(220,252,231,0.72)', marginBottom: 'clamp(20px, 4vw, 28px)', flexGrow: 1, transition: 'color 0.3s ease', textAlign: 'center' }}>{body}</p>
-          <div style={{ display: 'flex', justifyContent: 'center' }}>
-            {isInternal ? (
-              <Link to={href} style={ctaStyle}
-                onMouseEnter={e => { e.currentTarget.style.background = '#16a34a'; e.currentTarget.style.color = '#ffffff'; e.currentTarget.style.borderColor = '#16a34a'; }}
-                onMouseLeave={e => { e.currentTarget.style.background = 'rgba(74,222,128,0.12)'; e.currentTarget.style.color = '#4ade80'; e.currentTarget.style.borderColor = 'rgba(74,222,128,0.30)'; }}
-              >
-                {action}<ArrowSvg />
-              </Link>
-            ) : (
-              <a href={href} style={ctaStyle}
-                onMouseEnter={e => { e.currentTarget.style.background = '#16a34a'; e.currentTarget.style.color = '#ffffff'; e.currentTarget.style.borderColor = '#16a34a'; }}
-                onMouseLeave={e => { e.currentTarget.style.background = 'rgba(74,222,128,0.12)'; e.currentTarget.style.color = '#4ade80'; e.currentTarget.style.borderColor = 'rgba(74,222,128,0.30)'; }}
-              >
-                {action}<ArrowSvg />
-              </a>
-            )}
-          </div>
+          <h3 style={{ fontFamily: FI, fontWeight: 800, fontSize: '1.25rem', letterSpacing: '-0.02em', color: '#ffffff', marginBottom: '12px', lineHeight: 1.2 }}>{title}</h3>
+          <p style={{ fontFamily: FP, fontSize: '0.9375rem', fontWeight: 400, lineHeight: 1.75, color: hovered ? 'rgba(220,252,231,0.92)' : 'rgba(220,252,231,0.72)', marginBottom: '28px', flexGrow: 1, transition: 'color 0.3s ease' }}>{body}</p>
+          {isInternal ? (
+            <Link to={href} style={ctaStyle}
+              onMouseEnter={e => { e.currentTarget.style.background = '#16a34a'; e.currentTarget.style.color = '#ffffff'; e.currentTarget.style.borderColor = '#16a34a'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.15)'; e.currentTarget.style.color = '#ffffff'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.40)'; }}
+            >
+              {action}<ArrowSvg />
+            </Link>
+          ) : (
+            <a href={href} style={ctaStyle}
+              onMouseEnter={e => { e.currentTarget.style.background = '#16a34a'; e.currentTarget.style.color = '#ffffff'; e.currentTarget.style.borderColor = '#16a34a'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.15)'; e.currentTarget.style.color = '#ffffff'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.40)'; }}
+            >
+              {action}<ArrowSvg />
+            </a>
+          )}
         </div>
       </div>
     </Reveal>
@@ -500,7 +486,7 @@ const ContactPage = () => (
   <Layout>
 
     {/* ══ 1. HERO ══ */}
-    <section style={{ position: 'relative', minHeight: '55vh', display: 'flex', alignItems: 'center', overflow: 'hidden' }}>
+    <section style={{ position: 'relative', minHeight: '60vh', display: 'flex', alignItems: 'center', overflow: 'hidden' }}>
       <img
         src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&q=80&w=2000&h=900&crop=top"
         alt="RAAH Technologies contact"
@@ -510,61 +496,62 @@ const ContactPage = () => (
       <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent 40%, rgba(5,46,22,0.60) 100%)' }} aria-hidden="true" />
       <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle, rgba(74,222,128,0.07) 1px, transparent 1px)', backgroundSize: '32px 32px', pointerEvents: 'none' }} aria-hidden="true" />
 
-      <div className="container-custom" style={{ position: 'relative', zIndex: 1, textAlign: 'center', padding: 'clamp(50px, 10vw, 120px) clamp(16px, 4vw, 24px)' }}>
+      <div className="container-custom" style={{ position: 'relative', zIndex: 1, textAlign: 'center', padding: '120px 24px' }}>
         <Reveal delay={0}><Eyebrow label="Contact Us" light /></Reveal>
         <Reveal delay={80}>
-          <h1 style={{ fontFamily: FI, fontWeight: 900, fontSize: 'clamp(2.25rem, 6vw, 5rem)', letterSpacing: '-0.03em', lineHeight: 1.05, color: '#ffffff', maxWidth: '900px', margin: '0 auto 24px' }}>
+          <h1 style={{ fontFamily: FI, fontWeight: 900, fontSize: 'clamp(2.5rem, 6vw, 5rem)', letterSpacing: '-0.03em', lineHeight: 1.05, color: '#ffffff', maxWidth: '900px', margin: '0 auto 24px' }}>
             Let's Talk About{' '}
-            <span style={{ color: '#4ade80' }}>Your Agency</span>
+            <span style={{ color: '#ffffff', textDecoration: 'underline', textDecorationColor: 'rgba(255,255,255,0.40)', textUnderlineOffset: '6px' }}>Your Agency</span>
           </h1>
         </Reveal>
         <Reveal delay={160}>
-          <p style={{ fontFamily: FP, fontSize: 'clamp(1rem, 2vw, 1.25rem)', fontWeight: 500, lineHeight: 1.75, color: 'rgba(220,252,231,0.85)', maxWidth: '580px', margin: '0 auto' }}>
+          <p style={{ fontFamily: FP, fontSize: 'clamp(1.05rem, 1.6vw, 1.25rem)', fontWeight: 500, lineHeight: 1.75, color: 'rgba(255,255,255,0.90)', maxWidth: '580px', margin: '0 auto' }}>
             Whether you want to see the platform, ask about pricing, or just have questions, our team responds within one business day.
           </p>
         </Reveal>
       </div>
     </section>
 
-    <WaveDivider topColor="rgba(5,46,22,0.65)" bottomColor="#ffffff" />
+    <WaveDivider topColor="rgba(5,46,22,0.65)" bottomColor="#dff0df" />
 
     {/* ══ 2. CONTACT BODY ══ */}
-    <section style={{ background: '#ffffff', padding: 'clamp(50px, 10vw, 100px) 0 clamp(60px, 12vw, 120px)', position: 'relative', overflow: 'hidden' }}>
+    <section style={{ background: '#dff0df', padding: '100px 0 120px', position: 'relative', overflow: 'hidden' }}>
       <DotGrid />
       <Watermark />
       <RadialGlow top="-60px" right="-60px" size={420} opacity={0.07} />
       <RadialGlow bottom="-60px" left="-60px" size={360} opacity={0.06} />
 
+      <style>{`
+        .contact-body-grid {
+          display: grid;
+          gap: 64px;
+          align-items: start;
+        }
+        @media (min-width: 1024px) {
+          .contact-body-grid {
+            grid-template-columns: 1fr 1.5fr;
+            align-items: stretch;
+          }
+        }
+      `}</style>
       <div className="container-custom" style={{ position: 'relative', zIndex: 1 }}>
-        <style>{`
-          .contact-grid {
-            display: grid;
-            gap: 48px;
-            align-items: start;
-          }
-          @media (min-width: 1024px) {
-            .contact-grid {
-              grid-template-columns: 1fr 1.5fr;
-              gap: 64px;
-            }
-          }
-        `}</style>
-        <div className="contact-grid">
+        <div className="contact-body-grid">
 
           {/* Left — info cards */}
-          <div>
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
             <Reveal delay={0}>
               <Eyebrow label="Reach Us" />
-              <h2 style={{ fontFamily: FI, fontWeight: 900, fontSize: 'clamp(1.75rem, 4vw, 3rem)', letterSpacing: '-0.03em', lineHeight: 1.08, color: '#0f172a', marginBottom: '16px' }}>
+              <h2 style={{ fontFamily: FI, fontWeight: 900, fontSize: 'clamp(2rem, 4vw, 3rem)', letterSpacing: '-0.03em', lineHeight: 1.08, color: '#0f172a', marginBottom: '16px' }}>
                 We Are{' '}
                 <span style={{ color: '#16a34a' }}>Here to Help</span>
               </h2>
-              <p style={{ fontFamily: FP, fontSize: 'clamp(0.9375rem, 2vw, 1rem)', fontWeight: 400, lineHeight: 1.80, color: '#475569', marginBottom: '40px', maxWidth: '420px' }}>
+              <p style={{ fontFamily: FP, fontSize: '1rem', fontWeight: 400, lineHeight: 1.80, color: '#475569', marginBottom: '40px', maxWidth: '420px' }}>
                 Our team of home health specialists is available Monday through Friday. For urgent platform issues, our support line answers within two hours during business hours.
               </p>
             </Reveal>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(12px, 2vw, 16px)' }}>
+            {/* Info cards */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               <InfoCard
                 icon={MapPinIcon}
                 title="Office Location"
@@ -596,44 +583,22 @@ const ContactPage = () => (
                 delay={290}
               />
             </div>
-
-            {/* Quick links */}
-            <Reveal delay={360}>
-              <div style={{ marginTop: 'clamp(28px, 5vw, 36px)', padding: 'clamp(16px, 3vw, 24px)', borderRadius: '14px', background: 'rgba(22,163,74,0.05)', border: '1px solid rgba(22,163,74,0.12)' }}>
-                <p style={{ fontFamily: FI, fontWeight: 700, fontSize: 'clamp(0.85rem, 1.8vw, 0.9rem)', color: '#0f172a', marginBottom: '14px' }}>Looking for something specific?</p>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(8px, 1.5vw, 10px)' }}>
-                  {[
-                    { label: 'Request a platform demo', path: '/demo' },
-                    { label: 'Get a custom pricing quote', path: '/pricing' },
-                    { label: 'Learn about our services', path: '/services' },
-                  ].map(({ label, path }) => (
-                    <Link key={path} to={path} style={{ fontFamily: FP, fontSize: 'clamp(0.85rem, 1.8vw, 0.9rem)', color: '#16a34a', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px', transition: 'gap 0.2s ease' }}
-                      onMouseEnter={e => { e.currentTarget.style.gap = '12px'; }}
-                      onMouseLeave={e => { e.currentTarget.style.gap = '8px'; }}
-                    >
-                      <svg viewBox="0 0 16 16" fill="none" width="14" height="14">
-                        <path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="#16a34a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                      {label}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            </Reveal>
           </div>
 
-          {/* Right — contact form */}
+          {/* Right — form card stretches to match left column height */}
           <Reveal delay={100}>
-            <div style={{
-              background: '#ffffff',
-              borderRadius: '20px',
-              border: '1px solid rgba(22,163,74,0.14)',
-              boxShadow: '0 8px 48px rgba(5,46,22,0.10), 0 2px 12px rgba(5,46,22,0.06)',
-              overflow: 'hidden',
-            }}>
-              {/* Card top accent */}
-              <div style={{ height: '3px', background: 'linear-gradient(to right, #16a34a, #4ade80, #16a34a)' }} />
-              <ContactForm />
+            <div style={{ height: '100%' }}>
+              <div style={{
+                background: '#ffffff',
+                borderRadius: '20px',
+                border: '1px solid rgba(22,163,74,0.14)',
+                boxShadow: '0 8px 48px rgba(5,46,22,0.10), 0 2px 12px rgba(5,46,22,0.06)',
+                overflow: 'hidden',
+                height: '100%',
+              }}>
+                <div style={{ height: '3px', background: 'linear-gradient(to right, #16a34a, #4ade80, #16a34a)' }} />
+                <ContactForm />
+              </div>
             </div>
           </Reveal>
 
@@ -641,26 +606,23 @@ const ContactPage = () => (
       </div>
     </section>
 
-    <WaveDivider topColor="#ffffff" bottomColor="#052e16" flip />
 
     {/* ══ 3. MAP ══ */}
-    <section style={{ background: '#052e16', position: 'relative', overflow: 'hidden' }}>
-      <DotGrid color="rgba(74,222,128,0.06)" />
-
+    <section style={{ background: '#1a1a1a', position: 'relative', overflow: 'hidden' }}>
       <div style={{ position: 'relative', zIndex: 1 }}>
         {/* Map label bar */}
-        <div className="container-custom" style={{ paddingTop: 'clamp(32px, 6vw, 48px)', paddingBottom: 'clamp(16px, 3vw, 24px)' }}>
+        <div className="container-custom" style={{ paddingTop: '48px', paddingBottom: '24px' }}>
           <Reveal delay={0}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 'clamp(12px, 2vw, 16px)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
               <div>
-                <p style={{ fontFamily: FP, fontSize: 'clamp(0.7rem, 1.5vw, 0.75rem)', fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#4ade80', marginBottom: '6px' }}>Our Location</p>
-                <p style={{ fontFamily: FI, fontWeight: 700, fontSize: 'clamp(1rem, 2.5vw, 1.125rem)', color: '#ffffff' }}>13891 Oswego Street, Aurora, Colorado</p>
+                <p style={{ fontFamily: FP, fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.60)', marginBottom: '6px' }}>Our Location</p>
+                <p style={{ fontFamily: FI, fontWeight: 700, fontSize: '1.125rem', color: '#ffffff' }}>13891 Oswego Street, Aurora, Colorado</p>
               </div>
               <a
                 href="https://maps.google.com/?q=13891+Oswego+Street+Aurora+CO"
                 target="_blank"
                 rel="noreferrer"
-                style={{ fontFamily: FI, fontWeight: 700, fontSize: 'clamp(0.75rem, 1.5vw, 0.8125rem)', letterSpacing: '0.06em', textTransform: 'uppercase', padding: 'clamp(9px, 2vw, 11px) clamp(18px, 3vw, 22px)', borderRadius: '999px', background: 'transparent', color: '#4ade80', border: '1.5px solid rgba(74,222,128,0.40)', textDecoration: 'none', transition: 'all 0.22s ease', display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+                style={{ fontFamily: FI, fontWeight: 700, fontSize: '0.8125rem', letterSpacing: '0.06em', textTransform: 'uppercase', padding: '11px 22px', borderRadius: '999px', background: 'transparent', color: '#4ade80', border: '1.5px solid rgba(74,222,128,0.35)', textDecoration: 'none', transition: 'all 0.22s ease', display: 'inline-flex', alignItems: 'center', gap: '8px' }}
                 onMouseEnter={e => { e.currentTarget.style.background = 'rgba(74,222,128,0.12)'; e.currentTarget.style.borderColor = '#4ade80'; }}
                 onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = 'rgba(74,222,128,0.40)'; }}
               >
@@ -673,63 +635,65 @@ const ContactPage = () => (
           </Reveal>
         </div>
 
-        {/* Google Maps iframe — no API key required */}
+        {/* Google Maps iframe — zoom animation, edge fades, proper alignment */}
         <Reveal delay={80}>
-          <div style={{ position: 'relative', width: '100%', height: 'clamp(320px, 50vw, 480px)', borderTop: '1px solid rgba(74,222,128,0.12)', borderBottom: '1px solid rgba(74,222,128,0.12)' }}>
+          <div style={{
+            position: 'relative', width: '100%', height: 'clamp(320px, 50vw, 480px)',
+            borderTop: '1px solid rgba(255,255,255,0.15)',
+            borderBottom: '1px solid rgba(255,255,255,0.15)',
+            overflow: 'hidden',
+          }}>
             <iframe
               title="RAAH Technologies Office Location"
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3068.0!2d-104.8319!3d39.7294!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x876c63d0c9e3e06b%3A0x0!2s13891+Oswego+St%2C+Aurora%2C+CO+80011!5e0!3m2!1sen!2sus!4v1700000000000!5m2!1sen!2sus"
               width="100%"
               height="100%"
-              style={{ border: 0, display: 'block', filter: 'saturate(0.9) contrast(1.05)' }}
+              style={{
+                border: 0, display: 'block',
+                filter: 'saturate(0.9) contrast(1.05)',
+                transition: 'transform 0.7s cubic-bezier(0.22, 1, 0.36, 1)',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.03)'; }}
+              onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; }}
               allowFullScreen
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
             />
+
           </div>
         </Reveal>
 
         {/* Bottom padding */}
-        <div style={{ height: 'clamp(32px, 6vw, 48px)' }} />
+        <div style={{ height: '48px' }} />
       </div>
     </section>
 
-    <WaveDivider topColor="#052e16" bottomColor="#ffffff" />
 
     {/* ══ 4. SUPPORT STRIP ══ */}
-    <section style={{ background: '#ffffff', padding: 'clamp(50px, 10vw, 100px) 0 clamp(60px, 12vw, 120px)', position: 'relative', overflow: 'hidden' }}>
+    <section style={{ background: '#dff0df', padding: '100px 0 120px', position: 'relative', overflow: 'hidden' }}>
       <DotGrid />
       <RadialGlow top="-60px" right="-60px" size={420} opacity={0.07} />
 
       <div className="container-custom" style={{ position: 'relative', zIndex: 1 }}>
         <Reveal delay={0}>
-          <div style={{ textAlign: 'center', marginBottom: 'clamp(40px, 8vw, 60px)' }}>
+          <div style={{ textAlign: 'center', marginBottom: '60px' }}>
             <Eyebrow label="Support" />
-            <h2 style={{ fontFamily: FI, fontWeight: 900, fontSize: 'clamp(2rem, 5vw, 3.5rem)', letterSpacing: '-0.03em', lineHeight: 1.08, color: '#0f172a', maxWidth: '680px', margin: '0 auto 16px' }}>
+            <h2 style={{ fontFamily: FI, fontWeight: 900, fontSize: 'clamp(2.25rem, 5vw, 3.5rem)', letterSpacing: '-0.03em', lineHeight: 1.08, color: '#0f172a', maxWidth: '680px', margin: '0 auto 16px' }}>
               Three Ways to{' '}
               <span style={{ color: '#16a34a' }}>Get Help</span>
             </h2>
-            <p style={{ fontFamily: FP, fontSize: 'clamp(0.9375rem, 1.8vw, 1.15rem)', fontWeight: 500, lineHeight: 1.75, color: '#374151', maxWidth: '500px', margin: '0 auto' }}>
+            <p style={{ fontFamily: FP, fontSize: 'clamp(1rem, 1.4vw, 1.15rem)', fontWeight: 500, lineHeight: 1.75, color: '#374151', maxWidth: '500px', margin: '0 auto' }}>
               RAAH clients get dedicated support at every stage. Not a ticket queue.
             </p>
           </div>
         </Reveal>
 
         <style>{`
-          .support-grid {
-            display: grid;
-            gap: 24px;
-            justify-items: center;
-            grid-template-columns: 1fr;
-          }
-          @media (min-width: 640px) {
-            .support-grid { grid-template-columns: repeat(2, 1fr); }
-          }
-          @media (min-width: 1024px) {
-            .support-grid { grid-template-columns: repeat(3, 1fr); }
-          }
-        `}</style>
-        <div className="support-grid">
+            @media (max-width: 639px) { .support-grid { grid-template-columns: 1fr !important; } }
+            @media (min-width: 640px) and (max-width: 1023px) { .support-grid { grid-template-columns: repeat(2, 1fr) !important; } }
+            @media (min-width: 1024px) { .support-grid { grid-template-columns: repeat(3, 1fr) !important; } }
+          `}</style>
+        <div className="support-grid" style={{ display: 'grid', gap: '24px', alignItems: 'stretch' }}>
           {SUPPORT_CHANNELS.map((channel) => (
             <SupportCard key={channel.title} {...channel} />
           ))}

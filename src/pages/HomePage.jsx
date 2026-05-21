@@ -2537,7 +2537,7 @@ const HomePage = () => {
               alignItems: 'center',
               width: '100%',
               maxWidth: '720px',
-              margin: '0 auto 56px',
+              margin: '0 auto clamp(32px, 6vw, 48px)', // ✅ Improved responsive spacing
             }}>
               {[
                 { value: '99.2%', label: 'Billing Accuracy' },

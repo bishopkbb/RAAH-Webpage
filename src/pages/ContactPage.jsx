@@ -112,10 +112,10 @@ const InfoCard = ({ icon, title, lines, link, linkLabel, delay }) => {
         style={{
           background: '#ffffff',
           borderRadius: '18px',
-          padding: '24px 28px',
+          padding: '28px 32px',
           display: 'flex',
           alignItems: 'flex-start',
-          gap: '20px',
+          gap: '22px',
           border: '1px solid',
           borderColor: hovered ? 'rgba(22,163,74,0.30)' : 'rgba(22,163,74,0.12)',
           boxShadow: hovered
@@ -127,33 +127,33 @@ const InfoCard = ({ icon, title, lines, link, linkLabel, delay }) => {
       >
         {/* Icon square */}
         <div style={{
-          width: '60px', height: '60px', borderRadius: '15px', flexShrink: 0,
+          width: '64px', height: '64px', borderRadius: '16px', flexShrink: 0,
           background: hovered ? '#16a34a' : 'rgba(22,163,74,0.08)',
           border: `1.5px solid ${hovered ? '#16a34a' : 'rgba(22,163,74,0.18)'}`,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           transition: 'all 0.3s ease',
         }}>
           {React.createElement(icon, {
-            size: 24,
+            size: 26,
             color: hovered ? '#ffffff' : '#16a34a',
             strokeWidth: 1.75,
             style: { transition: 'color 0.3s ease' },
           })}
         </div>
         <div style={{ flex: 1 }}>
-          <p style={{ fontFamily: FI, fontWeight: 800, fontSize: '1.0625rem', color: '#0f172a', marginBottom: '7px', lineHeight: 1.2 }}>
+          <p style={{ fontFamily: FI, fontWeight: 800, fontSize: '1.125rem', color: '#0a0a0a', marginBottom: '8px', lineHeight: 1.2 }}>
             {title}
           </p>
           {lines.map((line, i) => (
-            <p key={i} style={{ fontFamily: FP, fontSize: '0.9375rem', color: '#374151', lineHeight: 1.65 }}>
+            <p key={i} style={{ fontFamily: FP, fontSize: '1rem', color: '#1e293b', lineHeight: 1.65, fontWeight: 500 }}>
               {line}
             </p>
           ))}
           {link && (
             <a href={link} style={{
-              fontFamily: FI, fontWeight: 700, fontSize: '0.8125rem',
+              fontFamily: FI, fontWeight: 700, fontSize: '0.875rem',
               color: '#16a34a', textDecoration: 'none',
-              letterSpacing: '0.03em', marginTop: '9px',
+              letterSpacing: '0.02em', marginTop: '10px',
               display: 'inline-flex', alignItems: 'center', gap: '5px',
               transition: 'gap 0.2s ease',
             }}
@@ -219,23 +219,23 @@ const ContactForm = () => {
   };
 
   const inputStyle = {
-    width: '100%', fontFamily: FP, fontSize: '1rem', fontWeight: 400,
-    padding: '15px 18px', borderRadius: '12px', outline: 'none',
-    border: '1.5px solid rgba(22,163,74,0.20)',
-    color: '#0f172a', background: '#fafffe',
+    width: '100%', fontFamily: FP, fontSize: '1.0625rem', fontWeight: 400,
+    padding: '16px 20px', borderRadius: '12px', outline: 'none',
+    border: '1.5px solid rgba(22,163,74,0.22)',
+    color: '#0a0a0a', background: '#f8fffc',
     transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
     boxSizing: 'border-box',
   };
 
   const labelStyle = {
-    fontFamily: FI, fontSize: '0.8rem', fontWeight: 700,
-    color: '#0f172a', marginBottom: '8px', display: 'block',
+    fontFamily: FI, fontSize: '0.8125rem', fontWeight: 700,
+    color: '#0a0a0a', marginBottom: '9px', display: 'block',
     letterSpacing: '0.06em', textTransform: 'uppercase',
   };
 
   if (submitted) {
     return (
-      <div style={{ textAlign: 'center', padding: '60px 32px' }}>
+      <div style={{ textAlign: 'center', padding: '72px 48px' }}>
         <div style={{
           width: '72px', height: '72px', borderRadius: '50%',
           background: 'linear-gradient(135deg, #052e16 0%, #16a34a 100%)',
@@ -266,16 +266,16 @@ const ContactForm = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit} style={{ padding: '48px 48px 44px' }}>
-      <h3 style={{ fontFamily: FI, fontWeight: 900, fontSize: '1.625rem', color: '#0f172a', marginBottom: '8px', letterSpacing: '-0.02em' }}>
+    <form onSubmit={handleSubmit} style={{ padding: '52px 52px 48px' }}>
+      <h3 style={{ fontFamily: FI, fontWeight: 900, fontSize: '1.875rem', color: '#0a0a0a', marginBottom: '8px', letterSpacing: '-0.02em' }}>
         Send Us a Message
       </h3>
-      <p style={{ fontFamily: FP, fontSize: '0.9375rem', color: '#475569', marginBottom: '36px', lineHeight: 1.65 }}>
+      <p style={{ fontFamily: FP, fontSize: '1rem', color: '#374151', fontWeight: 500, marginBottom: '40px', lineHeight: 1.65 }}>
         We respond to all enquiries within one business day.
       </p>
 
       {/* Row: Name + Agency */}
-      <div style={{ display: 'grid', gap: '16px', marginBottom: '20px' }} className="contact-form-row">
+      <div style={{ display: 'grid', gap: '18px', marginBottom: '22px' }} className="contact-form-row">
         <div>
           <label style={labelStyle} htmlFor="name">Full Name *</label>
           <input id="name" name="name" type="text" required placeholder="Sarah Johnson" value={fields.name} onChange={handleChange} style={inputStyle}
@@ -293,7 +293,7 @@ const ContactForm = () => {
       </div>
 
       {/* Row: Email + Phone */}
-      <div style={{ display: 'grid', gap: '16px', marginBottom: '20px' }} className="contact-form-row">
+      <div style={{ display: 'grid', gap: '18px', marginBottom: '22px' }} className="contact-form-row">
         <div>
           <label style={labelStyle} htmlFor="email">Email Address *</label>
           <input id="email" name="email" type="email" required placeholder="sarah@caringhands.org" value={fields.email} onChange={handleChange} style={inputStyle}
@@ -311,7 +311,7 @@ const ContactForm = () => {
       </div>
 
       {/* Subject */}
-      <div style={{ marginBottom: '20px' }}>
+      <div style={{ marginBottom: '22px' }}>
         <label style={labelStyle} htmlFor="subject">Subject *</label>
         <select id="subject" name="subject" required value={fields.subject} onChange={handleChange}
           style={{ ...inputStyle, cursor: 'pointer', color: fields.subject ? '#0f172a' : '#94a3b8' }}
@@ -330,10 +330,10 @@ const ContactForm = () => {
       </div>
 
       {/* Message */}
-      <div style={{ marginBottom: '32px' }}>
+      <div style={{ marginBottom: '36px' }}>
         <label style={labelStyle} htmlFor="message">Message *</label>
         <textarea id="message" name="message" required rows={4} placeholder="Tell us about your agency, what you are looking for, or any questions you have..." value={fields.message} onChange={handleChange}
-          style={{ ...inputStyle, resize: 'vertical', minHeight: '140px' }}
+          style={{ ...inputStyle, resize: 'vertical', minHeight: '160px' }}
           onFocus={e => { e.target.style.borderColor = '#16a34a'; e.target.style.boxShadow = '0 0 0 3px rgba(22,163,74,0.10)'; }}
           onBlur={e => { e.target.style.borderColor = 'rgba(22,163,74,0.18)'; e.target.style.boxShadow = 'none'; }}
         />
@@ -372,7 +372,7 @@ const ContactForm = () => {
         )}
       </button>
 
-      <p style={{ fontFamily: FP, fontSize: '0.8125rem', color: '#64748b', textAlign: 'center', marginTop: '18px' }}>
+      <p style={{ fontFamily: FP, fontSize: '0.875rem', color: '#475569', textAlign: 'center', marginTop: '20px' }}>
         We respect your privacy. Your information will never be shared.
       </p>
 
@@ -497,15 +497,28 @@ const ContactPage = () => (
       <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle, rgba(74,222,128,0.07) 1px, transparent 1px)', backgroundSize: '32px 32px', pointerEvents: 'none' }} aria-hidden="true" />
 
       <div className="container-custom" style={{ position: 'relative', zIndex: 1, textAlign: 'center', padding: '120px 24px' }}>
-        <Reveal delay={0}><Eyebrow label="Contact Us" light /></Reveal>
+        <Reveal delay={0}>
+          <Eyebrow label="Contact Us" light />
+        </Reveal>
         <Reveal delay={80}>
-          <h1 style={{ fontFamily: FI, fontWeight: 900, fontSize: 'clamp(2.5rem, 6vw, 5rem)', letterSpacing: '-0.03em', lineHeight: 1.05, color: '#ffffff', maxWidth: '900px', margin: '0 auto 24px' }}>
+          <h1 style={{
+            fontFamily: FI, fontWeight: 900,
+            fontSize: 'clamp(2.5rem, 6vw, 5rem)',
+            letterSpacing: '-0.03em', lineHeight: 1.05,
+            color: '#ffffff', marginBottom: '24px',
+            maxWidth: '900px', margin: '0 auto 24px',
+          }}>
             Let's Talk About{' '}
-            <span style={{ color: '#ffffff', textDecoration: 'underline', textDecorationColor: 'rgba(255,255,255,0.40)', textUnderlineOffset: '6px' }}>Your Agency</span>
+            <span style={{ color: '#4ade80' }}>Your Agency</span>
           </h1>
         </Reveal>
         <Reveal delay={160}>
-          <p style={{ fontFamily: FP, fontSize: 'clamp(1.05rem, 1.6vw, 1.25rem)', fontWeight: 500, lineHeight: 1.75, color: 'rgba(255,255,255,0.90)', maxWidth: '580px', margin: '0 auto' }}>
+          <p style={{
+            fontFamily: FP, fontSize: 'clamp(1.05rem, 1.6vw, 1.25rem)',
+            fontWeight: 500, lineHeight: 1.75,
+            color: 'rgba(220,252,231,0.85)',
+            maxWidth: '620px', margin: '0 auto 40px',
+          }}>
             Whether you want to see the platform, ask about pricing, or just have questions, our team responds within one business day.
           </p>
         </Reveal>
@@ -545,8 +558,8 @@ const ContactPage = () => (
                 We Are{' '}
                 <span style={{ color: '#16a34a' }}>Here to Help</span>
               </h2>
-              <p style={{ fontFamily: FP, fontSize: '1rem', fontWeight: 400, lineHeight: 1.80, color: '#475569', marginBottom: '40px', maxWidth: '420px' }}>
-                Our team of home health specialists is available Monday through Friday. For urgent platform issues, our support line answers within two hours during business hours.
+              <p style={{ fontFamily: FP, fontSize: '1rem', fontWeight: 500, lineHeight: 1.80, color: '#374151', marginBottom: '40px', maxWidth: '420px' }}>
+                Our team of home health specialists is available Monday through Friday. For urgent platform issues, our support line answers within two hours during business hours. We believe in real conversations, not ticket queues.
               </p>
             </Reveal>
 

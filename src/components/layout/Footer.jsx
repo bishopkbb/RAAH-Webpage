@@ -14,10 +14,8 @@
  *   Muted       rgba(255,255,255,0.45)
  *
  * ESLint fix:
- *   SOCIALS destructures `{ icon: SocialIcon }` — capital-named alias
- *   so jsx-uses-vars correctly tracks `<SocialIcon />` usage.
- *   CONTACT destructures `{ icon: ContactIcon }` for the same reason.
- *   Both follow the same pattern used in Navbar.jsx.
+ *   Using React.createElement with lowercase `icon` key instead of
+ *   destructuring aliases to avoid 'defined but never used' warnings.
  *
  * Changes from original:
  *   — "Request a Demo" CTA button removed from Contact column.
@@ -53,8 +51,6 @@ const CONTACT = [
   { icon: Mail,   text: 'info@raahhealth.org',            href: 'mailto:info@raahhealth.org'},
 ];
 
-// icon property is lowercase intentionally — renamed to SocialIcon in the map
-// so ESLint's jsx-uses-vars rule correctly tracks the component reference.
 const SOCIALS = [
   { icon: Facebook,  href: '#', label: 'Facebook'  },
   { icon: Twitter,   href: '#', label: 'Twitter'   },
@@ -78,20 +74,20 @@ const POPPINS = "'Poppins', sans-serif";
 const colHeadingStyle = {
   fontFamily:    INTER,
   fontWeight:    700,
-  fontSize:      '0.95rem',
+  fontSize:      'clamp(0.875rem, 1.5vw, 0.95rem)',
   letterSpacing: '0.08em',
   textTransform: 'uppercase',
   color:         '#ffffff',
-  paddingLeft:   '14px',
+  paddingLeft:   'clamp(10px, 2vw, 14px)',
   borderLeft:    '3px solid #4ade80',
   lineHeight:    1,
-  marginBottom:  '28px',
+  marginBottom:  'clamp(20px, 4vw, 28px)',
   display:       'block',
 };
 
 const linkBaseStyle = {
   fontFamily:     POPPINS,
-  fontSize:       '0.9375rem',
+  fontSize:       'clamp(0.875rem, 1.8vw, 0.9375rem)',
   fontWeight:     400,
   color:          'rgba(255,255,255,0.78)',
   textDecoration: 'none',
@@ -149,10 +145,10 @@ const Footer = () => {
         aria-hidden="true"
         style={{
           position:     'absolute',
-          top:          '-80px',
-          right:        '-80px',
-          width:        '480px',
-          height:       '480px',
+          top:          'clamp(-60px, -10vw, -80px)',
+          right:        'clamp(-60px, -10vw, -80px)',
+          width:        'clamp(360px, 60vw, 480px)',
+          height:       'clamp(360px, 60vw, 480px)',
           borderRadius: '50%',
           background:   'radial-gradient(circle, rgba(22,163,74,0.14) 0%, transparent 70%)',
           pointerEvents: 'none',
@@ -164,10 +160,10 @@ const Footer = () => {
         aria-hidden="true"
         style={{
           position:     'absolute',
-          bottom:       '-60px',
-          left:         '-60px',
-          width:        '360px',
-          height:       '360px',
+          bottom:       'clamp(-40px, -8vw, -60px)',
+          left:         'clamp(-40px, -8vw, -60px)',
+          width:        'clamp(280px, 50vw, 360px)',
+          height:       'clamp(280px, 50vw, 360px)',
           borderRadius: '50%',
           background:   'radial-gradient(circle, rgba(22,163,74,0.10) 0%, transparent 70%)',
           pointerEvents: 'none',
@@ -179,25 +175,37 @@ const Footer = () => {
       ══════════════════════════════════════════ */}
       <div
         className="container-custom"
-        style={{ position: 'relative', zIndex: 1, paddingTop: '80px', paddingBottom: '60px' }}
+        style={{ 
+          position: 'relative', 
+          zIndex: 1, 
+          paddingTop: 'clamp(60px, 10vw, 80px)', 
+          paddingBottom: 'clamp(40px, 8vw, 60px)',
+          paddingInline: 'clamp(16px, 4vw, 24px)',
+        }}
       >
-        <div
-          style={{
-            display:             'grid',
-            gridTemplateColumns: '1.5fr 1fr 1fr 1.4fr',
-            gap:                 '48px',
-          }}
-          className="footer-grid"
-        >
+        <style>{`
+          .footer-grid {
+            display: grid;
+            gap: clamp(32px, 6vw, 48px);
+            grid-template-columns: 1fr;
+          }
+          @media (min-width: 480px) {
+            .footer-grid { grid-template-columns: repeat(2, 1fr); }
+          }
+          @media (min-width: 768px) {
+            .footer-grid { grid-template-columns: 1.5fr 1fr 1fr 1.4fr; }
+          }
+        `}</style>
+        <div className="footer-grid">
 
           {/* ── COLUMN 1 — Brand ── */}
           <div>
-            <Link to="/" style={{ display: 'inline-block', marginBottom: '24px' }}>
+            <Link to="/" style={{ display: 'inline-block', marginBottom: 'clamp(16px, 3vw, 24px)' }}>
               <img
                 src="/raah.png"
                 alt="RAAH Technologies"
                 style={{
-                  height:          '64px',
+                  height:          'clamp(48px, 8vw, 64px)',
                   width:           'auto',
                   display:         'block',
                   filter:          'brightness(1.1)',
@@ -212,23 +220,20 @@ const Footer = () => {
             <p
               style={{
                 fontFamily:   POPPINS,
-                fontSize:     '0.9375rem',
+                fontSize:     'clamp(0.875rem, 1.8vw, 0.9375rem)',
                 fontWeight:   400,
                 lineHeight:   1.75,
                 color:        'rgba(255,255,255,0.70)',
-                marginBottom: '32px',
-                maxWidth:     '280px',
+                marginBottom: 'clamp(24px, 4vw, 32px)',
+                maxWidth:     'clamp(240px, 40vw, 280px)',
               }}
             >
               The end-to-end platform built exclusively for home health agencies. Clinical, operational, and financial workflows in one connected system.
             </p>
 
-            {/* Social icons ─────────────────────────────────────────────────
-                Destructured as `icon: SocialIcon` (capital alias) so
-                ESLint's jsx-uses-vars rule correctly tracks <SocialIcon />.
-            ─────────────────────────────────────────────────────────────── */}
-            <div style={{ display: 'flex', gap: '10px' }}>
-              {SOCIALS.map(({ icon: SocialIcon, href, label }) => (
+            {/* Social icons — using React.createElement to avoid ESLint alias warnings */}
+            <div style={{ display: 'flex', gap: 'clamp(8px, 1.5vw, 10px)', flexWrap: 'wrap' }}>
+              {SOCIALS.map(({ icon, href, label }) => (
                 <a
                   key={label}
                   href={href}
@@ -236,8 +241,8 @@ const Footer = () => {
                   rel="noreferrer"
                   aria-label={label}
                   style={{
-                    width:          '40px',
-                    height:         '40px',
+                    width:          'clamp(36px, 7vw, 40px)',
+                    height:         'clamp(36px, 7vw, 40px)',
                     borderRadius:   '10px',
                     background:     'rgba(255,255,255,0.07)',
                     border:         '1px solid rgba(74,222,128,0.15)',
@@ -247,6 +252,7 @@ const Footer = () => {
                     color:          'rgba(255,255,255,0.70)',
                     transition:     'all 0.25s cubic-bezier(0.22, 1, 0.36, 1)',
                     textDecoration: 'none',
+                    flexShrink:     0,
                   }}
                   onMouseEnter={e => {
                     e.currentTarget.style.background  = 'rgba(74,222,128,0.15)';
@@ -263,7 +269,7 @@ const Footer = () => {
                     e.currentTarget.style.boxShadow   = 'none';
                   }}
                 >
-                  <SocialIcon size={17} strokeWidth={1.75} />
+                  {React.createElement(icon, { size: 17, strokeWidth: 1.75, color: 'rgba(255,255,255,0.70)' })}
                 </a>
               ))}
             </div>
@@ -279,7 +285,7 @@ const Footer = () => {
                 margin:         0,
                 display:        'flex',
                 flexDirection:  'column',
-                gap:            '14px',
+                gap:            'clamp(10px, 2vw, 14px)',
               }}
             >
               {NAV_LINKS.map(({ label, path }) => (
@@ -300,7 +306,7 @@ const Footer = () => {
                 margin:        0,
                 display:       'flex',
                 flexDirection: 'column',
-                gap:           '14px',
+                gap:           'clamp(10px, 2vw, 14px)',
               }}
             >
               {SOLUTIONS.map(item => (
@@ -308,7 +314,7 @@ const Footer = () => {
                   <span
                     style={{
                       fontFamily: POPPINS,
-                      fontSize:   '0.9375rem',
+                      fontSize:   'clamp(0.875rem, 1.8vw, 0.9375rem)',
                       fontWeight: 400,
                       color:      'rgba(255,255,255,0.78)',
                       lineHeight: 1,
@@ -325,10 +331,7 @@ const Footer = () => {
           <div>
             <span style={colHeadingStyle}>Contact Us</span>
 
-            {/* Contact items ──────────────────────────────────────────────
-                Destructured as `icon: ContactIcon` (capital alias) so
-                ESLint's jsx-uses-vars rule correctly tracks <ContactIcon />.
-            ─────────────────────────────────────────────────────────────── */}
+            {/* Contact items — using React.createElement to avoid ESLint alias warnings */}
             <ul
               style={{
                 listStyle:     'none',
@@ -336,10 +339,10 @@ const Footer = () => {
                 margin:        0,
                 display:       'flex',
                 flexDirection: 'column',
-                gap:           '20px',
+                gap:           'clamp(16px, 3vw, 20px)',
               }}
             >
-              {CONTACT.map(({ icon: ContactIcon, text, href }) => (
+              {CONTACT.map(({ icon, text, href }) => (
                 <li key={text}>
                   <a
                     href={href}
@@ -348,7 +351,7 @@ const Footer = () => {
                     style={{
                       display:        'flex',
                       alignItems:     'flex-start',
-                      gap:            '14px',
+                      gap:            'clamp(10px, 2vw, 14px)',
                       textDecoration: 'none',
                       transition:     'opacity 0.2s ease',
                     }}
@@ -358,8 +361,8 @@ const Footer = () => {
                     {/* Icon square */}
                     <div
                       style={{
-                        width:          '36px',
-                        height:         '36px',
+                        width:          'clamp(32px, 6vw, 36px)',
+                        height:         'clamp(32px, 6vw, 36px)',
                         borderRadius:   '9px',
                         background:     'rgba(74,222,128,0.10)',
                         border:         '1px solid rgba(74,222,128,0.20)',
@@ -367,20 +370,21 @@ const Footer = () => {
                         alignItems:     'center',
                         justifyContent: 'center',
                         flexShrink:     0,
-                        marginTop:      '1px',
+                        marginTop:      'clamp(0px, 0.5vw, 1px)',
                       }}
                     >
-                      <ContactIcon size={15} color="#4ade80" strokeWidth={1.75} />
+                      {React.createElement(icon, { size: 15, color: '#4ade80', strokeWidth: 1.75 })}
                     </div>
 
                     <span
                       style={{
                         fontFamily: POPPINS,
-                        fontSize:   '0.9rem',
+                        fontSize:   'clamp(0.85rem, 1.8vw, 0.9rem)',
                         fontWeight: 400,
                         color:      'rgba(255,255,255,0.82)',
                         lineHeight: 1.6,
-                        paddingTop: '7px',
+                        paddingTop: 'clamp(4px, 1vw, 7px)',
+                        wordBreak:  'break-word',
                       }}
                     >
                       {text}
@@ -389,8 +393,6 @@ const Footer = () => {
                 </li>
               ))}
             </ul>
-
-            {/* "Request a Demo" button removed per brief */}
 
           </div>
 
@@ -401,21 +403,22 @@ const Footer = () => {
         ══════════════════════════════════════════ */}
         <div
           style={{
-            marginTop:      '60px',
-            paddingTop:     '28px',
+            marginTop:      'clamp(40px, 8vw, 60px)',
+            paddingTop:     'clamp(20px, 4vw, 28px)',
             borderTop:      '1px solid rgba(74,222,128,0.12)',
             display:        'flex',
             justifyContent: 'center',
             alignItems:     'center',
             flexWrap:       'wrap',
-            gap:            '16px',
+            gap:            'clamp(12px, 2vw, 16px)',
+            textAlign:      'center',
           }}
         >
           {/* Copyright */}
           <p
             style={{
               fontFamily:    POPPINS,
-              fontSize:      '0.8375rem',
+              fontSize:      'clamp(0.78rem, 1.5vw, 0.8375rem)',
               fontWeight:    400,
               color:         'rgba(255,255,255,0.42)',
               margin:        0,
@@ -455,16 +458,6 @@ const Footer = () => {
         </div>
 
       </div>
-
-      {/* ── Responsive grid overrides ── */}
-      <style>{`
-        @media (max-width: 1024px) {
-          .footer-grid { grid-template-columns: 1fr 1fr !important; gap: 40px !important; }
-        }
-        @media (max-width: 640px) {
-          .footer-grid { grid-template-columns: 1fr !important; gap: 36px !important; }
-        }
-      `}</style>
 
     </footer>
   );

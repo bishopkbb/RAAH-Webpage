@@ -17,7 +17,7 @@
  *   ✦ No Icon alias in .map() — React.createElement with lowercase key
  *   ✦ No setState in effect body — mobile menu via onClick only
  *   ✦ ESLint-clean, zero unused imports
- *   ✦ Mobile close X button: explicit SVG color, type="button", zeroed padding
+ *   ✦ Single toggle button: Menu ↔ X morph based on isOpen state
  */
 
 import React, { useState, useEffect } from 'react';
@@ -272,31 +272,47 @@ const Navbar = ({ heroMode = false }) => {
                 />
               </Link>
 
-              {/* ✅ Hamburger menu button - visible on mobile only */}
+              {/* ✅✅✅ SINGLE TOGGLE BUTTON: Menu ↔ X morph */}
               <button
                 className="lg:hidden flex items-center justify-center"
-                onClick={() => setIsOpen(true)}
+                onClick={() => setIsOpen(prev => !prev)}
+                type="button"
+                aria-label={isOpen ? 'Close menu' : 'Open menu'}
+                aria-expanded={isOpen}
                 style={{
-                  width: '40px',
-                  height: '40px',
-                  borderRadius: '10px',
-                  border: '1.5px solid rgba(22,163,74,0.20)',
-                  background: 'transparent',
+                  width: '48px',
+                  height: '48px',
+                  borderRadius: '12px',
+                  border: '2px solid #16a34a',
+                  background: isOpen ? '#16a34a' : 'transparent',
                   color: '#16a34a',
                   cursor: 'pointer',
-                  transition: 'all 0.2s ease',
+                  transition: 'all 0.25s cubic-bezier(0.22, 1, 0.36, 1)',
+                  padding: 0,
+                  margin: 0,
+                  outline: 'none',
+                  flexShrink: 0,
+                  boxShadow: isOpen ? '0 4px 12px rgba(22,163,74,0.30)' : 'none',
                 }}
-                aria-label="Open menu"
                 onMouseEnter={e => {
-                  e.currentTarget.style.background = 'rgba(22,163,74,0.08)';
-                  e.currentTarget.style.borderColor = 'rgba(22,163,74,0.40)';
+                  if (!isOpen) {
+                    e.currentTarget.style.background = 'rgba(22,163,74,0.08)';
+                    e.currentTarget.style.borderColor = 'rgba(22,163,74,0.40)';
+                  }
                 }}
                 onMouseLeave={e => {
-                  e.currentTarget.style.background = 'transparent';
-                  e.currentTarget.style.borderColor = 'rgba(22,163,74,0.20)';
+                  if (!isOpen) {
+                    e.currentTarget.style.background = 'transparent';
+                    e.currentTarget.style.borderColor = 'rgba(22,163,74,0.20)';
+                  }
                 }}
               >
-                <Menu size={22} strokeWidth={2} />
+                {/* ✅ Icon morphs: Menu when closed, X when open */}
+                {isOpen ? (
+                  <X size={22} strokeWidth={2.5} color="#ffffff" />
+                ) : (
+                  <Menu size={22} strokeWidth={2} color="#16a34a" />
+                )}
               </button>
 
               {/* Desktop nav links */}
@@ -482,7 +498,8 @@ const Navbar = ({ heroMode = false }) => {
       )}
 
       {/* ══════════════════════════════════════════════════════
-          ✅✅ MOBILE MENU — full-screen slide-in from right
+          ✅ MOBILE MENU — full-screen slide-in from right
+          NO separate close button — uses the morphing toggle above
       ══════════════════════════════════════════════════════ */}
       <div
         className="lg:hidden fixed inset-0 z-[55]"
@@ -495,11 +512,11 @@ const Navbar = ({ heroMode = false }) => {
         }}
         aria-hidden={!isOpen}
       >
-        {/* ✅ Mobile Header Row */}
+        {/* ✅ Mobile header — NO close button, just logo */}
         <div style={{
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'space-between',
+          justifyContent: 'flex-start',
           padding: '0 20px',
           height: `${NAV_H}px`,
           borderBottom: '1px solid rgba(22,163,74,0.10)',
@@ -510,47 +527,6 @@ const Navbar = ({ heroMode = false }) => {
           <Link to="/" onClick={() => setIsOpen(false)}>
             <img src={logoUrl} alt="RAAH Technologies" style={{ height: '42px', width: 'auto', border: 'none', background: 'transparent', padding: 0 }} />
           </Link>
-          
-          {/* ✅✅✅ CLOSE X BUTTON — Fully audited & explicit */}
-          <button
-            type="button"
-            onClick={(e) => {
-              e.preventDefault();
-              setIsOpen(false);
-            }}
-            aria-label="Close menu"
-            style={{
-              width: '48px',
-              height: '48px',
-              borderRadius: '12px',
-              border: '2px solid #16a34a',
-              background: '#16a34a',
-              color: '#ffffff',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              cursor: 'pointer',
-              transition: 'all 0.2s ease',
-              flexShrink: 0,
-              boxShadow: '0 4px 12px rgba(22,163,74,0.30)',
-              padding: 0,
-              margin: 0,
-              outline: 'none',
-            }}
-            onMouseEnter={e => {
-              e.currentTarget.style.background = '#0d7a3e';
-              e.currentTarget.style.borderColor = '#0d7a3e';
-              e.currentTarget.style.transform = 'scale(1.05)';
-            }}
-            onMouseLeave={e => {
-              e.currentTarget.style.background = '#16a34a';
-              e.currentTarget.style.borderColor = '#16a34a';
-              e.currentTarget.style.transform = 'scale(1)';
-            }}
-          >
-            {/* Explicit color prop guarantees white stroke regardless of CSS inheritance */}
-            <X size={22} strokeWidth={2.5} color="#ffffff" />
-          </button>
         </div>
 
         {/* Scrollable body */}

@@ -17,6 +17,7 @@
  *   ✦ No Icon alias in .map() — React.createElement with lowercase key
  *   ✦ No setState in effect body — mobile menu via onClick only
  *   ✦ ESLint-clean, zero unused imports
+ *   ✦ Mobile close X button: explicit SVG color, type="button", zeroed padding
  */
 
 import React, { useState, useEffect } from 'react';
@@ -271,7 +272,7 @@ const Navbar = ({ heroMode = false }) => {
                 />
               </Link>
 
-              {/* Hamburger menu button - visible on mobile only */}
+              {/* ✅ Hamburger menu button - visible on mobile only */}
               <button
                 className="lg:hidden flex items-center justify-center"
                 onClick={() => setIsOpen(true)}
@@ -451,8 +452,6 @@ const Navbar = ({ heroMode = false }) => {
                 </Link>
               </div>
 
-
-
             </div>
           </div>
         </div>
@@ -483,7 +482,7 @@ const Navbar = ({ heroMode = false }) => {
       )}
 
       {/* ══════════════════════════════════════════════════════
-          MOBILE MENU — full-screen slide-in from right
+          ✅✅ MOBILE MENU — full-screen slide-in from right
       ══════════════════════════════════════════════════════ */}
       <div
         className="lg:hidden fixed inset-0 z-[55]"
@@ -491,57 +490,71 @@ const Navbar = ({ heroMode = false }) => {
           background: '#ffffff',
           transform: isOpen ? 'translateX(0)' : 'translateX(100%)',
           transition: 'transform 0.32s cubic-bezier(0.22, 1, 0.36, 1)',
-          height: '100dvh',
+          height: '100vh',
+          overflow: 'hidden',
         }}
         aria-hidden={!isOpen}
       >
-        {/* Mobile header */}
+        {/* ✅ Mobile Header Row */}
         <div style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          padding: '0 24px',
+          padding: '0 20px',
           height: `${NAV_H}px`,
           borderBottom: '1px solid rgba(22,163,74,0.10)',
+          position: 'relative',
+          zIndex: 10,
+          background: '#ffffff',
         }}>
           <Link to="/" onClick={() => setIsOpen(false)}>
             <img src={logoUrl} alt="RAAH Technologies" style={{ height: '42px', width: 'auto', border: 'none', background: 'transparent', padding: 0 }} />
           </Link>
-          {/* ✅ Close X Button - Highly visible */}
+          
+          {/* ✅✅✅ CLOSE X BUTTON — Fully audited & explicit */}
           <button
-            onClick={() => setIsOpen(false)}
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              setIsOpen(false);
+            }}
+            aria-label="Close menu"
             style={{
-              width: '44px',
-              height: '44px',
+              width: '48px',
+              height: '48px',
               borderRadius: '12px',
-              border: '1.5px solid rgba(22,163,74,0.25)',
-              background: 'rgba(22,163,74,0.06)',
-              color: '#0f172a',
+              border: '2px solid #16a34a',
+              background: '#16a34a',
+              color: '#ffffff',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               cursor: 'pointer',
               transition: 'all 0.2s ease',
               flexShrink: 0,
+              boxShadow: '0 4px 12px rgba(22,163,74,0.30)',
+              padding: 0,
+              margin: 0,
+              outline: 'none',
             }}
-            aria-label="Close menu"
             onMouseEnter={e => {
-              e.currentTarget.style.background = 'rgba(22,163,74,0.12)';
-              e.currentTarget.style.borderColor = 'rgba(22,163,74,0.50)';
+              e.currentTarget.style.background = '#0d7a3e';
+              e.currentTarget.style.borderColor = '#0d7a3e';
               e.currentTarget.style.transform = 'scale(1.05)';
             }}
             onMouseLeave={e => {
-              e.currentTarget.style.background = 'rgba(22,163,74,0.06)';
-              e.currentTarget.style.borderColor = 'rgba(22,163,74,0.25)';
+              e.currentTarget.style.background = '#16a34a';
+              e.currentTarget.style.borderColor = '#16a34a';
               e.currentTarget.style.transform = 'scale(1)';
             }}
           >
-            <X size={20} strokeWidth={2.5} />
+            {/* Explicit color prop guarantees white stroke regardless of CSS inheritance */}
+            <X size={22} strokeWidth={2.5} color="#ffffff" />
           </button>
         </div>
 
         {/* Scrollable body */}
-        <div style={{ overflowY: 'auto', height: `calc(100dvh - ${NAV_H}px)` }}>
+        <div style={{ overflowY: 'auto', height: `calc(100vh - ${NAV_H}px)`, paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}>
           <div style={{ padding: '8px 24px 40px', display: 'flex', flexDirection: 'column' }}>
 
             {/* Nav links */}

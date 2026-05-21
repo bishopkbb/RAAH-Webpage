@@ -32,7 +32,7 @@ const SLIDES = [
     headlineTop: 'Protect Your',
     accentWord:  'Revenue.',
     headlineBot: 'From Day One.',
-    bgImage: 'https://images.unsplash.com/photo-1594824476967-48c8b964273f?auto=format&q=80&w=2000&h=1200&fit=crop&crop=top',
+    bgImage: 'assets/banner.jpeg',
     bgAlt:   'Home health billing professional',
   },
   {
@@ -41,7 +41,7 @@ const SLIDES = [
     headlineTop: 'Your Team,',
     accentWord:  'Empowered.',
     headlineBot: 'Everywhere.',
-    bgImage: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&q=80&w=2000&h=1200&fit=crop&crop=top',
+    bgImage: 'assets/banner 2.jpeg',
     bgAlt:   'Home health caregiver in the field',
   },
   {
@@ -50,7 +50,7 @@ const SLIDES = [
     headlineTop: 'Run a Smarter',
     accentWord:  'Agency.',
     headlineBot: 'Not a Busier One.',
-    bgImage: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&q=80&w=2000&h=1200&fit=crop&crop=top',
+    bgImage: 'assets/banner3.jpeg',
     bgAlt:   'Agency administrator reviewing operations dashboard',
   },
 ];

@@ -1815,7 +1815,7 @@ const HomePage = () => {
                   }}
                 >
                   <img
-                    src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1200"
+                    src="assets\workflow home page.jpeg"
                     alt="RAAH Platform Dashboard"
                     style={{
                       width: '100%',

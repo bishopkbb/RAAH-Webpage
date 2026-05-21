@@ -21,7 +21,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Phone, MapPin, Clock, Facebook, Twitter, Linkedin, Instagram, ChevronRight, X } from 'lucide-react';
+import { Phone, MapPin, Clock, Facebook, Twitter, Linkedin, Instagram, ChevronRight, X, Menu } from 'lucide-react';
 
 // ─── Constants ─────────────────────────────────────────────────────────────────
 const TOPBAR_H  = 56;   // px — topbar at rest
@@ -271,6 +271,33 @@ const Navbar = ({ heroMode = false }) => {
                 />
               </Link>
 
+              {/* Hamburger menu button - visible on mobile only */}
+              <button
+                className="lg:hidden flex items-center justify-center"
+                onClick={() => setIsOpen(true)}
+                style={{
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '10px',
+                  border: '1.5px solid rgba(22,163,74,0.20)',
+                  background: 'transparent',
+                  color: '#16a34a',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                }}
+                aria-label="Open menu"
+                onMouseEnter={e => {
+                  e.currentTarget.style.background = 'rgba(22,163,74,0.08)';
+                  e.currentTarget.style.borderColor = 'rgba(22,163,74,0.40)';
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.background = 'transparent';
+                  e.currentTarget.style.borderColor = 'rgba(22,163,74,0.20)';
+                }}
+              >
+                <Menu size={22} strokeWidth={2} />
+              </button>
+
               {/* Desktop nav links */}
               <nav
                 className="hidden lg:flex items-center flex-1 justify-center"
@@ -480,18 +507,36 @@ const Navbar = ({ heroMode = false }) => {
           <Link to="/" onClick={() => setIsOpen(false)}>
             <img src={logoUrl} alt="RAAH Technologies" style={{ height: '42px', width: 'auto', border: 'none', background: 'transparent', padding: 0 }} />
           </Link>
+          {/* ✅ Close X Button - Highly visible */}
           <button
             onClick={() => setIsOpen(false)}
             style={{
-              width: '40px', height: '40px', borderRadius: '10px',
-              border: '1.5px solid rgba(22,163,74,0.20)',
-              background: 'transparent', color: '#6b7280',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              cursor: 'pointer', transition: 'all 0.2s ease',
+              width: '44px',
+              height: '44px',
+              borderRadius: '12px',
+              border: '1.5px solid rgba(22,163,74,0.25)',
+              background: 'rgba(22,163,74,0.06)',
+              color: '#0f172a',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              transition: 'all 0.2s ease',
+              flexShrink: 0,
             }}
             aria-label="Close menu"
+            onMouseEnter={e => {
+              e.currentTarget.style.background = 'rgba(22,163,74,0.12)';
+              e.currentTarget.style.borderColor = 'rgba(22,163,74,0.50)';
+              e.currentTarget.style.transform = 'scale(1.05)';
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.background = 'rgba(22,163,74,0.06)';
+              e.currentTarget.style.borderColor = 'rgba(22,163,74,0.25)';
+              e.currentTarget.style.transform = 'scale(1)';
+            }}
           >
-            <X size={22} strokeWidth={2} />
+            <X size={20} strokeWidth={2.5} />
           </button>
         </div>
 

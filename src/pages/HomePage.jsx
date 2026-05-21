@@ -249,7 +249,8 @@ const FEATURES = [
 ];
 
 // ─── Feature Card ─────────────────────────────────────────────────────────────
-// Green background, white text. Hover: lifts, glows, reveals metric + shimmer.
+// Rest: white card, green label, RAAH green heading, black body text.
+// Hover: flips to full green gradient — all animations preserved exactly.
 const FeatureCard = ({ feature, delay }) => {
   const [hovered, setHovered] = useState(false);
   const { Icon, label, title, desc, metric, metricLabel } = feature;
@@ -260,24 +261,22 @@ const FeatureCard = ({ feature, delay }) => {
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
         style={{
-          // Green card — deep on rest, brightens on hover
           background: hovered
-            ? 'linear-gradient(145deg, #15803d 0%, #166534 60%, #14532d 100%)'
-            : 'linear-gradient(145deg, #166534 0%, #14532d 60%, #052e16 100%)',
+            ? 'linear-gradient(145deg, #1db954 0%, #16a34a 60%, #0d8a3e 100%)'
+            : '#ffffff',
           borderRadius: '20px',
           padding: '0',
           overflow: 'hidden',
           position: 'relative',
           height: '100%',
-          // Outer glow deepens on hover
           boxShadow: hovered
             ? '0 24px 64px rgba(5,46,22,0.28), 0 4px 16px rgba(22,163,74,0.20), inset 0 1px 0 rgba(74,222,128,0.15)'
-            : '0 4px 20px rgba(5,46,22,0.12), inset 0 1px 0 rgba(74,222,128,0.08)',
+            : '0 4px 20px rgba(5,46,22,0.08), 0 1px 4px rgba(5,46,22,0.04)',
           transform: hovered ? 'translateY(-8px) scale(1.01)' : 'translateY(0) scale(1)',
           transition: 'all 0.4s cubic-bezier(0.22, 1, 0.36, 1)',
           cursor: 'default',
           border: '1px solid',
-          borderColor: hovered ? 'rgba(74,222,128,0.30)' : 'rgba(74,222,128,0.12)',
+          borderColor: hovered ? 'rgba(74,222,128,0.30)' : 'rgba(22,163,74,0.14)',
         }}
       >
         {/* Shimmer sweep on hover */}
@@ -296,13 +295,13 @@ const FeatureCard = ({ feature, delay }) => {
           aria-hidden="true"
         />
 
-        {/* Top mint line — always visible, brightens on hover */}
+        {/* Top accent line — green on rest, mint on hover */}
         <div
           style={{
-            height: '2px',
+            height: '3px',
             background: hovered
               ? 'linear-gradient(to right, #4ade80, #86efac, #4ade80)'
-              : 'linear-gradient(to right, rgba(74,222,128,0.40), rgba(74,222,128,0.15))',
+              : 'linear-gradient(to right, #16a34a, #22c55e)',
             transition: 'background 0.4s ease',
           }}
         />
@@ -315,8 +314,8 @@ const FeatureCard = ({ feature, delay }) => {
               width: '72px',
               height: '72px',
               borderRadius: '18px',
-              background: '#ffffff',
-              border: '1.5px solid rgba(22,163,74,0.25)',
+              background: hovered ? '#ffffff' : 'rgba(22,163,74,0.07)',
+              border: hovered ? '1.5px solid rgba(255,255,255,0.80)' : '1.5px solid rgba(22,163,74,0.20)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -325,18 +324,17 @@ const FeatureCard = ({ feature, delay }) => {
               position: 'relative',
             }}
           >
-            {/* Radial glow behind icon — always on, brightens on hover */}
+            {/* Radial glow behind icon */}
             <div style={{
               position: 'absolute',
               inset: '-10px',
               borderRadius: '26px',
               background: hovered
                 ? 'radial-gradient(circle, rgba(74,222,128,0.20) 0%, transparent 70%)'
-                : 'radial-gradient(circle, rgba(74,222,128,0.08) 0%, transparent 70%)',
+                : 'radial-gradient(circle, rgba(22,163,74,0.10) 0%, transparent 70%)',
               pointerEvents: 'none',
               transition: 'background 0.4s ease',
             }} />
-            {/* Re-colour SVG strokes for white-on-green context */}
             <div style={{ filter: 'none' }}>
               <Icon />
             </div>
@@ -350,7 +348,7 @@ const FeatureCard = ({ feature, delay }) => {
               fontWeight: 600,
               letterSpacing: '0.18em',
               textTransform: 'uppercase',
-              color: hovered ? '#86efac' : '#4ade80',
+              color: hovered ? '#ffffff' : '#16a34a',
               marginBottom: '8px',
               transition: 'color 0.3s ease',
             }}
@@ -358,29 +356,30 @@ const FeatureCard = ({ feature, delay }) => {
             {label}
           </p>
 
-          {/* Title */}
+          {/* Title — RAAH brand green at rest, white on hover */}
           <h3
             style={{
               fontFamily: "'Inter', sans-serif",
               fontSize: '1.375rem',
               fontWeight: 800,
               letterSpacing: '-0.02em',
-              color: '#ffffff',
+              color: hovered ? '#ffffff' : '#16a34a',
               marginBottom: '14px',
               lineHeight: 1.25,
+              transition: 'color 0.3s ease',
             }}
           >
             {title}
           </h3>
 
-          {/* Description */}
+          {/* Description — near-black at rest, white on hover */}
           <p
             style={{
               fontFamily: "'Poppins', sans-serif",
               fontSize: '1rem',
               fontWeight: 400,
               lineHeight: 1.80,
-              color: hovered ? '#ffffff' : 'rgba(255,255,255,0.88)',
+              color: hovered ? '#ffffff' : '#1a1a1a',
               marginBottom: '28px',
               transition: 'color 0.3s ease',
             }}
@@ -388,11 +387,11 @@ const FeatureCard = ({ feature, delay }) => {
             {desc}
           </p>
 
-          {/* Metric — always visible, pops on hover */}
+          {/* Metric */}
           <div
             style={{
               paddingTop: '20px',
-              borderTop: `1px solid ${hovered ? 'rgba(74,222,128,0.25)' : 'rgba(74,222,128,0.12)'}`,
+              borderTop: `1px solid ${hovered ? 'rgba(255,255,255,0.25)' : 'rgba(22,163,74,0.15)'}`,
               display: 'flex',
               alignItems: 'center',
               gap: '14px',
@@ -407,7 +406,7 @@ const FeatureCard = ({ feature, delay }) => {
                 borderRadius: '999px',
                 background: hovered
                   ? 'linear-gradient(to bottom, #86efac, #4ade80)'
-                  : 'linear-gradient(to bottom, #4ade80, rgba(74,222,128,0.40))',
+                  : 'linear-gradient(to bottom, #16a34a, rgba(22,163,74,0.40))',
                 flexShrink: 0,
                 transition: 'background 0.35s ease',
               }}
@@ -418,7 +417,7 @@ const FeatureCard = ({ feature, delay }) => {
                   fontFamily: "'Inter', sans-serif",
                   fontSize: '1.625rem',
                   fontWeight: 900,
-                  color: hovered ? '#ffffff' : 'rgba(255,255,255,0.90)',
+                  color: hovered ? '#ffffff' : '#0a6b30',
                   lineHeight: 1,
                   letterSpacing: '-0.02em',
                   transition: 'color 0.3s ease',
@@ -431,7 +430,7 @@ const FeatureCard = ({ feature, delay }) => {
                   fontFamily: "'Poppins', sans-serif",
                   fontSize: '0.78rem',
                   fontWeight: 500,
-                  color: hovered ? '#86efac' : 'rgba(74,222,128,0.65)',
+                  color: hovered ? '#ffffff' : '#16a34a',
                   textTransform: 'uppercase',
                   letterSpacing: '0.1em',
                   marginTop: '3px',
@@ -473,10 +472,9 @@ const AnimatedSection = ({ children, className = '', animation = 'fade-in-up' })
 };
 
 // ─── CaregiverCard ────────────────────────────────────────────────────────────
-// Identical architecture to FeatureCard — dark green bg, white icon container,
-// green icons, shimmer sweep, lift + glow on hover, metric stat always visible.
-// Sits on the brand-green section so the gradient is slightly lighter than the
-// Why Choose Us cards to create depth against the dark background.
+// White card on green section — mirrors FeatureCard rest state.
+// Hover: no green flip. Instead: lifts, top accent bar sweeps in via scaleX,
+// icon bounces, border greens, shadow deepens, text stays readable.
 const CaregiverCard = ({ item, delay }) => {
   const [hovered, setHovered] = useState(false);
   const { label, title, desc, metric, metricLabel, icon } = item;
@@ -487,78 +485,82 @@ const CaregiverCard = ({ item, delay }) => {
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
         style={{
-          background: hovered
-            ? 'linear-gradient(145deg, #166534 0%, #14532d 60%, #052e16 100%)'
-            : 'linear-gradient(145deg, #14532d 0%, #052e16 60%, #031a0e 100%)',
+          background: '#ffffff',
           borderRadius: '20px',
           overflow: 'hidden',
           position: 'relative',
           height: '100%',
           boxShadow: hovered
-            ? '0 24px 64px rgba(0,0,0,0.40), 0 4px 16px rgba(22,163,74,0.18), inset 0 1px 0 rgba(74,222,128,0.15)'
-            : '0 4px 24px rgba(0,0,0,0.25), inset 0 1px 0 rgba(74,222,128,0.06)',
+            ? '0 20px 56px rgba(5,46,22,0.22), 0 4px 16px rgba(22,163,74,0.16)'
+            : '0 4px 20px rgba(5,46,22,0.10)',
           transform: hovered ? 'translateY(-8px) scale(1.01)' : 'translateY(0) scale(1)',
           transition: 'all 0.4s cubic-bezier(0.22, 1, 0.36, 1)',
           cursor: 'default',
           border: '1px solid',
-          borderColor: hovered ? 'rgba(74,222,128,0.28)' : 'rgba(74,222,128,0.10)',
+          borderColor: hovered ? 'rgba(22,163,74,0.35)' : 'rgba(22,163,74,0.14)',
         }}
       >
-        {/* Shimmer sweep on hover */}
+        {/* Top accent bar — hairline at rest, full sweep on hover */}
+        <div
+          style={{
+            position: 'absolute',
+            top: 0, left: 0, right: 0,
+            height: '3px',
+            background: 'linear-gradient(to right, #16a34a, #22c55e)',
+            transform: hovered ? 'scaleX(1)' : 'scaleX(0.12)',
+            transformOrigin: 'left',
+            opacity: hovered ? 1 : 0.45,
+            transition: 'transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.45s ease',
+            zIndex: 2,
+          }}
+        />
+
+        {/* Subtle shimmer on hover — softer than FeatureCard */}
         <div
           aria-hidden="true"
           style={{
             position: 'absolute',
             top: 0,
-            left: hovered ? '120%' : '-60%',
-            width: '50%',
+            left: hovered ? '110%' : '-50%',
+            width: '40%',
             height: '100%',
-            background: 'linear-gradient(105deg, transparent 20%, rgba(255,255,255,0.05) 50%, transparent 80%)',
+            background: 'linear-gradient(105deg, transparent 20%, rgba(22,163,74,0.04) 50%, transparent 80%)',
             transform: 'skewX(-15deg)',
-            transition: 'left 0.7s cubic-bezier(0.22, 1, 0.36, 1)',
+            transition: 'left 0.8s cubic-bezier(0.22, 1, 0.36, 1)',
             pointerEvents: 'none',
-          }}
-        />
-
-        {/* Top mint accent line */}
-        <div
-          style={{
-            height: '2px',
-            background: hovered
-              ? 'linear-gradient(to right, #4ade80, #86efac, #4ade80)'
-              : 'linear-gradient(to right, rgba(74,222,128,0.35), rgba(74,222,128,0.10))',
-            transition: 'background 0.4s ease',
           }}
         />
 
         <div style={{ padding: '36px 32px 32px', position: 'relative', zIndex: 1 }}>
 
-          {/* Icon container — white bg, green icon, glow on hover */}
+          {/* Icon container — bounces on hover */}
           <div
             style={{
               width: '72px',
               height: '72px',
               borderRadius: '18px',
-              background: '#ffffff',
-              border: `1.5px solid ${hovered ? 'rgba(22,163,74,0.35)' : 'rgba(22,163,74,0.20)'}`,
+              background: hovered ? 'rgba(22,163,74,0.08)' : 'rgba(22,163,74,0.06)',
+              border: `1.5px solid ${hovered ? 'rgba(22,163,74,0.30)' : 'rgba(22,163,74,0.18)'}`,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               marginBottom: '28px',
-              transition: 'all 0.35s ease',
+              transition: 'all 0.4s cubic-bezier(0.22, 1, 0.36, 1)',
+              transform: hovered ? 'translateY(-4px) scale(1.06)' : 'translateY(0) scale(1)',
               position: 'relative',
               flexShrink: 0,
             }}
           >
+            {/* Glow behind icon on hover */}
             <div
               aria-hidden="true"
               style={{
                 position: 'absolute',
-                inset: '-10px',
-                borderRadius: '26px',
+                inset: '-8px',
+                borderRadius: '24px',
                 background: hovered
-                  ? 'radial-gradient(circle, rgba(74,222,128,0.18) 0%, transparent 70%)'
-                  : 'radial-gradient(circle, rgba(74,222,128,0.06) 0%, transparent 70%)',
+                  ? 'radial-gradient(circle, rgba(22,163,74,0.14) 0%, transparent 70%)'
+                  : 'radial-gradient(circle, rgba(22,163,74,0.04) 0%, transparent 70%)',
                 pointerEvents: 'none',
                 transition: 'background 0.4s ease',
               }}
@@ -574,37 +576,37 @@ const CaregiverCard = ({ item, delay }) => {
               fontWeight: 600,
               letterSpacing: '0.18em',
               textTransform: 'uppercase',
-              color: hovered ? '#86efac' : '#4ade80',
+              color: '#16a34a',
               marginBottom: '8px',
-              transition: 'color 0.3s ease',
             }}
           >
             {label}
           </p>
 
-          {/* Title */}
+          {/* Title — RAAH green, darkens slightly on hover */}
           <h3
             style={{
               fontFamily: "'Inter', sans-serif",
               fontSize: '1.375rem',
               fontWeight: 800,
               letterSpacing: '-0.02em',
-              color: '#ffffff',
+              color: hovered ? '#0a6b30' : '#16a34a',
               marginBottom: '14px',
               lineHeight: 1.25,
+              transition: 'color 0.3s ease',
             }}
           >
             {title}
           </h3>
 
-          {/* Description */}
+          {/* Description — near-black, deepens on hover */}
           <p
             style={{
               fontFamily: "'Poppins', sans-serif",
               fontSize: '1rem',
               fontWeight: 400,
               lineHeight: 1.80,
-              color: hovered ? '#ffffff' : 'rgba(255,255,255,0.82)',
+              color: hovered ? '#111111' : '#1a1a1a',
               marginBottom: '28px',
               transition: 'color 0.3s ease',
             }}
@@ -616,23 +618,22 @@ const CaregiverCard = ({ item, delay }) => {
           <div
             style={{
               paddingTop: '20px',
-              borderTop: `1px solid ${hovered ? 'rgba(74,222,128,0.22)' : 'rgba(74,222,128,0.10)'}`,
+              borderTop: `1px solid ${hovered ? 'rgba(22,163,74,0.22)' : 'rgba(22,163,74,0.12)'}`,
               display: 'flex',
               alignItems: 'center',
               gap: '14px',
               transition: 'all 0.35s ease',
             }}
           >
+            {/* Accent bar — grows on hover */}
             <div
               style={{
                 width: '4px',
-                height: '36px',
+                height: hovered ? '42px' : '36px',
                 borderRadius: '999px',
-                background: hovered
-                  ? 'linear-gradient(to bottom, #86efac, #4ade80)'
-                  : 'linear-gradient(to bottom, #4ade80, rgba(74,222,128,0.35))',
+                background: 'linear-gradient(to bottom, #16a34a, rgba(22,163,74,0.40))',
                 flexShrink: 0,
-                transition: 'background 0.35s ease',
+                transition: 'height 0.35s cubic-bezier(0.22, 1, 0.36, 1)',
               }}
             />
             <div>
@@ -641,7 +642,7 @@ const CaregiverCard = ({ item, delay }) => {
                   fontFamily: "'Inter', sans-serif",
                   fontSize: '1.625rem',
                   fontWeight: 900,
-                  color: hovered ? '#ffffff' : 'rgba(255,255,255,0.90)',
+                  color: hovered ? '#052e16' : '#0a6b30',
                   lineHeight: 1,
                   letterSpacing: '-0.02em',
                   transition: 'color 0.3s ease',
@@ -654,11 +655,10 @@ const CaregiverCard = ({ item, delay }) => {
                   fontFamily: "'Poppins', sans-serif",
                   fontSize: '0.78rem',
                   fontWeight: 500,
-                  color: hovered ? '#86efac' : 'rgba(74,222,128,0.60)',
+                  color: '#16a34a',
                   textTransform: 'uppercase',
                   letterSpacing: '0.1em',
                   marginTop: '3px',
-                  transition: 'color 0.3s ease',
                 }}
               >
                 {metricLabel}
@@ -700,7 +700,7 @@ const WorkflowStep = ({ step, isLast }) => {
             height: '52px',
             borderRadius: '14px',
             background: hovered
-              ? 'linear-gradient(135deg, #052e16 0%, #166534 100%)'
+              ? 'linear-gradient(135deg, #0d7a3e 0%, #16a34a 100%)'
               : '#ffffff',
             border: `2px solid ${hovered ? '#16a34a' : 'rgba(22,163,74,0.25)'}`,
             display: 'flex',
@@ -721,7 +721,7 @@ const WorkflowStep = ({ step, isLast }) => {
               fontSize: '0.85rem',
               fontWeight: 900,
               letterSpacing: '0.06em',
-              color: hovered ? '#4ade80' : '#16a34a',
+              color: hovered ? '#ffffff' : '#16a34a',
               transition: 'color 0.3s ease',
             }}
           >
@@ -736,7 +736,7 @@ const WorkflowStep = ({ step, isLast }) => {
               width: '2px',
               flexGrow: 1,
               minHeight: '40px',
-              background: 'linear-gradient(to bottom, rgba(22,163,74,0.25), rgba(22,163,74,0.05))',
+              background: 'linear-gradient(to bottom, rgba(22,163,74,0.40), rgba(22,163,74,0.08))',
               borderRadius: '999px',
               margin: '6px 0',
             }}
@@ -779,7 +779,7 @@ const WorkflowStep = ({ step, isLast }) => {
               fontWeight: 800,
               fontSize: '1.375rem',
               letterSpacing: '-0.02em',
-              color: hovered ? '#052e16' : '#0f172a',
+              color: hovered ? '#0a6b30' : '#0f172a',
               lineHeight: 1.2,
               transition: 'color 0.3s ease',
             }}
@@ -814,7 +814,7 @@ const TESTIMONIALS = [
     initials: 'SJ',
     metric: '90%',
     metricLabel: 'Fewer Claim Rejections',
-    color: '#166534',
+    color: '#16a34a',
   },
   {
     quote: 'The mobile app is exactly what our caregivers needed. Training took under an hour, compliance issues disappeared, and our visit documentation is now airtight. I recommend RAAH to every agency owner I know.',
@@ -824,7 +824,7 @@ const TESTIMONIALS = [
     initials: 'MC',
     metric: '< 1hr',
     metricLabel: 'Staff Training Time',
-    color: '#14532d',
+    color: '#0d8a3e',
   },
   {
     quote: 'Before RAAH, our schedulers were spending six hours a day on conflict resolution. Now it takes forty minutes. The drag-and-drop builder with skill-matching is genuinely a game changer for a team our size.',
@@ -834,7 +834,7 @@ const TESTIMONIALS = [
     initials: 'AO',
     metric: '85%',
     metricLabel: 'Scheduling Time Saved',
-    color: '#052e16',
+    color: '#0d7a3e',
   },
   {
     quote: 'EVV compliance was keeping me up at night before we switched. RAAH syncs with our state aggregator in real time and I have not had a single EVV-related claim issue in eight months. That peace of mind is priceless.',
@@ -844,7 +844,7 @@ const TESTIMONIALS = [
     initials: 'DR',
     metric: '8 mo',
     metricLabel: 'Zero EVV Claim Issues',
-    color: '#166534',
+    color: '#16a34a',
   },
   {
     quote: 'We scaled from 40 to 120 caregivers in under a year and RAAH scaled right with us. No performance issues, no re-training, no gaps. It is genuinely built for growth and I cannot imagine running our agency without it.',
@@ -854,7 +854,7 @@ const TESTIMONIALS = [
     initials: 'JO',
     metric: '3x',
     metricLabel: 'Team Growth, Zero Friction',
-    color: '#14532d',
+    color: '#0d8a3e',
   },
   {
     quote: 'The reporting dashboards alone justified the switch. I can see payer mix, caregiver performance, and care gaps on one screen before my first cup of coffee. My clinical team now makes decisions in hours, not weeks.',
@@ -864,7 +864,7 @@ const TESTIMONIALS = [
     initials: 'PN',
     metric: '+52%',
     metricLabel: 'Faster Clinical Decisions',
-    color: '#052e16',
+    color: '#0d7a3e',
   },
   {
     quote: 'RAAH is the first platform that actually understands home health billing. Secondary crossover claims, PDGM compliance, 835 remittance, all handled automatically. Our revenue cycle team has gone from reactive to completely proactive.',
@@ -874,7 +874,7 @@ const TESTIMONIALS = [
     initials: 'KA',
     metric: '99.2%',
     metricLabel: 'Billing Accuracy Rate',
-    color: '#166534',
+    color: '#16a34a',
   },
 ];
 
@@ -899,7 +899,7 @@ const TestimonialCard = ({ t, visible }) => {
         borderColor: hovered ? 'rgba(22,163,74,0.25)' : 'rgba(22,163,74,0.10)',
         boxShadow: hovered
           ? '0 20px 60px rgba(5,46,22,0.12), 0 4px 16px rgba(22,163,74,0.08)'
-          : '0 4px 24px rgba(5,46,22,0.06)',
+          : '0 4px 24px rgba(5,46,22,0.10)',
         transform: hovered ? 'translateY(-4px)' : 'translateY(0)',
         transition: 'all 0.35s cubic-bezier(0.22, 1, 0.36, 1)',
         opacity: visible ? 1 : 0,
@@ -1044,7 +1044,7 @@ const TestimonialCard = ({ t, visible }) => {
               fontFamily: "'Inter', sans-serif",
               fontSize: '1.25rem',
               fontWeight: 900,
-              color: '#052e16',
+              color: '#0a6b30',
               lineHeight: 1,
               letterSpacing: '-0.02em',
             }}
@@ -1075,7 +1075,6 @@ const TestimonialCard = ({ t, visible }) => {
 // ─── Testimonials Section ─────────────────────────────────────────────────────
 const TestimonialsSection = () => {
   const [current, setCurrent]   = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const [direction, setDirection] = useState(1); // 1=forward, -1=back
   const timerRef = useRef(null);
@@ -1095,17 +1094,16 @@ const TestimonialsSection = () => {
   const prev = () => goTo(current - 1, -1);
   const next = () => goTo(current + 1,  1);
 
-  // Auto-advance every 5s — uses functional setState to avoid stale closure
+  // Auto-slides continuously — no pause on hover
   useEffect(() => {
-    if (isPaused) { clearInterval(timerRef.current); return; }
     timerRef.current = setInterval(() => {
       setDirection(1);
       setIsAnimating(true);
       setCurrent(p => (p + 1) % total);
       setTimeout(() => setIsAnimating(false), 550);
-    }, 6000);
+    }, 5000);
     return () => clearInterval(timerRef.current);
-  }, [isPaused, total]);
+  }, [total]);
 
   // Which two testimonials are visible (desktop shows current + next)
   const visibleA = current;
@@ -1114,13 +1112,11 @@ const TestimonialsSection = () => {
   return (
     <section
       style={{
-        background: '#ffffff',
+        background: '#dff0df',
         padding: '120px 0 140px',
         position: 'relative',
         overflow: 'hidden',
       }}
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
     >
       {/* Keyframe for progress pip fill sweep */}
       <style>{`
@@ -1135,7 +1131,7 @@ const TestimonialsSection = () => {
         style={{
           position: 'absolute',
           inset: 0,
-          backgroundImage: 'radial-gradient(circle, rgba(5,46,22,0.04) 1px, transparent 1px)',
+          backgroundImage: 'radial-gradient(circle, rgba(5,46,22,0.06) 1px, transparent 1px)',
           backgroundSize: '32px 32px',
           pointerEvents: 'none',
         }}
@@ -1152,7 +1148,7 @@ const TestimonialsSection = () => {
           fontFamily: "'Inter', sans-serif",
           fontWeight: 900,
           fontSize: 'clamp(80px, 14vw, 180px)',
-          color: 'rgba(5,46,22,0.03)',
+          color: 'transparent',
           letterSpacing: '-0.05em',
           whiteSpace: 'nowrap',
           userSelect: 'none',
@@ -1349,7 +1345,7 @@ const TestimonialsSection = () => {
                           top: 0, left: 0, bottom: 0,
                           borderRadius: '999px',
                           background: '#16a34a',
-                          animation: `testimonialprogress ${isPaused ? '0s' : '6s'} linear forwards`,
+                          animation: 'testimonialprogress 5s linear forwards',
                         }}
                       />
                     )}
@@ -1438,7 +1434,7 @@ const HomePage = () => {
       <section
         ref={sectionRef}
         style={{
-          background: '#ffffff',
+          background: '#dff0df',
           padding: '120px 0 140px',
           position: 'relative',
           overflow: 'hidden',
@@ -1450,7 +1446,7 @@ const HomePage = () => {
           style={{
             position: 'absolute',
             inset: 0,
-            backgroundImage: 'radial-gradient(circle, rgba(5,46,22,0.04) 1px, transparent 1px)',
+            backgroundImage: 'radial-gradient(circle, rgba(5,46,22,0.06) 1px, transparent 1px)',
             backgroundSize: '32px 32px',
             pointerEvents: 'none',
           }}
@@ -1467,7 +1463,7 @@ const HomePage = () => {
             fontFamily: "'Inter', sans-serif",
             fontWeight: 900,
             fontSize: 'clamp(80px, 14vw, 180px)',
-            color: 'rgba(5,46,22,0.03)',
+            color: 'transparent',
             letterSpacing: '-0.05em',
             whiteSpace: 'nowrap',
             userSelect: 'none',
@@ -1577,10 +1573,15 @@ const HomePage = () => {
           </Reveal>
 
           {/* Cards grid */}
+          <style>{`
+            @media (max-width: 1023px) { .features-grid { grid-template-columns: repeat(2, 1fr) !important; } }
+            @media (max-width: 639px)  { .features-grid { grid-template-columns: 1fr !important; } }
+          `}</style>
           <div
+            className="features-grid"
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+              gridTemplateColumns: 'repeat(3, 1fr)',
               gap: '24px',
               alignItems: 'stretch',
             }}
@@ -1624,11 +1625,11 @@ const HomePage = () => {
                   transition: 'all 0.22s ease',
                 }}
                 onMouseEnter={e => {
-                  e.currentTarget.style.background  = '#052e16';
-                  e.currentTarget.style.color       = '#ffffff';
-                  e.currentTarget.style.borderColor = '#052e16';
+                  e.currentTarget.style.background  = 'transparent';
+                  e.currentTarget.style.color       = '#16a34a';
+                  e.currentTarget.style.borderColor = '#16a34a';
                   e.currentTarget.style.transform   = 'translateY(-2px)';
-                  e.currentTarget.style.boxShadow   = '0 10px 40px rgba(5,46,22,0.30)';
+                  e.currentTarget.style.boxShadow   = 'none';
                 }}
                 onMouseLeave={e => {
                   e.currentTarget.style.background  = '#16a34a';
@@ -1655,8 +1656,8 @@ const HomePage = () => {
       ══════════════════════════════════════════════════════════════ */}
       <section
         style={{
-          background: '#ffffff',
-          padding: '130px 0',
+          background: '#dff0df',
+          padding: '120px 0 130px',
           position: 'relative',
           overflow: 'hidden',
         }}
@@ -1667,7 +1668,7 @@ const HomePage = () => {
           style={{
             position: 'absolute',
             inset: 0,
-            backgroundImage: 'radial-gradient(circle, rgba(5,46,22,0.03) 1px, transparent 1px)',
+            backgroundImage: 'radial-gradient(circle, rgba(5,46,22,0.07) 1px, transparent 1px)',
             backgroundSize: '28px 28px',
             pointerEvents: 'none',
           }}
@@ -1717,23 +1718,23 @@ const HomePage = () => {
         />
 
         <div className="container-custom" style={{ position: 'relative', zIndex: 1 }}>
+          <style>{`
+              @media (min-width: 768px) { .workflow-grid { grid-template-columns: repeat(2, 1fr); gap: 80px; } }
+              @media (max-width: 767px) { .workflow-grid { grid-template-columns: 1fr; gap: 48px; } }
+            `}</style>
           <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(2, 1fr)',
-              gap: '80px',
-              alignItems: 'stretch',
-            }}
-            className="grid-cols-1 md:grid-cols-2"
+            className="workflow-grid"
+            style={{ display: 'grid', alignItems: 'stretch' }}
           >
 
             {/* ── LEFT — Image ── */}
             <Reveal delay={0} className="order-2 md:order-1">
               <div style={{ position: 'relative', height: '100%', display: 'flex', flexDirection: 'column' }}>
 
-                {/* Large decorative ring behind image */}
+                {/* Large decorative ring behind image — desktop only */}
                 <div
                   aria-hidden="true"
+                  className="hidden md:block"
                   style={{
                     position: 'absolute',
                     top: '-24px',
@@ -1755,7 +1756,7 @@ const HomePage = () => {
                     overflow: 'hidden',
                     boxShadow: '0 32px 80px rgba(5,46,22,0.14), 0 8px 24px rgba(5,46,22,0.08)',
                     height: '100%',
-                    minHeight: '520px',
+                    minHeight: 'clamp(280px, 40vw, 520px)',
                   }}
                 >
                   <img
@@ -1821,7 +1822,7 @@ const HomePage = () => {
                       width: '48px',
                       height: '48px',
                       borderRadius: '12px',
-                      background: 'linear-gradient(135deg, #052e16 0%, #166534 100%)',
+                      background: 'linear-gradient(135deg, #0d7a3e 0%, #16a34a 100%)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -1847,7 +1848,7 @@ const HomePage = () => {
                     <p
                       style={{
                         fontFamily: "'Inter', sans-serif",
-                        fontSize: '1.75rem',
+                        fontSize: '2rem',
                         fontWeight: 900,
                         color: '#0f172a',
                         lineHeight: 1,
@@ -1866,7 +1867,7 @@ const HomePage = () => {
                     top: '-20px',
                     left: '-20px',
                     zIndex: 10,
-                    background: 'linear-gradient(135deg, #052e16 0%, #14532d 100%)',
+                    background: 'linear-gradient(135deg, #0d7a3e 0%, #16a34a 100%)',
                     borderRadius: '999px',
                     padding: '10px 18px',
                     boxShadow: '0 8px 24px rgba(5,46,22,0.30)',
@@ -2049,13 +2050,15 @@ const HomePage = () => {
                       transition: 'all 0.25s ease',
                     }}
                     onMouseEnter={e => {
-                      e.currentTarget.style.background  = '#052e16';
-                      e.currentTarget.style.borderColor = '#052e16';
+                      e.currentTarget.style.background  = 'transparent';
+                      e.currentTarget.style.color       = '#16a34a';
+                      e.currentTarget.style.borderColor = '#16a34a';
                       e.currentTarget.style.transform   = 'translateY(-2px)';
-                      e.currentTarget.style.boxShadow   = '0 10px 40px rgba(5,46,22,0.30)';
+                      e.currentTarget.style.boxShadow   = 'none';
                     }}
                     onMouseLeave={e => {
                       e.currentTarget.style.background  = '#16a34a';
+                      e.currentTarget.style.color       = '#ffffff';
                       e.currentTarget.style.borderColor = '#16a34a';
                       e.currentTarget.style.transform   = 'translateY(0)';
                       e.currentTarget.style.boxShadow   = '0 6px 32px rgba(22,163,74,0.35)';
@@ -2082,19 +2085,19 @@ const HomePage = () => {
       ══════════════════════════════════════════════════════════════ */}
       <section
         style={{
-          background: 'linear-gradient(160deg, #052e16 0%, #064e3b 55%, #052e16 100%)',
-          padding: '120px 0 140px',
+          background: 'linear-gradient(160deg, #0d7a3e 0%, #16a34a 55%, #0d7a3e 100%)',
+          padding: '120px 0 130px',
           position: 'relative',
           overflow: 'hidden',
         }}
       >
-        {/* Dot grid — same as Why Choose Us */}
+        {/* Dot grid — mint dots on dark green bg */}
         <div
           aria-hidden="true"
           style={{
             position: 'absolute',
             inset: 0,
-            backgroundImage: 'radial-gradient(circle, rgba(5,46,22,0.04) 1px, transparent 1px)',
+            backgroundImage: 'radial-gradient(circle, rgba(74,222,128,0.10) 1px, transparent 1px)',
             backgroundSize: '32px 32px',
             pointerEvents: 'none',
           }}
@@ -2111,7 +2114,7 @@ const HomePage = () => {
             fontFamily: "'Inter', sans-serif",
             fontWeight: 900,
             fontSize: 'clamp(80px, 14vw, 180px)',
-            color: 'rgba(255,255,255,0.025)',
+            color: 'rgba(255,255,255,0.055)',
             letterSpacing: '-0.05em',
             whiteSpace: 'nowrap',
             userSelect: 'none',
@@ -2166,7 +2169,7 @@ const HomePage = () => {
                   marginBottom: '20px',
                 }}
               >
-                <div style={{ width: '32px', height: '1.5px', background: '#4ade80', borderRadius: '999px' }} />
+                <div style={{ width: '32px', height: '1.5px', background: '#ffffff', borderRadius: '999px' }} />
                 <span
                   style={{
                     fontFamily: "'Poppins', sans-serif",
@@ -2174,12 +2177,12 @@ const HomePage = () => {
                     fontWeight: 600,
                     letterSpacing: '0.2em',
                     textTransform: 'uppercase',
-                    color: '#4ade80',
+                    color: '#ffffff',
                   }}
                 >
                   Caregiver Tools
                 </span>
-                <div style={{ width: '32px', height: '1.5px', background: '#4ade80', borderRadius: '999px' }} />
+                <div style={{ width: '32px', height: '1.5px', background: '#ffffff', borderRadius: '999px' }} />
               </div>
 
               {/* Heading — exact WCU size */}
@@ -2197,7 +2200,7 @@ const HomePage = () => {
                 }}
               >
                 Empower Your{' '}
-                <span style={{ color: '#4ade80' }}>Caregivers</span>
+                <span style={{ color: '#ffffff', textDecoration: 'underline', textDecorationColor: 'rgba(255,255,255,0.40)', textUnderlineOffset: '6px' }}>Caregivers</span>
               </h2>
 
               {/* Body — exact WCU subheading size/weight/colour on dark bg */}
@@ -2331,8 +2334,8 @@ const HomePage = () => {
       ══════════════════════════════════════════════════════════════ */}
       <section
         style={{
-          background: '#ffffff',
-          padding: '130px 0 140px',
+          background: '#dff0df',
+          padding: '120px 0 130px',
           position: 'relative',
           overflow: 'hidden',
         }}
@@ -2343,7 +2346,7 @@ const HomePage = () => {
           style={{
             position: 'absolute',
             inset: 0,
-            backgroundImage: 'radial-gradient(circle, rgba(5,46,22,0.04) 1px, transparent 1px)',
+            backgroundImage: 'radial-gradient(circle, rgba(5,46,22,0.06) 1px, transparent 1px)',
             backgroundSize: '32px 32px',
             pointerEvents: 'none',
           }}
@@ -2360,7 +2363,7 @@ const HomePage = () => {
             fontFamily: "'Inter', sans-serif",
             fontWeight: 900,
             fontSize: 'clamp(80px, 14vw, 180px)',
-            color: 'rgba(5,46,22,0.03)',
+            color: 'transparent',
             letterSpacing: '-0.05em',
             whiteSpace: 'nowrap',
             userSelect: 'none',
@@ -2480,7 +2483,7 @@ const HomePage = () => {
                     flex: '1',
                     minWidth: '160px',
                     padding: '28px 24px',
-                    borderRight: i < 2 ? '1px solid rgba(22,163,74,0.15)' : 'none',
+                    borderRight: i < 2 ? '1px solid rgba(22,163,74,0.28)' : 'none',
                     textAlign: 'center',
                   }}
                 >
@@ -2490,7 +2493,7 @@ const HomePage = () => {
                       fontWeight: 900,
                       fontSize: 'clamp(2rem, 3.5vw, 2.75rem)',
                       letterSpacing: '-0.03em',
-                      color: '#052e16',
+                      color: '#0a6b30',
                       lineHeight: 1,
                       marginBottom: '8px',
                     }}
@@ -2612,7 +2615,7 @@ const HomePage = () => {
                 fontFamily: "'Poppins', sans-serif",
                 fontSize: '0.8rem',
                 fontWeight: 400,
-                color: 'rgba(22,163,74,0.55)',
+                color: '#16a34a',
                 marginTop: '24px',
                 letterSpacing: '0.04em',
               }}

@@ -443,21 +443,34 @@ const ServicesPage = () => (
       <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle, rgba(74,222,128,0.07) 1px, transparent 1px)', backgroundSize: '32px 32px', pointerEvents: 'none' }} aria-hidden="true" />
 
       <div className="container-custom" style={{ position: 'relative', zIndex: 1, textAlign: 'center', padding: '120px 24px' }}>
-        <Reveal delay={0}><Eyebrow label="The Platform" light /></Reveal>
+        <Reveal delay={0}>
+          <Eyebrow label="The Platform" light />
+        </Reveal>
         <Reveal delay={80}>
-          <h1 style={{ fontFamily: FI, fontWeight: 900, fontSize: 'clamp(2.5rem, 6vw, 5rem)', letterSpacing: '-0.03em', lineHeight: 1.05, color: '#ffffff', maxWidth: '900px', margin: '0 auto 24px' }}>
+          <h1 style={{
+            fontFamily: FI, fontWeight: 900,
+            fontSize: 'clamp(2.5rem, 6vw, 5rem)',
+            letterSpacing: '-0.03em', lineHeight: 1.05,
+            color: '#ffffff', marginBottom: '24px',
+            maxWidth: '900px', margin: '0 auto 24px',
+          }}>
             Every Tool Your Agency{' '}
-            <span style={{ color: '#ffffff', textDecoration: 'underline', textDecorationColor: 'rgba(255,255,255,0.40)', textUnderlineOffset: '6px' }}>Needs to Thrive</span>
+            <span style={{ color: '#4ade80' }}>Needs to Thrive</span>
           </h1>
         </Reveal>
         <Reveal delay={160}>
-          <p style={{ fontFamily: FP, fontSize: 'clamp(1.05rem, 1.6vw, 1.25rem)', fontWeight: 500, lineHeight: 1.75, color: 'rgba(220,252,231,0.85)', maxWidth: '620px', margin: '0 auto 40px' }}>
+          <p style={{
+            fontFamily: FP, fontSize: 'clamp(1.05rem, 1.6vw, 1.25rem)',
+            fontWeight: 500, lineHeight: 1.75,
+            color: 'rgba(220,252,231,0.85)',
+            maxWidth: '620px', margin: '0 auto 40px',
+          }}>
             Nine integrated modules. One login. Zero gaps between your clinical, operational, and financial workflows.
           </p>
         </Reveal>
         <Reveal delay={220}>
           <Link to="/demo" style={{ fontFamily: FI, fontWeight: 700, fontSize: '0.9rem', letterSpacing: '0.07em', textTransform: 'uppercase', padding: '16px 36px', borderRadius: '999px', background: '#16a34a', color: '#ffffff', border: '2px solid #16a34a', boxShadow: '0 6px 28px rgba(22,163,74,0.40)', display: 'inline-flex', alignItems: 'center', gap: '10px', textDecoration: 'none', transition: 'all 0.25s ease' }}
-            onMouseEnter={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#4ade80'; e.currentTarget.style.borderColor = '#4ade80'; e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = 'none'; }}
+            onMouseEnter={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#ffffff'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.70)'; e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = 'none'; }}
             onMouseLeave={e => { e.currentTarget.style.background = '#16a34a'; e.currentTarget.style.color = '#ffffff'; e.currentTarget.style.borderColor = '#16a34a'; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 6px 28px rgba(22,163,74,0.40)'; }}
           >
             See the Platform Live
@@ -477,7 +490,11 @@ const ServicesPage = () => (
       <RadialGlow bottom="-60px" left="-60px" size={360} opacity={0.06} />
 
       <div className="container-custom" style={{ position: 'relative', zIndex: 1 }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', alignItems: 'center' }} className="grid-cols-1 md:grid-cols-2">
+        <style>{`
+          @media (max-width: 767px) { .platform-grid { grid-template-columns: 1fr !important; gap: 48px !important; } }
+          @media (min-width: 768px) { .platform-grid { grid-template-columns: repeat(2, 1fr); gap: 80px; } }
+        `}</style>
+        <div className="platform-grid" style={{ display: 'grid', alignItems: 'center' }}>
 
           <Reveal delay={0}>
             <div>
@@ -493,8 +510,8 @@ const ServicesPage = () => (
                 RAAH eliminates every one of those gaps. From the moment a referral arrives to the moment a remittance posts, every workflow runs inside a single connected system. One login for every role. Real-time data across every department. No re-entry, no reconciliation, no surprises.
               </p>
               <Link to="/demo" style={{ fontFamily: FI, fontWeight: 700, fontSize: '0.875rem', letterSpacing: '0.07em', textTransform: 'uppercase', padding: '15px 32px', borderRadius: '999px', background: '#16a34a', color: '#ffffff', border: '2px solid #16a34a', boxShadow: '0 6px 28px rgba(22,163,74,0.32)', display: 'inline-flex', alignItems: 'center', gap: '10px', textDecoration: 'none', transition: 'all 0.25s ease' }}
-                onMouseEnter={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#16a34a'; e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = 'none'; }}
-                onMouseLeave={e => { e.currentTarget.style.background = '#16a34a'; e.currentTarget.style.color = '#ffffff'; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 6px 28px rgba(22,163,74,0.32)'; }}
+                onMouseEnter={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#16a34a'; e.currentTarget.style.borderColor = '#16a34a'; e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = 'none'; }}
+                onMouseLeave={e => { e.currentTarget.style.background = '#16a34a'; e.currentTarget.style.color = '#ffffff'; e.currentTarget.style.borderColor = '#16a34a'; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 6px 28px rgba(22,163,74,0.32)'; }}
               >
                 Request a Demo
                 <ArrowRight size={15} strokeWidth={2.5} />
@@ -504,7 +521,11 @@ const ServicesPage = () => (
 
           {/* Capability pills */}
           <Reveal delay={150}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+            <style>{`
+              @media (max-width: 479px) { .pills-grid { grid-template-columns: 1fr !important; } }
+              @media (min-width: 480px) { .pills-grid { grid-template-columns: repeat(2, 1fr); } }
+            `}</style>
+            <div className="pills-grid" style={{ display: 'grid', gap: '12px' }}>
               {[
                 { label: 'Referral to Intake',      sub: 'Electronic referral acceptance' },
                 { label: 'Scheduling',               sub: 'Conflict detection and matching' },
@@ -558,7 +579,12 @@ const ServicesPage = () => (
           </div>
         </Reveal>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px', alignItems: 'stretch' }} className="grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        <style>{`
+          @media (max-width: 639px) { .services-grid { grid-template-columns: 1fr !important; } }
+          @media (min-width: 640px) and (max-width: 1023px) { .services-grid { grid-template-columns: repeat(2, 1fr) !important; } }
+          @media (min-width: 1024px) { .services-grid { grid-template-columns: repeat(3, 1fr) !important; } }
+        `}</style>
+        <div className="services-grid" style={{ display: 'grid', gap: '24px', alignItems: 'stretch' }}>
           {SERVICES.map((service, i) => (
             <ServiceCard key={service.title} service={service} delay={80 + i * 60} />
           ))}
@@ -666,20 +692,20 @@ const ServicesPage = () => (
         <Reveal delay={220}>
           <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '14px' }}>
             <Link to="/demo" style={{ fontFamily: FI, fontWeight: 700, fontSize: '0.9375rem', letterSpacing: '0.07em', textTransform: 'uppercase', padding: '18px 44px', borderRadius: '999px', background: '#16a34a', color: '#ffffff', border: '2px solid #16a34a', boxShadow: '0 8px 32px rgba(22,163,74,0.40)', display: 'inline-flex', alignItems: 'center', gap: '10px', textDecoration: 'none', transition: 'all 0.25s ease', whiteSpace: 'nowrap' }}
-              onMouseEnter={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#4ade80'; e.currentTarget.style.borderColor = '#4ade80'; e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = 'none'; }}
+              onMouseEnter={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#ffffff'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.70)'; e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = 'none'; }}
               onMouseLeave={e => { e.currentTarget.style.background = '#16a34a'; e.currentTarget.style.color = '#ffffff'; e.currentTarget.style.borderColor = '#16a34a'; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(22,163,74,0.40)'; }}
             >
               Request a Demo
               <ArrowRight size={16} strokeWidth={2.5} />
             </Link>
-            <Link to="/pricing" style={{ fontFamily: FI, fontWeight: 700, fontSize: '0.9375rem', letterSpacing: '0.07em', textTransform: 'uppercase', padding: '18px 44px', borderRadius: '999px', background: 'transparent', color: 'rgba(255,255,255,0.90)', border: '2px solid rgba(255,255,255,0.30)', display: 'inline-flex', alignItems: 'center', textDecoration: 'none', transition: 'all 0.25s ease', whiteSpace: 'nowrap' }}
-              onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.10)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.75)'; e.currentTarget.style.color = '#ffffff'; e.currentTarget.style.transform = 'translateY(-3px)'; }}
-              onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.30)'; e.currentTarget.style.color = 'rgba(255,255,255,0.90)'; e.currentTarget.style.transform = 'translateY(0)'; }}
+            <Link to="/pricing" style={{ fontFamily: FI, fontWeight: 700, fontSize: '0.9375rem', letterSpacing: '0.07em', textTransform: 'uppercase', padding: '18px 44px', borderRadius: '999px', background: 'transparent', color: '#ffffff', border: '2px solid rgba(255,255,255,0.55)', display: 'inline-flex', alignItems: 'center', textDecoration: 'none', transition: 'all 0.25s ease', whiteSpace: 'nowrap' }}
+              onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.15)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.90)'; e.currentTarget.style.transform = 'translateY(-3px)'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.55)'; e.currentTarget.style.transform = 'translateY(0)'; }}
             >
               View Pricing
             </Link>
           </div>
-          <p style={{ fontFamily: FP, fontSize: '0.8rem', fontWeight: 400, color: 'rgba(255,255,255,0.60)', marginTop: '24px', letterSpacing: '0.04em' }}>
+          <p style={{ fontFamily: FP, fontSize: '0.8rem', fontWeight: 400, color: 'rgba(255,255,255,0.80)', marginTop: '24px', letterSpacing: '0.04em' }}>
             No credit card required. Live in under 24 hours.
           </p>
         </Reveal>

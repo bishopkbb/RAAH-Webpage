@@ -1,17 +1,17 @@
 /**
  * DemoRequestPage.jsx — RAAH Technologies
  *
- * World-class Demo Request page. Follows the established RAAH design system:
- *   Inter 900 headings, Poppins body, #dff0df light sections,
- *   #16a34a brand green, dot-grid textures, Reveal animations,
- *   same card/button/hover patterns as HomePage and AboutPage.
- *
  * Architecture:
  *   Hero     — short, confident. Dark green overlay + eyebrow + heading.
- *   Body     — 2-col sticky layout:
- *              Left:  what you'll see, social proof snippet, trust strip
- *              Right: 6-field form with spinner + success state
+ *   Body     — 2-col layout:
+ *              Left:  what you'll see (features)
+ *              Right: demo form
+ *              Below: Testimonial + Trust cards in a shared aligned row
  *   Strip    — 3 reassurance stats (dark green section)
+ *
+ * ESLint fixes:
+ *   - Removed unused `onReset` prop from SuccessState
+ *   - Fixed 'Icon' defined but never used via React.createElement
  */
 
 import React, { useRef, useEffect, useState } from 'react';
@@ -72,7 +72,7 @@ const Eyebrow = ({ label, light = false }) => (
   </div>
 );
 const WaveDivider = ({ topColor, bottomColor, flip = false }) => (
-  <div style={{ position: 'relative', height: '80px', overflow: 'hidden', background: topColor, marginBottom: '-1px' }}>
+  <div style={{ position: 'relative', height: 'clamp(40px, 6vw, 80px)', overflow: 'hidden', background: topColor, marginBottom: '-1px' }}>
     <svg viewBox="0 0 1440 80" preserveAspectRatio="none" style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '100%', transform: flip ? 'scaleX(-1)' : 'none' }}>
       <path d="M0,40 C240,80 480,0 720,40 C960,80 1200,0 1440,40 L1440,80 L0,80 Z" fill={bottomColor} />
     </svg>
@@ -118,16 +118,16 @@ const CheckSvg = () => (
   </svg>
 );
 
-// ─── What you'll see items — extracted to avoid hooks in map ──────────────────
-const DemoFeatureItem = ({ icon: Icon, title, body }) => {
+// ─── What you'll see items ────────────────────────────────────────────────────
+const DemoFeatureItem = ({ icon, title, body }) => {
   const [hovered, setHovered] = useState(false);
   return (
     <div
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
-        display: 'flex', gap: '16px', alignItems: 'flex-start',
-        padding: '20px 20px',
+        display: 'flex', gap: 'clamp(12px, 2vw, 16px)', alignItems: 'flex-start',
+        padding: 'clamp(16px, 3vw, 20px)',
         borderRadius: '14px',
         background: hovered ? 'rgba(22,163,74,0.06)' : 'transparent',
         border: `1px solid ${hovered ? 'rgba(22,163,74,0.20)' : 'transparent'}`,
@@ -136,17 +136,17 @@ const DemoFeatureItem = ({ icon: Icon, title, body }) => {
       }}
     >
       <div style={{
-        width: '46px', height: '46px', borderRadius: '12px', flexShrink: 0,
+        width: 'clamp(40px, 7vw, 46px)', height: 'clamp(40px, 7vw, 46px)', borderRadius: '12px', flexShrink: 0,
         background: hovered ? '#16a34a' : 'rgba(22,163,74,0.08)',
         border: `1.5px solid ${hovered ? '#16a34a' : 'rgba(22,163,74,0.20)'}`,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         transition: 'all 0.25s ease',
       }}>
-        <Icon color={hovered ? '#ffffff' : '#16a34a'} />
+        {React.createElement(icon, { color: hovered ? '#ffffff' : '#16a34a' })}
       </div>
       <div>
-        <p style={{ fontFamily: FI, fontWeight: 700, fontSize: '1rem', color: '#0f172a', marginBottom: '4px' }}>{title}</p>
-        <p style={{ fontFamily: FP, fontWeight: 400, fontSize: '0.9rem', color: '#475569', lineHeight: 1.65 }}>{body}</p>
+        <p style={{ fontFamily: FI, fontWeight: 700, fontSize: 'clamp(0.9375rem, 2vw, 1rem)', color: '#0f172a', marginBottom: '4px' }}>{title}</p>
+        <p style={{ fontFamily: FP, fontWeight: 400, fontSize: 'clamp(0.85rem, 1.8vw, 0.9rem)', color: '#475569', lineHeight: 1.65 }}>{body}</p>
       </div>
     </div>
   );
@@ -154,15 +154,15 @@ const DemoFeatureItem = ({ icon: Icon, title, body }) => {
 
 // ─── Input field style ────────────────────────────────────────────────────────
 const inputStyle = {
-  width: '100%', fontFamily: FP, fontSize: '0.9375rem', fontWeight: 400,
-  padding: '13px 16px', borderRadius: '10px', outline: 'none',
+  width: '100%', fontFamily: FP, fontSize: 'clamp(0.875rem, 1.8vw, 0.9375rem)', fontWeight: 400,
+  padding: 'clamp(11px, 2vw, 13px) clamp(14px, 3vw, 16px)', borderRadius: '10px', outline: 'none',
   border: '1.5px solid rgba(22,163,74,0.18)',
   color: '#0f172a', background: '#fafffe',
   transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
   boxSizing: 'border-box',
 };
 const labelStyle = {
-  fontFamily: FI, fontSize: '0.78rem', fontWeight: 700,
+  fontFamily: FI, fontSize: 'clamp(0.72rem, 1.5vw, 0.78rem)', fontWeight: 700,
   color: '#374151', marginBottom: '7px', display: 'block',
   letterSpacing: '0.05em', textTransform: 'uppercase',
 };
@@ -176,10 +176,10 @@ const onBlur = e => {
 };
 
 // ─── Success state ────────────────────────────────────────────────────────────
-const SuccessState = ({ onReset }) => (
-  <div style={{ textAlign: 'center', padding: '48px 32px' }}>
+const SuccessState = () => (
+  <div style={{ textAlign: 'center', padding: 'clamp(32px, 6vw, 48px) clamp(24px, 5vw, 32px)' }}>
     <div style={{
-      width: '80px', height: '80px', borderRadius: '50%', margin: '0 auto 24px',
+      width: 'clamp(64px, 12vw, 80px)', height: 'clamp(64px, 12vw, 80px)', borderRadius: '50%', margin: '0 auto 24px',
       background: 'linear-gradient(135deg, #0d7a3e 0%, #16a34a 100%)',
       display: 'flex', alignItems: 'center', justifyContent: 'center',
       boxShadow: '0 12px 40px rgba(22,163,74,0.35)',
@@ -188,15 +188,14 @@ const SuccessState = ({ onReset }) => (
         <path d="M5 13l4 4L19 7" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>
     </div>
-    <h3 style={{ fontFamily: FI, fontWeight: 800, fontSize: '1.625rem', color: '#0f172a', marginBottom: '12px', letterSpacing: '-0.02em' }}>
+    <h3 style={{ fontFamily: FI, fontWeight: 800, fontSize: 'clamp(1.375rem, 3vw, 1.625rem)', color: '#0f172a', marginBottom: '12px', letterSpacing: '-0.02em' }}>
       Request Received
     </h3>
-    <p style={{ fontFamily: FP, fontSize: '1rem', color: '#475569', lineHeight: 1.75, maxWidth: '340px', margin: '0 auto 32px' }}>
+    <p style={{ fontFamily: FP, fontSize: 'clamp(0.9375rem, 2vw, 1rem)', color: '#475569', lineHeight: 1.75, maxWidth: '340px', margin: '0 auto 32px' }}>
       A member of our implementation team will reach out within one business day to confirm your session.
     </p>
-    {/* What happens next */}
-    <div style={{ background: '#dff0df', borderRadius: '14px', padding: '20px 24px', marginBottom: '28px', textAlign: 'left' }}>
-      <p style={{ fontFamily: FI, fontWeight: 700, fontSize: '0.8rem', color: '#16a34a', marginBottom: '12px', letterSpacing: '0.06em', textTransform: 'uppercase' }}>What happens next</p>
+    <div style={{ background: '#dff0df', borderRadius: '14px', padding: 'clamp(16px, 3vw, 20px) clamp(20px, 4vw, 24px)', marginBottom: '28px', textAlign: 'left' }}>
+      <p style={{ fontFamily: FI, fontWeight: 700, fontSize: 'clamp(0.7rem, 1.5vw, 0.8rem)', color: '#16a34a', marginBottom: '12px', letterSpacing: '0.06em', textTransform: 'uppercase' }}>What happens next</p>
       {[
         'We review your agency size and use case',
         'A specialist reaches out to confirm your time',
@@ -207,13 +206,13 @@ const SuccessState = ({ onReset }) => (
           <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: '#16a34a', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: '1px' }}>
             <span style={{ fontFamily: FI, fontWeight: 900, fontSize: '0.65rem', color: '#ffffff' }}>{i + 1}</span>
           </div>
-          <p style={{ fontFamily: FP, fontSize: '0.875rem', color: '#374151', lineHeight: 1.5 }}>{step}</p>
+          <p style={{ fontFamily: FP, fontSize: 'clamp(0.8rem, 1.8vw, 0.875rem)', color: '#374151', lineHeight: 1.5 }}>{step}</p>
         </div>
       ))}
     </div>
     <Link to="/" style={{
-      fontFamily: FI, fontWeight: 700, fontSize: '0.85rem', letterSpacing: '0.06em', textTransform: 'uppercase',
-      padding: '13px 28px', borderRadius: '999px', background: 'transparent',
+      fontFamily: FI, fontWeight: 700, fontSize: 'clamp(0.8rem, 1.5vw, 0.85rem)', letterSpacing: '0.06em', textTransform: 'uppercase',
+      padding: 'clamp(11px, 2vw, 13px) clamp(24px, 4vw, 28px)', borderRadius: '999px', background: 'transparent',
       color: '#16a34a', border: '2px solid #16a34a', textDecoration: 'none',
       display: 'inline-flex', alignItems: 'center', gap: '8px', transition: 'all 0.22s ease',
     }}
@@ -267,19 +266,23 @@ const DemoForm = () => {
     }
   };
 
-  if (submitted) return <SuccessState onReset={() => setSubmitted(false)} />;
+  if (submitted) return <SuccessState />;
 
   return (
-    <div style={{ padding: '40px 40px 36px' }}>
-      <h2 style={{ fontFamily: FI, fontWeight: 800, fontSize: '1.375rem', color: '#0f172a', marginBottom: '6px', letterSpacing: '-0.02em' }}>
+    <div style={{ padding: 'clamp(32px, 6vw, 40px)' }}>
+      <h2 style={{ fontFamily: FI, fontWeight: 800, fontSize: 'clamp(1.25rem, 3vw, 1.375rem)', color: '#0f172a', marginBottom: '6px', letterSpacing: '-0.02em' }}>
         Schedule Your Demo
       </h2>
-      <p style={{ fontFamily: FP, fontSize: '0.9rem', color: '#64748b', marginBottom: '32px', lineHeight: 1.6 }}>
+      <p style={{ fontFamily: FP, fontSize: 'clamp(0.85rem, 1.8vw, 0.9rem)', color: '#64748b', marginBottom: 'clamp(24px, 5vw, 32px)', lineHeight: 1.6 }}>
         Takes 90 seconds. We respond within one business day.
       </p>
 
-      {/* Row 1 — Agency + Contact */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }} className="form-row">
+      <style>{`
+        .form-row { display: grid; gap: 16px; grid-template-columns: 1fr; }
+        @media (min-width: 480px) { .form-row { grid-template-columns: repeat(2, 1fr); } }
+      `}</style>
+
+      <div className="form-row" style={{ marginBottom: '16px' }}>
         <div>
           <label style={labelStyle} htmlFor="agency_name">Agency Name *</label>
           <input id="agency_name" name="agency_name" type="text" required placeholder="Caring Hands Health" value={fields.agency_name} onChange={handleChange} style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
@@ -290,8 +293,7 @@ const DemoForm = () => {
         </div>
       </div>
 
-      {/* Row 2 — Email + Phone */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }} className="form-row">
+      <div className="form-row" style={{ marginBottom: '16px' }}>
         <div>
           <label style={labelStyle} htmlFor="contact_email">Work Email *</label>
           <input id="contact_email" name="contact_email" type="email" required placeholder="sarah@agency.org" value={fields.contact_email} onChange={handleChange} style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
@@ -302,8 +304,7 @@ const DemoForm = () => {
         </div>
       </div>
 
-      {/* Row 3 — Agency Size + Format */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }} className="form-row">
+      <div className="form-row" style={{ marginBottom: '16px' }}>
         <div>
           <label style={labelStyle} htmlFor="estimated_patients">Patient Volume *</label>
           <select id="estimated_patients" name="estimated_patients" required value={fields.estimated_patients} onChange={handleChange}
@@ -330,8 +331,7 @@ const DemoForm = () => {
         </div>
       </div>
 
-      {/* Row 4 — Primary Challenge + Preferred Date */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }} className="form-row">
+      <div className="form-row" style={{ marginBottom: '16px' }}>
         <div>
           <label style={labelStyle} htmlFor="primary_challenge">Primary Challenge</label>
           <select id="primary_challenge" name="primary_challenge" value={fields.primary_challenge} onChange={handleChange}
@@ -353,8 +353,7 @@ const DemoForm = () => {
         </div>
       </div>
 
-      {/* reCAPTCHA */}
-      <div style={{ display: 'flex', justifyContent: 'center', padding: '16px 0 20px' }}>
+      <div style={{ display: 'flex', justifyContent: 'center', padding: 'clamp(12px, 2vw, 16px) 0 clamp(16px, 3vw, 20px)' }}>
         <ReCAPTCHA
           ref={recaptchaRef}
           sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
@@ -362,15 +361,14 @@ const DemoForm = () => {
         />
       </div>
 
-      {/* Submit */}
       <button
         type="submit"
         disabled={submitting}
         onClick={handleSubmit}
         style={{
-          width: '100%', fontFamily: FI, fontWeight: 700, fontSize: '0.9rem',
+          width: '100%', fontFamily: FI, fontWeight: 700, fontSize: 'clamp(0.85rem, 1.8vw, 0.9rem)',
           letterSpacing: '0.07em', textTransform: 'uppercase',
-          padding: '16px 32px', borderRadius: '999px',
+          padding: 'clamp(14px, 3vw, 16px) clamp(24px, 5vw, 32px)', borderRadius: '999px',
           background: submitting ? '#15803d' : '#16a34a',
           color: '#ffffff', border: '2px solid #16a34a',
           boxShadow: '0 6px 24px rgba(22,163,74,0.30)',
@@ -399,13 +397,10 @@ const DemoForm = () => {
         )}
       </button>
 
-      <p style={{ fontFamily: FP, fontSize: '0.78rem', color: '#94a3b8', textAlign: 'center', marginTop: '14px' }}>
+      <p style={{ fontFamily: FP, fontSize: 'clamp(0.72rem, 1.5vw, 0.78rem)', color: '#94a3b8', textAlign: 'center', marginTop: '14px' }}>
         No commitment. No credit card. Responds within one business day.
       </p>
-      <style>{`
-        @keyframes demo-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        @media (max-width: 640px) { .form-row { grid-template-columns: 1fr !important; } }
-      `}</style>
+      <style>{`@keyframes demo-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
     </div>
   );
 };
@@ -415,7 +410,7 @@ const DemoRequestPage = () => (
   <Layout>
 
     {/* ══ HERO ══ */}
-    <section style={{ position: 'relative', minHeight: '52vh', display: 'flex', alignItems: 'center', overflow: 'hidden' }}>
+    <section style={{ position: 'relative', minHeight: '50vh', display: 'flex', alignItems: 'center', overflow: 'hidden' }}>
       <img
         src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&q=80&w=2000&h=800&crop=top"
         alt="RAAH Technologies demo"
@@ -425,12 +420,12 @@ const DemoRequestPage = () => (
       <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent 30%, rgba(5,46,22,0.55) 100%)' }} aria-hidden="true" />
       <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle, rgba(74,222,128,0.07) 1px, transparent 1px)', backgroundSize: '32px 32px', pointerEvents: 'none' }} aria-hidden="true" />
 
-      <div className="container-custom" style={{ position: 'relative', zIndex: 1, textAlign: 'center', padding: '100px 24px 110px' }}>
+      <div className="container-custom" style={{ position: 'relative', zIndex: 1, textAlign: 'center', padding: 'clamp(60px, 10vw, 100px) clamp(16px, 4vw, 24px) clamp(70px, 12vw, 110px)' }}>
         <Reveal delay={0}><Eyebrow label="Free 30-Minute Session" light /></Reveal>
         <Reveal delay={80}>
           <h1 style={{
             fontFamily: FI, fontWeight: 900,
-            fontSize: 'clamp(2.5rem, 6vw, 5rem)',
+            fontSize: 'clamp(2.25rem, 6vw, 5rem)',
             letterSpacing: '-0.03em', lineHeight: 1.05,
             color: '#ffffff', maxWidth: '820px', margin: '0 auto 20px',
           }}>
@@ -441,7 +436,7 @@ const DemoRequestPage = () => (
         </Reveal>
         <Reveal delay={160}>
           <p style={{
-            fontFamily: FP, fontSize: 'clamp(1.05rem, 1.6vw, 1.2rem)',
+            fontFamily: FP, fontSize: 'clamp(1rem, 2vw, 1.2rem)',
             fontWeight: 500, lineHeight: 1.75,
             color: 'rgba(255,255,255,0.88)',
             maxWidth: '560px', margin: '0 auto',
@@ -454,155 +449,141 @@ const DemoRequestPage = () => (
 
     <WaveDivider topColor="rgba(5,46,22,0.68)" bottomColor="#dff0df" />
 
-    {/* ══ BODY — 2-col sticky layout ══ */}
-    <section style={{ background: '#dff0df', padding: '80px 0 120px', position: 'relative', overflow: 'hidden' }}>
+    {/* ══ BODY ══ */}
+    <section style={{ background: '#dff0df', padding: 'clamp(50px, 10vw, 80px) 0 clamp(60px, 12vw, 120px)', position: 'relative', overflow: 'hidden' }}>
       <DotGrid />
       <RadialGlow top="-60px" right="-60px" size={500} opacity={0.07} />
       <RadialGlow bottom="-60px" left="-60px" size={380} opacity={0.05} />
 
-      <style>{`
-        .demo-grid { display: grid; gap: 48px; align-items: start; }
-        @media (min-width: 1024px) { .demo-grid { grid-template-columns: 1fr 1.15fr; gap: 64px; } }
-      `}</style>
-
       <div className="container-custom" style={{ position: 'relative', zIndex: 1 }}>
-        <div className="demo-grid">
-
-          {/* ── LEFT — sticky info column ── */}
-          <div style={{ position: 'sticky', top: '140px' }}>
-
+        
+        {/* ── Top Row: Left Features + Right Form ── */}
+        <style>{`
+          .demo-top-row { display: grid; gap: clamp(32px, 6vw, 48px); align-items: start; }
+          @media (min-width: 1024px) { .demo-top-row { grid-template-columns: 1fr 1.15fr; gap: 64px; } }
+        `}</style>
+        <div className="demo-top-row">
+          {/* LEFT: What You Will See */}
+          <div style={{ position: 'sticky', top: 'clamp(100px, 15vw, 140px)' }}>
             <Reveal delay={0}>
               <Eyebrow label="What You Will See" />
-              <h2 style={{
-                fontFamily: FI, fontWeight: 900,
-                fontSize: 'clamp(2rem, 4vw, 2.75rem)',
-                letterSpacing: '-0.03em', lineHeight: 1.1,
-                color: '#0f172a', marginBottom: '8px',
-              }}>
-                Built Around{' '}
-                <span style={{ color: '#16a34a' }}>Your Workflow</span>
+              <h2 style={{ fontFamily: FI, fontWeight: 900, fontSize: 'clamp(1.75rem, 4vw, 2.75rem)', letterSpacing: '-0.03em', lineHeight: 1.1, color: '#0f172a', marginBottom: '8px' }}>
+                Built Around{' '}<span style={{ color: '#16a34a' }}>Your Workflow</span>
               </h2>
-              <p style={{ fontFamily: FP, fontSize: '1rem', color: '#475569', lineHeight: 1.75, marginBottom: '32px', maxWidth: '440px' }}>
+              <p style={{ fontFamily: FP, fontSize: 'clamp(0.9375rem, 2vw, 1rem)', color: '#475569', lineHeight: 1.75, marginBottom: 'clamp(24px, 4vw, 32px)', maxWidth: '440px' }}>
                 Every demo is configured for your specific disciplines, state EVV requirements, and payer mix before the session begins.
               </p>
             </Reveal>
 
-            {/* What you'll see — 4 feature items */}
             <Reveal delay={80}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginBottom: '36px' }}>
-                <DemoFeatureItem
-                  icon={IconWalkthrough}
-                  title="Live Platform Walkthrough"
-                  body="See your exact workflows: scheduling, EVV clock-in, claim scrubbing, and 835 remittance — live, not slides."
-                />
-                <DemoFeatureItem
-                  icon={IconExperts}
-                  title="Direct Q&A with Specialists"
-                  body="Ask billing, compliance, or clinical questions to the specialist who configured your session."
-                />
-                <DemoFeatureItem
-                  icon={IconROI}
-                  title="Your ROI Projection"
-                  body="We model your agency's specific numbers: claim rejection rate, scheduling hours, and billing accuracy potential."
-                />
-                <DemoFeatureItem
-                  icon={IconSetup}
-                  title="Setup and Migration Plan"
-                  body="Walk away with a clear onboarding timeline. Most agencies are live within 24 hours of signing."
-                />
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(2px, 0.5vw, 4px)' }}>
+                <DemoFeatureItem icon={IconWalkthrough} title="Live Platform Walkthrough" body="See your exact workflows: scheduling, EVV clock-in, claim scrubbing, and 835 remittance — live, not slides." />
+                <DemoFeatureItem icon={IconExperts} title="Direct Q&A with Specialists" body="Ask billing, compliance, or clinical questions to the specialist who configured your session." />
+                <DemoFeatureItem icon={IconROI} title="Your ROI Projection" body="We model your agency's specific numbers: claim rejection rate, scheduling hours, and billing accuracy potential." />
+                <DemoFeatureItem icon={IconSetup} title="Setup and Migration Plan" body="Walk away with a clear onboarding timeline. Most agencies are live within 24 hours of signing." />
               </div>
             </Reveal>
-
-            {/* Social proof snippet */}
-            <Reveal delay={160}>
-              <div style={{
-                background: '#ffffff',
-                borderRadius: '16px',
-                padding: '24px 24px',
-                border: '1px solid rgba(22,163,74,0.14)',
-                boxShadow: '0 4px 20px rgba(5,46,22,0.08)',
-                marginBottom: '24px',
-                position: 'relative', overflow: 'hidden',
-              }}>
-                {/* Green top accent */}
-                <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '3px', background: 'linear-gradient(to right, #16a34a, #22c55e)' }} />
-                {/* Stars */}
-                <div style={{ display: 'flex', gap: '3px', marginBottom: '12px' }}>
-                  {[1,2,3,4,5].map(s => (
-                    <svg key={s} width="14" height="14" viewBox="0 0 16 16" fill="#f59e0b">
-                      <path d="M8 1l1.854 3.756L14 5.528l-3 2.923.708 4.129L8 10.5l-3.708 2.08L5 8.451 2 5.528l4.146-.772z"/>
-                    </svg>
-                  ))}
-                </div>
-                <p style={{ fontFamily: FP, fontStyle: 'italic', fontSize: '0.9375rem', color: '#374151', lineHeight: 1.75, marginBottom: '16px' }}>
-                  "RAAH transformed our billing process completely. We reduced claim rejections by 90% in the first month and our cash flow has never been stronger."
-                </p>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <div style={{
-                    width: '40px', height: '40px', borderRadius: '50%',
-                    background: 'linear-gradient(135deg, #16a34a 0%, #0d7a3e 100%)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-                  }}>
-                    <span style={{ fontFamily: FI, fontWeight: 800, fontSize: '0.8rem', color: '#ffffff' }}>SJ</span>
-                  </div>
-                  <div>
-                    <p style={{ fontFamily: FI, fontWeight: 700, fontSize: '0.9rem', color: '#0f172a', lineHeight: 1.2 }}>Sarah Johnson</p>
-                    <p style={{ fontFamily: FP, fontSize: '0.78rem', color: '#16a34a', lineHeight: 1.3 }}>Director of Operations, Caring Hands Home Health</p>
-                  </div>
-                  <div style={{ marginLeft: 'auto', textAlign: 'right', flexShrink: 0 }}>
-                    <p style={{ fontFamily: FI, fontWeight: 900, fontSize: '1.25rem', color: '#052e16', lineHeight: 1, letterSpacing: '-0.02em' }}>90%</p>
-                    <p style={{ fontFamily: FP, fontSize: '0.65rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Fewer Rejections</p>
-                  </div>
-                </div>
-              </div>
-            </Reveal>
-
-            {/* Trust strip */}
-            <Reveal delay={220}>
-              <div style={{
-                background: '#ffffff',
-                borderRadius: '14px',
-                padding: '18px 20px',
-                border: '1px solid rgba(22,163,74,0.12)',
-                boxShadow: '0 2px 12px rgba(5,46,22,0.06)',
-              }}>
-                <p style={{ fontFamily: FI, fontWeight: 700, fontSize: '0.72rem', color: '#94a3b8', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '14px' }}>
-                  Trusted by agencies across 30 states
-                </p>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                  {[
-                    'HIPAA-compliant platform — BAA included',
-                    'No credit card required to book',
-                    'Live in under 24 hours after signing',
-                    '500+ agencies currently on RAAH',
-                  ].map((item, i) => (
-                    <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-                      <CheckSvg />
-                      <span style={{ fontFamily: FP, fontSize: '0.875rem', color: '#374151', lineHeight: 1.4 }}>{item}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </Reveal>
-
           </div>
 
-          {/* ── RIGHT — Form card ── */}
+          {/* RIGHT: Form */}
           <Reveal delay={120}>
             <div style={{
-              background: '#ffffff',
-              borderRadius: '20px',
+              background: '#ffffff', borderRadius: '20px',
               border: '1px solid rgba(22,163,74,0.14)',
               boxShadow: '0 8px 48px rgba(5,46,22,0.10), 0 2px 12px rgba(5,46,22,0.06)',
               overflow: 'hidden',
             }}>
-              {/* Card top accent */}
               <div style={{ height: '3px', background: 'linear-gradient(to right, #16a34a, #4ade80, #16a34a)' }} />
               <DemoForm />
             </div>
           </Reveal>
-
         </div>
+
+        {/* ── ✅ Bottom Row: Perfectly Aligned Cards ── */}
+        <style>{`
+          .cards-aligned-row {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+            align-items: stretch;
+            margin-top: clamp(32px, 6vw, 48px);
+          }
+          @media (min-width: 768px) {
+            .cards-aligned-row { grid-template-columns: 1fr 1fr; gap: 32px; }
+          }
+        `}</style>
+        
+        <div className="cards-aligned-row">
+          {/* LEFT CARD: Testimonial */}
+          <Reveal delay={160}>
+            <div style={{
+              background: '#ffffff',
+              borderRadius: '16px',
+              padding: 'clamp(20px, 4vw, 24px)',
+              border: '1px solid rgba(22,163,74,0.14)',
+              boxShadow: '0 4px 20px rgba(5,46,22,0.08)',
+              position: 'relative', overflow: 'hidden',
+              display: 'flex', flexDirection: 'column',
+              height: '100%',
+            }}>
+              <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '3px', background: 'linear-gradient(to right, #16a34a, #22c55e)' }} />
+              <div style={{ display: 'flex', gap: '3px', marginBottom: '12px' }}>
+                {[1,2,3,4,5].map(s => (
+                  <svg key={s} width="14" height="14" viewBox="0 0 16 16" fill="#f59e0b">
+                    <path d="M8 1l1.854 3.756L14 5.528l-3 2.923.708 4.129L8 10.5l-3.708 2.08L5 8.451 2 5.528l4.146-.772z"/>
+                  </svg>
+                ))}
+              </div>
+              <p style={{ fontFamily: FP, fontStyle: 'italic', fontSize: 'clamp(0.875rem, 1.8vw, 0.9375rem)', color: '#374151', lineHeight: 1.75, marginBottom: '16px', flexGrow: 1 }}>
+                "RAAH transformed our billing process completely. We reduced claim rejections by 90% in the first month and our cash flow has never been stronger."
+              </p>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap', marginTop: 'auto' }}>
+                <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'linear-gradient(135deg, #16a34a 0%, #0d7a3e 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <span style={{ fontFamily: FI, fontWeight: 800, fontSize: '0.8rem', color: '#ffffff' }}>SJ</span>
+                </div>
+                <div>
+                  <p style={{ fontFamily: FI, fontWeight: 700, fontSize: 'clamp(0.85rem, 1.8vw, 0.9rem)', color: '#0f172a', lineHeight: 1.2 }}>Sarah Johnson</p>
+                  <p style={{ fontFamily: FP, fontSize: 'clamp(0.72rem, 1.5vw, 0.78rem)', color: '#16a34a', lineHeight: 1.3 }}>Director of Operations, Caring Hands Home Health</p>
+                </div>
+                <div style={{ marginLeft: 'auto', textAlign: 'right', flexShrink: 0 }}>
+                  <p style={{ fontFamily: FI, fontWeight: 900, fontSize: 'clamp(1.125rem, 2.5vw, 1.25rem)', color: '#052e16', lineHeight: 1, letterSpacing: '-0.02em' }}>90%</p>
+                  <p style={{ fontFamily: FP, fontSize: 'clamp(0.6rem, 1.2vw, 0.65rem)', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Fewer Rejections</p>
+                </div>
+              </div>
+            </div>
+          </Reveal>
+
+          {/* RIGHT CARD: Trust Strip */}
+          <Reveal delay={220}>
+            <div style={{
+              background: '#ffffff',
+              borderRadius: '14px',
+              padding: 'clamp(20px, 4vw, 24px)',
+              border: '1px solid rgba(22,163,74,0.12)',
+              boxShadow: '0 2px 12px rgba(5,46,22,0.06)',
+              display: 'flex', flexDirection: 'column',
+              height: '100%',
+            }}>
+              <p style={{ fontFamily: FI, fontWeight: 700, fontSize: 'clamp(0.72rem, 1.5vw, 0.8rem)', color: '#94a3b8', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 'clamp(12px, 2vw, 16px)' }}>
+                Trusted by agencies across 30 states
+              </p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(10px, 2vw, 12px)', flexGrow: 1 }}>
+                {[
+                  'HIPAA-compliant platform — BAA included',
+                  'No credit card required to book',
+                  'Live in under 24 hours after signing',
+                  '500+ agencies currently on RAAH',
+                ].map((item, i) => (
+                  <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+                    <CheckSvg />
+                    <span style={{ fontFamily: FP, fontSize: 'clamp(0.85rem, 1.8vw, 0.9rem)', color: '#374151', lineHeight: 1.5 }}>{item}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </Reveal>
+        </div>
+
       </div>
     </section>
 
@@ -611,7 +592,7 @@ const DemoRequestPage = () => (
     {/* ══ REASSURANCE STRIP ══ */}
     <section style={{
       background: 'linear-gradient(160deg, #0d7a3e 0%, #16a34a 55%, #0d7a3e 100%)',
-      padding: '80px 0 90px', position: 'relative', overflow: 'hidden',
+      padding: 'clamp(50px, 10vw, 80px) 0 clamp(60px, 12vw, 90px)', position: 'relative', overflow: 'hidden',
     }}>
       <DotGrid color="rgba(74,222,128,0.08)" />
       <RadialGlow top="-60px" right="-60px" size={400} opacity={0.14} />
@@ -619,11 +600,7 @@ const DemoRequestPage = () => (
 
       <div className="container-custom" style={{ position: 'relative', zIndex: 1 }}>
         <Reveal delay={0}>
-          <p style={{
-            fontFamily: FP, fontSize: '0.75rem', fontWeight: 600,
-            letterSpacing: '0.2em', textTransform: 'uppercase',
-            color: 'rgba(255,255,255,0.80)', textAlign: 'center', marginBottom: '48px',
-          }}>
+          <p style={{ fontFamily: FP, fontSize: 'clamp(0.7rem, 1.5vw, 0.75rem)', fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.80)', textAlign: 'center', marginBottom: 'clamp(32px, 6vw, 48px)' }}>
             Every demo includes
           </p>
         </Reveal>
@@ -640,30 +617,25 @@ const DemoRequestPage = () => (
             { value: '1-on-1', label: 'Specialist Session', sub: 'Not a group webinar' },
           ].map((stat, i) => (
             <Reveal key={stat.label} delay={i * 60}>
-              <div style={{ background: 'rgba(5,46,22,0.45)', padding: '36px 24px', textAlign: 'center' }}>
-                <p style={{ fontFamily: FI, fontWeight: 900, fontSize: 'clamp(1.75rem, 3vw, 2.5rem)', letterSpacing: '-0.03em', lineHeight: 1, color: '#ffffff', marginBottom: '8px' }}>
-                  {stat.value}
-                </p>
-                <p style={{ fontFamily: FI, fontWeight: 700, fontSize: '0.9375rem', color: 'rgba(255,255,255,0.95)', marginBottom: '4px' }}>{stat.label}</p>
-                <p style={{ fontFamily: FP, fontWeight: 400, fontSize: '0.75rem', color: 'rgba(255,255,255,0.65)', letterSpacing: '0.04em' }}>{stat.sub}</p>
+              <div style={{ background: 'rgba(5,46,22,0.45)', padding: 'clamp(28px, 5vw, 36px) clamp(20px, 4vw, 24px)', textAlign: 'center' }}>
+                <p style={{ fontFamily: FI, fontWeight: 900, fontSize: 'clamp(1.5rem, 3vw, 2.5rem)', letterSpacing: '-0.03em', lineHeight: 1, color: '#ffffff', marginBottom: '8px' }}>{stat.value}</p>
+                <p style={{ fontFamily: FI, fontWeight: 700, fontSize: 'clamp(0.875rem, 1.8vw, 0.9375rem)', color: 'rgba(255,255,255,0.95)', marginBottom: '4px' }}>{stat.label}</p>
+                <p style={{ fontFamily: FP, fontWeight: 400, fontSize: 'clamp(0.7rem, 1.4vw, 0.75rem)', color: 'rgba(255,255,255,0.65)', letterSpacing: '0.04em' }}>{stat.sub}</p>
               </div>
             </Reveal>
           ))}
         </div>
 
-        {/* Bottom CTA link */}
         <Reveal delay={280}>
-          <div style={{ textAlign: 'center', marginTop: '48px' }}>
-            <p style={{ fontFamily: FP, fontSize: '0.9rem', color: 'rgba(255,255,255,0.75)', marginBottom: '16px' }}>
+          <div style={{ textAlign: 'center', marginTop: 'clamp(32px, 6vw, 48px)' }}>
+            <p style={{ fontFamily: FP, fontSize: 'clamp(0.85rem, 1.8vw, 0.9rem)', color: 'rgba(255,255,255,0.75)', marginBottom: '16px' }}>
               Prefer to reach us directly?
             </p>
             <Link to="/contact" style={{
-              fontFamily: FI, fontWeight: 700, fontSize: '0.8125rem', letterSpacing: '0.07em', textTransform: 'uppercase',
-              padding: '12px 28px', borderRadius: '999px',
-              background: 'transparent', color: '#ffffff',
-              border: '1.5px solid rgba(255,255,255,0.45)',
-              textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px',
-              transition: 'all 0.22s ease',
+              fontFamily: FI, fontWeight: 700, fontSize: 'clamp(0.75rem, 1.5vw, 0.8125rem)', letterSpacing: '0.07em', textTransform: 'uppercase',
+              padding: 'clamp(10px, 2vw, 12px) clamp(24px, 4vw, 28px)', borderRadius: '999px',
+              background: 'transparent', color: '#ffffff', border: '1.5px solid rgba(255,255,255,0.45)',
+              textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px', transition: 'all 0.22s ease',
             }}
               onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.15)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.80)'; }}
               onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.45)'; }}

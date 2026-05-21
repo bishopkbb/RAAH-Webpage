@@ -95,7 +95,7 @@ const Eyebrow = ({ label, light = false }) => (
 );
 
 const WaveDivider = ({ topColor, bottomColor, flip = false }) => (
-  <div style={{ position: 'relative', height: '80px', overflow: 'hidden', background: topColor, marginBottom: '-1px' }}>
+  <div style={{ position: 'relative', height: 'clamp(40px, 6vw, 80px)', overflow: 'hidden', background: topColor, marginBottom: '-1px' }}>
     <svg viewBox="0 0 1440 80" preserveAspectRatio="none" style={{
       position: 'absolute', bottom: 0, left: 0, width: '100%', height: '100%',
       transform: flip ? 'scaleX(-1)' : 'none',
@@ -324,9 +324,11 @@ const ServiceCard = ({ service, delay }) => {
           transition: 'all 0.4s cubic-bezier(0.22, 1, 0.36, 1)',
           border: '1px solid',
           borderColor: hovered ? 'rgba(74,222,128,0.30)' : 'rgba(74,222,128,0.12)',
+          width: '100%',
+          maxWidth: '420px',
+          margin: '0 auto',
         }}
       >
-        {/* Shimmer */}
         <div aria-hidden="true" style={{
           position: 'absolute', top: 0,
           left: hovered ? '120%' : '-60%',
@@ -336,7 +338,6 @@ const ServiceCard = ({ service, delay }) => {
           transition: 'left 0.7s cubic-bezier(0.22, 1, 0.36, 1)',
           pointerEvents: 'none',
         }} />
-        {/* Top accent line */}
         <div style={{
           height: '2px',
           background: hovered
@@ -345,13 +346,13 @@ const ServiceCard = ({ service, delay }) => {
           transition: 'background 0.4s ease',
         }} />
         <div style={{ padding: '36px 32px 32px', position: 'relative', zIndex: 1 }}>
-          {/* Icon */}
           <div style={{
             width: '72px', height: '72px', borderRadius: '18px',
             background: '#ffffff',
             border: `1.5px solid ${hovered ? 'rgba(22,163,74,0.35)' : 'rgba(22,163,74,0.25)'}`,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             marginBottom: '28px', position: 'relative', transition: 'all 0.35s ease',
+            margin: '0 auto 28px',
           }}>
             <div aria-hidden="true" style={{
               position: 'absolute', inset: '-10px', borderRadius: '26px',
@@ -362,20 +363,16 @@ const ServiceCard = ({ service, delay }) => {
             }} />
             <Icon />
           </div>
-          {/* Label */}
-          <p style={{ fontFamily: FP, fontSize: '0.78rem', fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', color: hovered ? '#86efac' : '#4ade80', marginBottom: '8px', transition: 'color 0.3s ease' }}>
+          <p style={{ fontFamily: FP, fontSize: '0.78rem', fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', color: hovered ? '#86efac' : '#4ade80', marginBottom: '8px', transition: 'color 0.3s ease', textAlign: 'center' }}>
             {label}
           </p>
-          {/* Title */}
-          <h3 style={{ fontFamily: FI, fontSize: '1.375rem', fontWeight: 800, letterSpacing: '-0.02em', color: '#ffffff', marginBottom: '14px', lineHeight: 1.25 }}>
+          <h3 style={{ fontFamily: FI, fontSize: '1.375rem', fontWeight: 800, letterSpacing: '-0.02em', color: '#ffffff', marginBottom: '14px', lineHeight: 1.25, textAlign: 'center' }}>
             {title}
           </h3>
-          {/* Desc */}
-          <p style={{ fontFamily: FP, fontSize: '1rem', fontWeight: 400, lineHeight: 1.80, color: hovered ? '#ffffff' : 'rgba(255,255,255,0.88)', marginBottom: '28px', transition: 'color 0.3s ease' }}>
+          <p style={{ fontFamily: FP, fontSize: '1rem', fontWeight: 400, lineHeight: 1.80, color: hovered ? '#ffffff' : 'rgba(255,255,255,0.88)', marginBottom: '28px', transition: 'color 0.3s ease', textAlign: 'center' }}>
             {desc}
           </p>
-          {/* Metric */}
-          <div style={{ paddingTop: '20px', borderTop: `1px solid ${hovered ? 'rgba(74,222,128,0.25)' : 'rgba(74,222,128,0.12)'}`, display: 'flex', alignItems: 'center', gap: '14px', transition: 'all 0.35s ease' }}>
+          <div style={{ paddingTop: '20px', borderTop: `1px solid ${hovered ? 'rgba(74,222,128,0.25)' : 'rgba(74,222,128,0.12)'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '14px', transition: 'all 0.35s ease' }}>
             <div style={{ width: '4px', height: '36px', borderRadius: '999px', background: hovered ? 'linear-gradient(to bottom, #86efac, #4ade80)' : 'linear-gradient(to bottom, #4ade80, rgba(74,222,128,0.40))', flexShrink: 0, transition: 'background 0.35s ease' }} />
             <div>
               <p style={{ fontFamily: FI, fontSize: '1.625rem', fontWeight: 900, color: hovered ? '#ffffff' : 'rgba(255,255,255,0.90)', lineHeight: 1, letterSpacing: '-0.02em', transition: 'color 0.3s ease' }}>
@@ -432,7 +429,7 @@ const ServicesPage = () => (
   <Layout>
 
     {/* ══ 1. HERO ══ */}
-    <section style={{ position: 'relative', minHeight: '65vh', display: 'flex', alignItems: 'center', overflow: 'hidden' }}>
+    <section style={{ position: 'relative', minHeight: '60vh', display: 'flex', alignItems: 'center', overflow: 'hidden' }}>
       <img
         src="https://images.unsplash.com/photo-1504813184591-01572f98c85f?auto=format&fit=crop&q=80&w=2000&h=900&crop=top"
         alt="RAAH platform services"
@@ -442,7 +439,7 @@ const ServicesPage = () => (
       <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent 40%, rgba(5,46,22,0.60) 100%)' }} aria-hidden="true" />
       <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle, rgba(74,222,128,0.07) 1px, transparent 1px)', backgroundSize: '32px 32px', pointerEvents: 'none' }} aria-hidden="true" />
 
-      <div className="container-custom" style={{ position: 'relative', zIndex: 1, textAlign: 'center', padding: '120px 24px' }}>
+      <div className="container-custom" style={{ position: 'relative', zIndex: 1, textAlign: 'center', padding: 'clamp(60px, 10vw, 120px) 24px' }}>
         <Reveal delay={0}><Eyebrow label="The Platform" light /></Reveal>
         <Reveal delay={80}>
           <h1 style={{ fontFamily: FI, fontWeight: 900, fontSize: 'clamp(2.5rem, 6vw, 5rem)', letterSpacing: '-0.03em', lineHeight: 1.05, color: '#ffffff', maxWidth: '900px', margin: '0 auto 24px' }}>
@@ -470,14 +467,27 @@ const ServicesPage = () => (
     <WaveDivider topColor="rgba(5,46,22,0.65)" bottomColor="#ffffff" />
 
     {/* ══ 2. PLATFORM OVERVIEW ══ */}
-    <section style={{ background: '#ffffff', padding: '120px 0', position: 'relative', overflow: 'hidden' }}>
+    <section style={{ background: '#ffffff', padding: 'clamp(60px, 10vw, 120px) 0', position: 'relative', overflow: 'hidden' }}>
       <DotGrid />
       <Watermark />
       <RadialGlow top="-60px" right="-60px" size={420} opacity={0.07} />
       <RadialGlow bottom="-60px" left="-60px" size={360} opacity={0.06} />
 
       <div className="container-custom" style={{ position: 'relative', zIndex: 1 }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', alignItems: 'center' }} className="grid-cols-1 md:grid-cols-2">
+        <style>{`
+          .platform-grid {
+            display: grid;
+            gap: 48px;
+            align-items: center;
+          }
+          @media (min-width: 768px) {
+            .platform-grid {
+              grid-template-columns: repeat(2, 1fr);
+              gap: 80px;
+            }
+          }
+        `}</style>
+        <div className="platform-grid">
 
           <Reveal delay={0}>
             <div>
@@ -504,7 +514,17 @@ const ServicesPage = () => (
 
           {/* Capability pills */}
           <Reveal delay={150}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+            <style>{`
+              .pills-grid {
+                display: grid;
+                gap: 12px;
+                grid-template-columns: 1fr;
+              }
+              @media (min-width: 480px) {
+                .pills-grid { grid-template-columns: repeat(2, 1fr); }
+              }
+            `}</style>
+            <div className="pills-grid">
               {[
                 { label: 'Referral to Intake',      sub: 'Electronic referral acceptance' },
                 { label: 'Scheduling',               sub: 'Conflict detection and matching' },
@@ -538,7 +558,7 @@ const ServicesPage = () => (
     <WaveDivider topColor="#ffffff" bottomColor="#052e16" flip />
 
     {/* ══ 3. SERVICES GRID ══ */}
-    <section style={{ background: 'linear-gradient(160deg, #052e16 0%, #064e3b 55%, #052e16 100%)', padding: '120px 0 140px', position: 'relative', overflow: 'hidden' }}>
+    <section style={{ background: 'linear-gradient(160deg, #052e16 0%, #064e3b 55%, #052e16 100%)', padding: 'clamp(60px, 10vw, 120px) 0 clamp(70px, 12vw, 140px)', position: 'relative', overflow: 'hidden' }}>
       <DotGrid color="rgba(74,222,128,0.08)" />
       <Watermark color="rgba(255,255,255,0.03)" />
       <RadialGlow top="-80px" right="-80px" size={500} opacity={0.14} />
@@ -558,7 +578,21 @@ const ServicesPage = () => (
           </div>
         </Reveal>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px', alignItems: 'stretch' }} className="grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        <style>{`
+          .services-grid {
+            display: grid;
+            gap: 24px;
+            justify-items: center;
+            grid-template-columns: 1fr;
+          }
+          @media (min-width: 640px) {
+            .services-grid { grid-template-columns: repeat(2, 1fr); }
+          }
+          @media (min-width: 1024px) {
+            .services-grid { grid-template-columns: repeat(3, 1fr); }
+          }
+        `}</style>
+        <div className="services-grid">
           {SERVICES.map((service, i) => (
             <ServiceCard key={service.title} service={service} delay={80 + i * 60} />
           ))}
@@ -569,7 +603,7 @@ const ServicesPage = () => (
     <WaveDivider topColor="#052e16" bottomColor="#ffffff" />
 
     {/* ══ 4. COMPARISON TABLE ══ */}
-    <section style={{ background: '#ffffff', padding: '120px 0', position: 'relative', overflow: 'hidden' }}>
+    <section style={{ background: '#ffffff', padding: 'clamp(60px, 10vw, 120px) 0', position: 'relative', overflow: 'hidden' }}>
       <DotGrid />
       <Watermark color="rgba(5,46,22,0.06)" />
       <RadialGlow top="-60px" right="-60px" size={420} opacity={0.07} />
@@ -589,52 +623,55 @@ const ServicesPage = () => (
         </Reveal>
 
         <Reveal delay={100}>
-          <div style={{ borderRadius: '20px', overflow: 'hidden', border: '1px solid rgba(22,163,74,0.15)', boxShadow: '0 4px 24px rgba(5,46,22,0.08)' }}>
-            {/* Table header */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 180px 180px', background: '#052e16' }}>
-              <div style={{ padding: '20px 28px' }}>
-                <p style={{ fontFamily: FP, fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(74,222,128,0.70)' }}>Feature</p>
-              </div>
-              <div style={{ padding: '20px 0', textAlign: 'center', borderLeft: '1px solid rgba(74,222,128,0.10)' }}>
-                <p style={{ fontFamily: FI, fontWeight: 800, fontSize: '0.9375rem', color: '#4ade80' }}>RAAH</p>
-              </div>
-              <div style={{ padding: '20px 0', textAlign: 'center', borderLeft: '1px solid rgba(74,222,128,0.10)' }}>
-                <p style={{ fontFamily: FI, fontWeight: 700, fontSize: '0.9375rem', color: 'rgba(255,255,255,0.50)' }}>Legacy Tools</p>
-              </div>
-            </div>
-
-            {/* Rows */}
-            {COMPARISON.map((row, i) => (
-              <Reveal key={row.feature} delay={i * 30}>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 180px 180px', background: i % 2 === 0 ? '#ffffff' : 'rgba(22,163,74,0.02)', borderTop: '1px solid rgba(22,163,74,0.08)', transition: 'background 0.2s ease' }}
-                  onMouseEnter={e => { e.currentTarget.style.background = 'rgba(22,163,74,0.05)'; }}
-                  onMouseLeave={e => { e.currentTarget.style.background = i % 2 === 0 ? '#ffffff' : 'rgba(22,163,74,0.02)'; }}
-                >
-                  <div style={{ padding: '18px 28px', display: 'flex', alignItems: 'center' }}>
-                    <p style={{ fontFamily: FP, fontSize: '0.9375rem', fontWeight: 500, color: '#374151' }}>{row.feature}</p>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', borderLeft: '1px solid rgba(22,163,74,0.08)' }}>
-                    <CheckIcon />
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', borderLeft: '1px solid rgba(22,163,74,0.08)' }}>
-                    {row.legacy === true ? <CheckIcon /> : row.legacy === 'partial' ? <PartialIcon /> : <CrossIcon />}
-                  </div>
+          {/* ✅ Responsive table wrapper: horizontal scroll on mobile */}
+          <div style={{ borderRadius: '20px', overflow: 'hidden', border: '1px solid rgba(22,163,74,0.15)', boxShadow: '0 4px 24px rgba(5,46,22,0.08)', overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
+            <div style={{ minWidth: '720px' }}>
+              {/* Table header */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 180px 180px', background: '#052e16' }}>
+                <div style={{ padding: '20px 28px' }}>
+                  <p style={{ fontFamily: FP, fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(74,222,128,0.70)' }}>Feature</p>
                 </div>
-              </Reveal>
-            ))}
-
-            {/* Legend */}
-            <div style={{ padding: '16px 28px', background: 'rgba(22,163,74,0.03)', borderTop: '1px solid rgba(22,163,74,0.08)', display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
-              {[
-                { icon: <CheckIcon />, label: 'Fully supported' },
-                { icon: <PartialIcon />, label: 'Partial or add-on cost' },
-                { icon: <CrossIcon />, label: 'Not supported' },
-              ].map(({ icon, label }) => (
-                <div key={label} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  {icon}
-                  <span style={{ fontFamily: FP, fontSize: '0.78rem', color: '#64748b' }}>{label}</span>
+                <div style={{ padding: '20px 0', textAlign: 'center', borderLeft: '1px solid rgba(74,222,128,0.10)' }}>
+                  <p style={{ fontFamily: FI, fontWeight: 800, fontSize: '0.9375rem', color: '#4ade80' }}>RAAH</p>
                 </div>
+                <div style={{ padding: '20px 0', textAlign: 'center', borderLeft: '1px solid rgba(74,222,128,0.10)' }}>
+                  <p style={{ fontFamily: FI, fontWeight: 700, fontSize: '0.9375rem', color: 'rgba(255,255,255,0.50)' }}>Legacy Tools</p>
+                </div>
+              </div>
+
+              {/* Rows */}
+              {COMPARISON.map((row, i) => (
+                <Reveal key={row.feature} delay={i * 30}>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 180px 180px', background: i % 2 === 0 ? '#ffffff' : 'rgba(22,163,74,0.02)', borderTop: '1px solid rgba(22,163,74,0.08)', transition: 'background 0.2s ease' }}
+                    onMouseEnter={e => { e.currentTarget.style.background = 'rgba(22,163,74,0.05)'; }}
+                    onMouseLeave={e => { e.currentTarget.style.background = i % 2 === 0 ? '#ffffff' : 'rgba(22,163,74,0.02)'; }}
+                  >
+                    <div style={{ padding: '18px 28px', display: 'flex', alignItems: 'center' }}>
+                      <p style={{ fontFamily: FP, fontSize: '0.9375rem', fontWeight: 500, color: '#374151' }}>{row.feature}</p>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', borderLeft: '1px solid rgba(22,163,74,0.08)' }}>
+                      <CheckIcon />
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', borderLeft: '1px solid rgba(22,163,74,0.08)' }}>
+                      {row.legacy === true ? <CheckIcon /> : row.legacy === 'partial' ? <PartialIcon /> : <CrossIcon />}
+                    </div>
+                  </div>
+                </Reveal>
               ))}
+
+              {/* Legend */}
+              <div style={{ padding: '16px 28px', background: 'rgba(22,163,74,0.03)', borderTop: '1px solid rgba(22,163,74,0.08)', display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
+                {[
+                  { icon: <CheckIcon />, label: 'Fully supported' },
+                  { icon: <PartialIcon />, label: 'Partial or add-on cost' },
+                  { icon: <CrossIcon />, label: 'Not supported' },
+                ].map(({ icon, label }) => (
+                  <div key={label} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    {icon}
+                    <span style={{ fontFamily: FP, fontSize: '0.78rem', color: '#64748b' }}>{label}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </Reveal>
@@ -644,7 +681,7 @@ const ServicesPage = () => (
     <WaveDivider topColor="#ffffff" bottomColor="#052e16" flip />
 
     {/* ══ 5. CTA ══ */}
-    <section style={{ background: 'linear-gradient(160deg, #052e16 0%, #064e3b 55%, #052e16 100%)', padding: '120px 0 140px', position: 'relative', overflow: 'hidden' }}>
+    <section style={{ background: 'linear-gradient(160deg, #052e16 0%, #064e3b 55%, #052e16 100%)', padding: 'clamp(60px, 10vw, 120px) 0 clamp(70px, 12vw, 140px)', position: 'relative', overflow: 'hidden' }}>
       <DotGrid color="rgba(74,222,128,0.08)" />
       <Watermark color="rgba(255,255,255,0.055)" />
       <RadialGlow top="-80px" right="-80px" size={500} opacity={0.14} />
@@ -664,7 +701,7 @@ const ServicesPage = () => (
           </p>
         </Reveal>
         <Reveal delay={220}>
-          <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '14px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px' }} className="sm:flex-row sm:justify-center">
             <Link to="/demo" style={{ fontFamily: FI, fontWeight: 700, fontSize: '0.9375rem', letterSpacing: '0.07em', textTransform: 'uppercase', padding: '18px 44px', borderRadius: '999px', background: '#16a34a', color: '#ffffff', border: '2px solid #16a34a', boxShadow: '0 8px 32px rgba(22,163,74,0.40)', display: 'inline-flex', alignItems: 'center', gap: '10px', textDecoration: 'none', transition: 'all 0.25s ease', whiteSpace: 'nowrap' }}
               onMouseEnter={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#4ade80'; e.currentTarget.style.borderColor = '#4ade80'; e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = 'none'; }}
               onMouseLeave={e => { e.currentTarget.style.background = '#16a34a'; e.currentTarget.style.color = '#ffffff'; e.currentTarget.style.borderColor = '#16a34a'; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(22,163,74,0.40)'; }}

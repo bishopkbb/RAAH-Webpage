@@ -113,7 +113,7 @@ const CheckSvg = () => (
 );
 
 // ─── Value prop card — extracted (no hooks in map) ────────────────────────────
-const ValuePropCard = ({ icon: Icon, title, body, delay }) => {
+const ValuePropCard = ({ icon, title, body, delay }) => {
   const [hovered, setHovered] = useState(false);
   return (
     <Reveal delay={delay}>
@@ -122,7 +122,7 @@ const ValuePropCard = ({ icon: Icon, title, body, delay }) => {
         onMouseLeave={() => setHovered(false)}
         style={{
           display: 'flex', gap: '16px', alignItems: 'flex-start',
-          padding: '20px',
+          padding: '22px',
           borderRadius: '14px',
           background: hovered ? 'rgba(22,163,74,0.06)' : 'transparent',
           border: `1px solid ${hovered ? 'rgba(22,163,74,0.20)' : 'transparent'}`,
@@ -131,17 +131,17 @@ const ValuePropCard = ({ icon: Icon, title, body, delay }) => {
         }}
       >
         <div style={{
-          width: '48px', height: '48px', borderRadius: '12px', flexShrink: 0,
+          width: '52px', height: '52px', borderRadius: '13px', flexShrink: 0,
           background: hovered ? '#16a34a' : 'rgba(22,163,74,0.08)',
           border: `1.5px solid ${hovered ? '#16a34a' : 'rgba(22,163,74,0.20)'}`,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           transition: 'all 0.25s ease',
         }}>
-          <Icon color={hovered ? '#ffffff' : '#16a34a'} />
+          {React.createElement(icon, { color: hovered ? '#ffffff' : '#16a34a' })}
         </div>
         <div>
-          <p style={{ fontFamily: FI, fontWeight: 700, fontSize: '1rem', color: '#0f172a', marginBottom: '4px' }}>{title}</p>
-          <p style={{ fontFamily: FP, fontWeight: 400, fontSize: '0.9rem', color: '#475569', lineHeight: 1.65 }}>{body}</p>
+          <p style={{ fontFamily: FI, fontWeight: 700, fontSize: '1.0625rem', color: '#0a0a0a', marginBottom: '5px' }}>{title}</p>
+          <p style={{ fontFamily: FP, fontWeight: 500, fontSize: '0.9375rem', color: '#374151', lineHeight: 1.65 }}>{body}</p>
         </div>
       </div>
     </Reveal>
@@ -150,16 +150,16 @@ const ValuePropCard = ({ icon: Icon, title, body, delay }) => {
 
 // ─── Input styles ─────────────────────────────────────────────────────────────
 const inputStyle = {
-  width: '100%', fontFamily: FP, fontSize: '0.9375rem', fontWeight: 400,
-  padding: '13px 16px', borderRadius: '10px', outline: 'none',
-  border: '1.5px solid rgba(22,163,74,0.18)',
-  color: '#0f172a', background: '#fafffe',
+  width: '100%', fontFamily: FP, fontSize: '1.0625rem', fontWeight: 400,
+  padding: '16px 20px', borderRadius: '12px', outline: 'none',
+  border: '1.5px solid rgba(22,163,74,0.22)',
+  color: '#0a0a0a', background: '#f8fffc',
   transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
   boxSizing: 'border-box',
 };
 const labelStyle = {
-  fontFamily: FI, fontSize: '0.78rem', fontWeight: 700,
-  color: '#374151', marginBottom: '7px', display: 'block',
+  fontFamily: FI, fontSize: '0.8125rem', fontWeight: 700,
+  color: '#0a0a0a', marginBottom: '9px', display: 'block',
   letterSpacing: '0.05em', textTransform: 'uppercase',
 };
 const onFocus = e => {
@@ -264,16 +264,16 @@ const PricingForm = () => {
   if (submitted) return <SuccessState />;
 
   return (
-    <div style={{ padding: '40px 40px 36px' }}>
-      <h2 style={{ fontFamily: FI, fontWeight: 800, fontSize: '1.375rem', color: '#0f172a', marginBottom: '6px', letterSpacing: '-0.02em' }}>
+    <div style={{ padding: '52px 52px 48px' }}>
+      <h2 style={{ fontFamily: FI, fontWeight: 900, fontSize: '1.875rem', color: '#0a0a0a', marginBottom: '8px', letterSpacing: '-0.02em' }}>
         Request a Custom Quote
       </h2>
-      <p style={{ fontFamily: FP, fontSize: '0.9rem', color: '#64748b', marginBottom: '32px', lineHeight: 1.6 }}>
+      <p style={{ fontFamily: FP, fontSize: '1rem', color: '#374151', fontWeight: 500, marginBottom: '40px', lineHeight: 1.6 }}>
         Takes 60 seconds. A tailored proposal arrives within one business day.
       </p>
 
       {/* Row 1 — Agency + Contact */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }} className="pricing-row">
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '18px', marginBottom: '22px' }} className="pricing-row">
         <div>
           <label style={labelStyle} htmlFor="p_agency_name">Agency Name *</label>
           <input id="p_agency_name" name="agency_name" type="text" required placeholder="Caring Hearts Health" value={fields.agency_name} onChange={handleChange} style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
@@ -285,7 +285,7 @@ const PricingForm = () => {
       </div>
 
       {/* Row 2 — Email + Phone */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }} className="pricing-row">
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '18px', marginBottom: '22px' }} className="pricing-row">
         <div>
           <label style={labelStyle} htmlFor="p_contact_email">Work Email *</label>
           <input id="p_contact_email" name="contact_email" type="email" required placeholder="sarah@agency.org" value={fields.contact_email} onChange={handleChange} style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
@@ -297,22 +297,22 @@ const PricingForm = () => {
       </div>
 
       {/* Patient count */}
-      <div style={{ marginBottom: '16px' }}>
+      <div style={{ marginBottom: '22px' }}>
         <label style={labelStyle} htmlFor="p_estimated_patients">Active Patient Count</label>
         <input id="p_estimated_patients" name="estimated_patients" type="number" min="1" placeholder="e.g. 75" value={fields.estimated_patients} onChange={handleChange} style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
-        <p style={{ fontFamily: FP, fontSize: '0.78rem', color: '#16a34a', fontWeight: 600, marginTop: '6px' }}>
+        <p style={{ fontFamily: FP, fontSize: '0.8125rem', color: '#16a34a', fontWeight: 600, marginTop: '7px' }}>
           We use this to recommend the most cost-effective tier for your volume.
         </p>
       </div>
 
       {/* Notes / challenges */}
-      <div style={{ marginBottom: '20px' }}>
+      <div style={{ marginBottom: '24px' }}>
         <label style={labelStyle} htmlFor="p_notes">Specific Needs or Questions</label>
         <textarea
           id="p_notes" name="notes" rows={4}
           placeholder="Tell us about your current billing setup, state requirements, or any operational challenges you want to solve..."
           value={fields.notes} onChange={handleChange}
-          style={{ ...inputStyle, resize: 'vertical', minHeight: '110px' }}
+          style={{ ...inputStyle, resize: 'vertical', minHeight: '130px' }}
           onFocus={onFocus} onBlur={onBlur}
         />
       </div>
@@ -337,7 +337,7 @@ const PricingForm = () => {
           ].map((item, i) => (
             <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
               <CheckSvg />
-              <span style={{ fontFamily: FP, fontSize: '0.8125rem', color: '#374151' }}>{item}</span>
+              <span style={{ fontFamily: FP, fontSize: '0.875rem', color: '#1e293b', fontWeight: 500 }}>{item}</span>
             </div>
           ))}
         </div>
@@ -358,7 +358,7 @@ const PricingForm = () => {
         disabled={submitting}
         onClick={handleSubmit}
         style={{
-          width: '100%', fontFamily: FI, fontWeight: 700, fontSize: '0.9rem',
+          width: '100%', fontFamily: FI, fontWeight: 700, fontSize: '0.9375rem',
           letterSpacing: '0.07em', textTransform: 'uppercase',
           padding: '16px 32px', borderRadius: '999px',
           background: submitting ? '#15803d' : '#16a34a',
@@ -389,13 +389,12 @@ const PricingForm = () => {
         )}
       </button>
 
-      <p style={{ fontFamily: FP, fontSize: '0.78rem', color: '#94a3b8', textAlign: 'center', marginTop: '14px' }}>
+      <p style={{ fontFamily: FP, fontSize: '0.875rem', color: '#475569', textAlign: 'center', marginTop: '18px' }}>
         No commitment. No credit card. Custom proposal within 24 hours.
       </p>
 
       <style>{`
         @keyframes price-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        @media (max-width: 640px) { .pricing-row { grid-template-columns: 1fr !important; } }
       `}</style>
     </div>
   );
@@ -416,25 +415,28 @@ const PricingRequestPage = () => (
       <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent 30%, rgba(5,46,22,0.55) 100%)' }} aria-hidden="true" />
       <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle, rgba(74,222,128,0.07) 1px, transparent 1px)', backgroundSize: '32px 32px', pointerEvents: 'none' }} aria-hidden="true" />
 
-      <div className="container-custom" style={{ position: 'relative', zIndex: 1, textAlign: 'center', padding: '100px 24px 110px' }}>
-        <Reveal delay={0}><Eyebrow label="Transparent Pricing" light /></Reveal>
+      <div className="container-custom" style={{ position: 'relative', zIndex: 1, textAlign: 'center', padding: '120px 24px' }}>
+        <Reveal delay={0}>
+          <Eyebrow label="Transparent Pricing" light />
+        </Reveal>
         <Reveal delay={80}>
           <h1 style={{
             fontFamily: FI, fontWeight: 900,
             fontSize: 'clamp(2.5rem, 6vw, 5rem)',
             letterSpacing: '-0.03em', lineHeight: 1.05,
-            color: '#ffffff', maxWidth: '860px', margin: '0 auto 20px',
+            color: '#ffffff', marginBottom: '24px',
+            maxWidth: '900px', margin: '0 auto 24px',
           }}>
             Pricing Built Around{' '}
-            <span style={{ color: '#ffffff', textDecoration: 'underline', textDecorationColor: 'rgba(255,255,255,0.40)', textUnderlineOffset: '8px' }}>Your Agency</span>
+            <span style={{ color: '#4ade80' }}>Your Agency</span>
           </h1>
         </Reveal>
         <Reveal delay={160}>
           <p style={{
-            fontFamily: FP, fontSize: 'clamp(1.05rem, 1.6vw, 1.2rem)',
+            fontFamily: FP, fontSize: 'clamp(1.05rem, 1.6vw, 1.25rem)',
             fontWeight: 500, lineHeight: 1.75,
-            color: 'rgba(255,255,255,0.88)',
-            maxWidth: '540px', margin: '0 auto',
+            color: 'rgba(220,252,231,0.85)',
+            maxWidth: '620px', margin: '0 auto 40px',
           }}>
             No rigid tiers. No per-module fees. A custom proposal based on your patient volume, state, and clinical disciplines.
           </p>
@@ -452,14 +454,16 @@ const PricingRequestPage = () => (
 
       <style>{`
         .pricing-grid { display: grid; gap: 48px; align-items: start; }
-        @media (min-width: 1024px) { .pricing-grid { grid-template-columns: 1fr 1.2fr; gap: 64px; } }
+        @media (min-width: 1024px) { .pricing-grid { grid-template-columns: 1fr 1.2fr; gap: 64px; align-items: stretch; } }
+        .pricing-left-col { display: flex; flex-direction: column; }
+        @media (max-width: 640px) { .pricing-row { grid-template-columns: 1fr !important; } }
       `}</style>
 
       <div className="container-custom" style={{ position: 'relative', zIndex: 1 }}>
         <div className="pricing-grid">
 
-          {/* ── LEFT — sticky value column ── */}
-          <div style={{ position: 'sticky', top: '140px' }}>
+          {/* ── LEFT — value column, sticky on desktop only ── */}
+          <div className="pricing-left-col">
 
             <Reveal delay={0}>
               <Eyebrow label="Why RAAH" />
@@ -472,7 +476,7 @@ const PricingRequestPage = () => (
                 One Price.{' '}
                 <span style={{ color: '#16a34a' }}>Everything Included.</span>
               </h2>
-              <p style={{ fontFamily: FP, fontSize: '1rem', color: '#475569', lineHeight: 1.75, marginBottom: '32px', maxWidth: '420px' }}>
+              <p style={{ fontFamily: FP, fontSize: '1rem', color: '#374151', fontWeight: 500, lineHeight: 1.75, marginBottom: '32px', maxWidth: '420px' }}>
                 No nickel-and-diming for modules. No per-user limits. One flat rate that covers your entire agency from day one.
               </p>
             </Reveal>
@@ -508,10 +512,10 @@ const PricingRequestPage = () => (
             {/* Social proof snippet */}
             <Reveal delay={320}>
               <div style={{
-                background: '#ffffff', borderRadius: '16px', padding: '24px',
+                background: '#ffffff', borderRadius: '16px', padding: '28px',
                 border: '1px solid rgba(22,163,74,0.14)',
                 boxShadow: '0 4px 20px rgba(5,46,22,0.08)',
-                marginBottom: '20px', position: 'relative', overflow: 'hidden',
+                position: 'relative', overflow: 'hidden',
               }}>
                 <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '3px', background: 'linear-gradient(to right, #16a34a, #22c55e)' }} />
                 <div style={{ display: 'flex', gap: '3px', marginBottom: '12px' }}>
@@ -521,7 +525,7 @@ const PricingRequestPage = () => (
                     </svg>
                   ))}
                 </div>
-                <p style={{ fontFamily: FP, fontStyle: 'italic', fontSize: '0.9375rem', color: '#374151', lineHeight: 1.75, marginBottom: '16px' }}>
+                <p style={{ fontFamily: FP, fontStyle: 'italic', fontSize: '1rem', color: '#1e293b', lineHeight: 1.75, marginBottom: '18px' }}>
                   "RAAH is the first platform that actually understands home health billing. Secondary crossover claims, PDGM compliance, 835 remittance, all handled automatically."
                 </p>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -533,8 +537,8 @@ const PricingRequestPage = () => (
                     <span style={{ fontFamily: FI, fontWeight: 800, fontSize: '0.8rem', color: '#ffffff' }}>KA</span>
                   </div>
                   <div>
-                    <p style={{ fontFamily: FI, fontWeight: 700, fontSize: '0.9rem', color: '#0f172a', lineHeight: 1.2 }}>Kevin Adeyemi</p>
-                    <p style={{ fontFamily: FP, fontSize: '0.78rem', color: '#16a34a' }}>Revenue Cycle Manager, PrimeCare Solutions</p>
+                    <p style={{ fontFamily: FI, fontWeight: 700, fontSize: '0.9375rem', color: '#0a0a0a', lineHeight: 1.2 }}>Kevin Adeyemi</p>
+                    <p style={{ fontFamily: FP, fontSize: '0.8125rem', color: '#16a34a' }}>Revenue Cycle Manager, PrimeCare Solutions</p>
                   </div>
                   <div style={{ marginLeft: 'auto', textAlign: 'right', flexShrink: 0 }}>
                     <p style={{ fontFamily: FI, fontWeight: 900, fontSize: '1.25rem', color: '#052e16', lineHeight: 1, letterSpacing: '-0.02em' }}>99.2%</p>
@@ -545,41 +549,20 @@ const PricingRequestPage = () => (
             </Reveal>
 
             {/* Trust strip */}
-            <Reveal delay={380}>
-              <div style={{
-                background: '#ffffff', borderRadius: '14px', padding: '18px 20px',
-                border: '1px solid rgba(22,163,74,0.12)',
-                boxShadow: '0 2px 12px rgba(5,46,22,0.06)',
-              }}>
-                <p style={{ fontFamily: FI, fontWeight: 700, fontSize: '0.72rem', color: '#94a3b8', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '14px' }}>
-                  Every plan, every agency
-                </p>
-                {[
-                  'No hidden fees or per-module charges',
-                  'No credit card required for the quote',
-                  'Cancel within 30 days, no questions asked',
-                  'Live in under 24 hours after signing',
-                ].map((item, i) => (
-                  <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', marginBottom: i < 3 ? '10px' : 0 }}>
-                    <CheckSvg />
-                    <span style={{ fontFamily: FP, fontSize: '0.875rem', color: '#374151', lineHeight: 1.4 }}>{item}</span>
-                  </div>
-                ))}
-              </div>
-            </Reveal>
-
           </div>
 
-          {/* ── RIGHT — Form card ── */}
+          {/* ── RIGHT — Form card fills full column height ── */}
           <Reveal delay={120}>
-            <div style={{
-              background: '#ffffff', borderRadius: '20px',
-              border: '1px solid rgba(22,163,74,0.14)',
-              boxShadow: '0 8px 48px rgba(5,46,22,0.10), 0 2px 12px rgba(5,46,22,0.06)',
-              overflow: 'hidden',
-            }}>
-              <div style={{ height: '3px', background: 'linear-gradient(to right, #16a34a, #4ade80, #16a34a)' }} />
-              <PricingForm />
+            <div style={{ height: '100%' }}>
+              <div style={{
+                background: '#ffffff', borderRadius: '20px',
+                border: '1px solid rgba(22,163,74,0.14)',
+                boxShadow: '0 8px 48px rgba(5,46,22,0.10), 0 2px 12px rgba(5,46,22,0.06)',
+                overflow: 'hidden', height: '100%',
+              }}>
+                <div style={{ height: '3px', background: 'linear-gradient(to right, #16a34a, #4ade80, #16a34a)' }} />
+                <PricingForm />
+              </div>
             </div>
           </Reveal>
 

@@ -76,8 +76,9 @@ const GlobalStyles = () => (
 );
 
 // ─── Section wave divider ─────────────────────────────────────────────────────
+// topColor = section above, bottomColor = section below
 const WaveDivider = ({ topColor, bottomColor, flip = false }) => (
-  <div style={{ position: 'relative', height: 'clamp(40px, 6vw, 80px)', overflow: 'hidden',
+  <div style={{ position: 'relative', height: '80px', overflow: 'hidden',
     background: topColor, marginBottom: '-1px' }}>
     <svg
       viewBox="0 0 1440 80" preserveAspectRatio="none"
@@ -95,7 +96,8 @@ const WaveDivider = ({ topColor, bottomColor, flip = false }) => (
   </div>
 );
 
-const DotGrid = ({ color = 'rgba(5,46,22,0.08)' }) => (
+
+const DotGrid = ({ color = 'rgba(5,46,22,0.06)' }) => (
   <div
     aria-hidden="true"
     style={{
@@ -107,7 +109,7 @@ const DotGrid = ({ color = 'rgba(5,46,22,0.08)' }) => (
   />
 );
 
-const Watermark = ({ color = 'rgba(5,46,22,0.06)' }) => (
+const Watermark = ({ color = 'transparent' }) => (
   <div
     aria-hidden="true"
     style={{
@@ -156,6 +158,7 @@ const Eyebrow = ({ label, light = false }) => (
 
 const IconMission = () => (
   <svg viewBox="0 0 48 48" fill="none" width="42" height="42">
+    {/* Compass / target metaphor */}
     <circle cx="24" cy="24" r="20" stroke="#16a34a" strokeWidth="1.5" fill="rgba(22,163,74,0.08)"/>
     <circle cx="24" cy="24" r="13" stroke="#16a34a" strokeWidth="1" fill="rgba(22,163,74,0.05)"/>
     <circle cx="24" cy="24" r="4" fill="#16a34a"/>
@@ -169,26 +172,33 @@ const IconMission = () => (
 
 const IconIntegrity = () => (
   <svg viewBox="0 0 48 48" fill="none" width="42" height="42">
+    {/* Handshake / agreement metaphor */}
     <path d="M4 22H14L20 16H28L34 22H44" stroke="#16a34a" strokeWidth="1.5" strokeLinejoin="round" fill="rgba(22,163,74,0.06)"/>
     <path d="M14 22L10 32H38L34 22" stroke="#16a34a" strokeWidth="1.5" strokeLinejoin="round" fill="rgba(22,163,74,0.08)"/>
     <path d="M20 16L22 10H26L28 16" stroke="#16a34a" strokeWidth="1.5" strokeLinejoin="round"/>
+    {/* Handshake lines */}
     <path d="M18 27C20 25 22 28 24 26C26 24 28 27 30 25" stroke="#16a34a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
     <circle cx="24" cy="22" r="2.5" fill="#16a34a"/>
+    {/* Star detail */}
     <path d="M24 34L25.2 37.6H29L26.4 39.7L27.3 43.3L24 41.3L20.7 43.3L21.6 39.7L19 37.6H22.8Z" fill="#16a34a" opacity="0.7"/>
   </svg>
 );
 
 const IconInnovation = () => (
   <svg viewBox="0 0 48 48" fill="none" width="42" height="42">
+    {/* Circuit / innovation metaphor */}
     <rect x="6" y="6" width="36" height="36" rx="6" fill="rgba(22,163,74,0.08)" stroke="#16a34a" strokeWidth="1.5"/>
+    {/* Circuit paths */}
     <path d="M14 24H20M28 24H34" stroke="#16a34a" strokeWidth="1.5" strokeLinecap="round"/>
     <path d="M24 14V20M24 28V34" stroke="#16a34a" strokeWidth="1.5" strokeLinecap="round"/>
     <path d="M20 24C20 21.8 21.8 20 24 20C26.2 20 28 21.8 28 24C28 26.2 26.2 28 24 28C21.8 28 20 26.2 20 24Z" fill="rgba(22,163,74,0.20)" stroke="#16a34a" strokeWidth="1.5"/>
     <circle cx="24" cy="24" r="2.5" fill="#16a34a"/>
+    {/* Corner nodes */}
     <circle cx="12" cy="12" r="2" fill="#16a34a" opacity="0.5"/>
     <circle cx="36" cy="12" r="2" fill="#16a34a" opacity="0.5"/>
     <circle cx="12" cy="36" r="2" fill="#16a34a" opacity="0.5"/>
     <circle cx="36" cy="36" r="2" fill="#16a34a" opacity="0.5"/>
+    {/* Connecting lines */}
     <line x1="14" y1="12" x2="20" y2="12" stroke="#16a34a" strokeWidth="1" strokeLinecap="round" opacity="0.4"/>
     <line x1="28" y1="12" x2="34" y2="12" stroke="#16a34a" strokeWidth="1" strokeLinecap="round" opacity="0.4"/>
     <line x1="12" y1="14" x2="12" y2="20" stroke="#16a34a" strokeWidth="1" strokeLinecap="round" opacity="0.4"/>
@@ -196,7 +206,46 @@ const IconInnovation = () => (
   </svg>
 );
 
-// ─── Value card ───────────────────────────────────────────────────────────────
+// ─── StatCell — animated stat card ───────────────────────────────────────────
+const StatCell = ({ stat }) => {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <div
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        background: hovered ? 'rgba(13,122,62,0.85)' : 'rgba(5,46,22,0.60)',
+        padding: 'clamp(32px, 5vw, 48px) 24px',
+        textAlign: 'center',
+        transition: 'background 0.3s ease',
+        cursor: 'default',
+      }}
+    >
+      <p style={{
+        fontFamily: FI, fontWeight: 900,
+        fontSize: hovered ? 'clamp(2.8rem, 4.5vw, 3.8rem)' : 'clamp(2.5rem, 4vw, 3.5rem)',
+        letterSpacing: '-0.03em', lineHeight: 1,
+        color: hovered ? '#ffffff' : '#4ade80',
+        marginBottom: '8px',
+        transition: 'all 0.3s cubic-bezier(0.22, 1, 0.36, 1)',
+        transform: hovered ? 'translateY(-3px)' : 'translateY(0)',
+      }}>{stat.value}</p>
+      <p style={{
+        fontFamily: FI, fontWeight: 700, fontSize: '1rem',
+        color: hovered ? '#ffffff' : 'rgba(255,255,255,0.90)',
+        marginBottom: '4px', transition: 'color 0.3s ease',
+      }}>{stat.label}</p>
+      <p style={{
+        fontFamily: FP, fontWeight: 400, fontSize: '0.78rem',
+        color: hovered ? 'rgba(220,252,231,0.85)' : 'rgba(220,252,231,0.55)',
+        textTransform: 'uppercase', letterSpacing: '0.08em',
+        transition: 'color 0.3s ease',
+      }}>{stat.sub}</p>
+    </div>
+  );
+};
+
+// ─── Value card ─── white at rest, full green on hover (matches FeatureCard) ──
 const ValueCard = ({ icon, label, title, body, delay }) => {
   const [hovered, setHovered] = useState(false);
   return (
@@ -206,24 +255,22 @@ const ValueCard = ({ icon, label, title, body, delay }) => {
         onMouseLeave={() => setHovered(false)}
         style={{
           background: hovered
-            ? 'linear-gradient(145deg, #15803d 0%, #166534 60%, #14532d 100%)'
-            : 'linear-gradient(145deg, #166534 0%, #14532d 60%, #052e16 100%)',
+            ? 'linear-gradient(145deg, #1db954 0%, #16a34a 60%, #0d8a3e 100%)'
+            : '#ffffff',
           borderRadius: '20px',
           overflow: 'hidden',
           position: 'relative',
           height: '100%',
           boxShadow: hovered
             ? '0 24px 64px rgba(5,46,22,0.28), 0 4px 16px rgba(22,163,74,0.20)'
-            : '0 4px 20px rgba(5,46,22,0.12)',
+            : '0 4px 20px rgba(5,46,22,0.08)',
           transform: hovered ? 'translateY(-8px) scale(1.01)' : 'translateY(0) scale(1)',
           transition: 'all 0.4s cubic-bezier(0.22, 1, 0.36, 1)',
           border: '1px solid',
-          borderColor: hovered ? 'rgba(74,222,128,0.30)' : 'rgba(74,222,128,0.12)',
-          width: '100%',
-          maxWidth: '420px',
-          margin: '0 auto',
+          borderColor: hovered ? 'rgba(74,222,128,0.30)' : 'rgba(22,163,74,0.14)',
         }}
       >
+        {/* Shimmer */}
         <div aria-hidden="true" style={{
           position: 'absolute', top: 0,
           left: hovered ? '120%' : '-60%',
@@ -233,51 +280,53 @@ const ValueCard = ({ icon, label, title, body, delay }) => {
           transition: 'left 0.7s cubic-bezier(0.22, 1, 0.36, 1)',
           pointerEvents: 'none',
         }} />
+        {/* Top line */}
         <div style={{
           height: '2px',
           background: hovered
             ? 'linear-gradient(to right, #4ade80, #86efac, #4ade80)'
-            : 'linear-gradient(to right, rgba(74,222,128,0.40), rgba(74,222,128,0.15))',
+            : 'linear-gradient(to right, #16a34a, #22c55e)',
           transition: 'background 0.4s ease',
         }} />
         <div style={{ padding: '36px 32px 32px', position: 'relative', zIndex: 1 }}>
+          {/* Icon */}
           <div style={{
             width: '72px', height: '72px', borderRadius: '18px',
-            background: '#ffffff',
-            border: `1.5px solid ${hovered ? 'rgba(22,163,74,0.35)' : 'rgba(22,163,74,0.25)'}`,
+            background: hovered ? '#ffffff' : 'rgba(22,163,74,0.09)',
+            border: `1.5px solid ${hovered ? 'rgba(22,163,74,0.30)' : 'rgba(22,163,74,0.22)'}`,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            marginBottom: '28px', position: 'relative',
-            transition: 'all 0.35s ease',
+            position: 'relative', transition: 'all 0.35s ease',
             margin: '0 auto 28px',
           }}>
             <div aria-hidden="true" style={{
               position: 'absolute', inset: '-10px', borderRadius: '26px',
               background: hovered
                 ? 'radial-gradient(circle, rgba(74,222,128,0.20) 0%, transparent 70%)'
-                : 'radial-gradient(circle, rgba(74,222,128,0.08) 0%, transparent 70%)',
+                : 'radial-gradient(circle, rgba(22,163,74,0.10) 0%, transparent 70%)',
               pointerEvents: 'none', transition: 'background 0.4s ease',
             }} />
             {icon}
           </div>
+          {/* Label */}
           <p style={{
             fontFamily: FP, fontSize: '0.78rem', fontWeight: 600,
             letterSpacing: '0.18em', textTransform: 'uppercase',
-            color: hovered ? '#86efac' : '#4ade80',
+            color: hovered ? '#ffffff' : '#16a34a',
             marginBottom: '8px', transition: 'color 0.3s ease',
-            textAlign: 'center',
           }}>{label}</p>
+          {/* Title */}
           <h3 style={{
             fontFamily: FI, fontSize: '1.375rem', fontWeight: 800,
-            letterSpacing: '-0.02em', color: '#ffffff',
+            letterSpacing: '-0.02em', color: hovered ? '#ffffff' : '#16a34a',
             marginBottom: '14px', lineHeight: 1.25,
-            textAlign: 'center',
+            transition: 'color 0.3s ease',
           }}>{title}</h3>
+          {/* Body */}
           <p style={{
             fontFamily: FP, fontSize: '1rem', fontWeight: 400,
             lineHeight: 1.80,
-            color: hovered ? '#ffffff' : 'rgba(255,255,255,0.88)',
+            color: hovered ? '#ffffff' : '#1a1a1a',
             transition: 'color 0.3s ease',
-            textAlign: 'center',
           }}>{body}</p>
         </div>
       </div>
@@ -286,6 +335,7 @@ const ValueCard = ({ icon, label, title, body, delay }) => {
 };
 
 // ─── Process step ─────────────────────────────────────────────────────────────
+// Bigger circle on hover: lifts, scales, pulses ring, number grows.
 const ProcessStep = ({ number, title, body, isLast, delay }) => {
   const [hovered, setHovered] = useState(false);
 
@@ -298,11 +348,9 @@ const ProcessStep = ({ number, title, body, isLast, delay }) => {
           display: 'flex', flexDirection: 'column',
           alignItems: 'center', textAlign: 'center',
           position: 'relative', cursor: 'default',
-          width: '100%',
-          maxWidth: '320px',
-          margin: '0 auto',
         }}
       >
+        {/* Outer pulse ring — expands on hover */}
         <div
           aria-hidden="true"
           style={{
@@ -311,12 +359,13 @@ const ProcessStep = ({ number, title, body, isLast, delay }) => {
             width: hovered ? '124px' : '96px',
             height: hovered ? '124px' : '96px',
             borderRadius: '50%',
-            border: `1.5px solid ${hovered ? 'rgba(74,222,128,0.40)' : 'rgba(74,222,128,0.12)'}`,
-            animation: hovered ? 'raah-pulse-ring 1.2s ease-out infinite' : 'none',
+            border: `2px solid ${hovered ? 'rgba(74,222,128,0.55)' : 'rgba(74,222,128,0.25)'}`,
+            animation: hovered ? 'raah-pulse-ring 1.0s ease-out infinite' : 'none',
             transition: 'all 0.5s cubic-bezier(0.22, 1, 0.36, 1)',
             pointerEvents: 'none',
           }}
         />
+        {/* Second pulse ring */}
         <div
           aria-hidden="true"
           style={{
@@ -325,31 +374,33 @@ const ProcessStep = ({ number, title, body, isLast, delay }) => {
             width: hovered ? '148px' : '96px',
             height: hovered ? '148px' : '96px',
             borderRadius: '50%',
-            border: `1px solid ${hovered ? 'rgba(74,222,128,0.18)' : 'transparent'}`,
+            border: `1.5px solid ${hovered ? 'rgba(74,222,128,0.28)' : 'rgba(74,222,128,0.08)'}`,
             transition: 'all 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.04s',
             pointerEvents: 'none',
           }}
         />
 
+        {/* Number circle */}
         <div
           style={{
             width: hovered ? '96px' : '80px',
             height: hovered ? '96px' : '80px',
             borderRadius: '50%',
             background: hovered
-              ? 'linear-gradient(135deg, #166534 0%, #16a34a 100%)'
-              : 'rgba(74,222,128,0.10)',
-            border: `2px solid ${hovered ? '#4ade80' : 'rgba(74,222,128,0.35)'}`,
+              ? 'linear-gradient(135deg, #0d7a3e 0%, #16a34a 100%)'
+              : 'rgba(74,222,128,0.18)',
+            border: `2px solid ${hovered ? '#4ade80' : 'rgba(74,222,128,0.60)'}`,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             marginBottom: '32px', flexShrink: 0,
             boxShadow: hovered
-              ? '0 0 0 6px rgba(74,222,128,0.12), 0 16px 40px rgba(5,46,22,0.40)'
-              : '0 0 0 8px rgba(74,222,128,0.06)',
+              ? '0 0 0 6px rgba(74,222,128,0.20), 0 16px 40px rgba(5,46,22,0.50)'
+              : '0 0 0 10px rgba(74,222,128,0.12)',
             animation: hovered ? 'none' : 'raah-float 3s ease-in-out infinite',
             position: 'relative',
             zIndex: 1,
           }}
         >
+          {/* Inner glow on hover */}
           {hovered && (
             <div aria-hidden="true" style={{
               position: 'absolute', inset: 0, borderRadius: '50%',
@@ -360,8 +411,8 @@ const ProcessStep = ({ number, title, body, isLast, delay }) => {
           <span
             style={{
               fontFamily: FI, fontWeight: 900,
-              fontSize: hovered ? '1.5rem' : '1.25rem',
-              color: hovered ? '#ffffff' : '#4ade80',
+              fontSize: hovered ? '1.6rem' : '1.35rem',
+              color: hovered ? '#ffffff' : '#ffffff',
               letterSpacing: '-0.02em',
               transition: 'all 0.35s cubic-bezier(0.22, 1, 0.36, 1)',
               lineHeight: 1,
@@ -371,7 +422,7 @@ const ProcessStep = ({ number, title, body, isLast, delay }) => {
           </span>
         </div>
 
-        {/* Connector line — desktop only, hidden on mobile */}
+        {/* Connector line — between steps, desktop only */}
         {!isLast && (
           <div aria-hidden="true" style={{
             position: 'absolute',
@@ -384,6 +435,7 @@ const ProcessStep = ({ number, title, body, isLast, delay }) => {
           }} className="lg:block" />
         )}
 
+        {/* Title — lifts on step hover */}
         <h3
           style={{
             fontFamily: FI, fontWeight: 800,
@@ -398,6 +450,7 @@ const ProcessStep = ({ number, title, body, isLast, delay }) => {
           {title}
         </h3>
 
+        {/* Body — brightens on hover */}
         <p
           style={{
             fontFamily: FP, fontSize: '0.9375rem', fontWeight: 400,
@@ -435,11 +488,9 @@ const Badge = ({ title, subtitle, delay }) => {
           transform: hovered ? 'translateY(-4px)' : 'translateY(0)',
           transition: 'all 0.35s cubic-bezier(0.22, 1, 0.36, 1)',
           display: 'flex', alignItems: 'center', gap: '16px',
-          width: '100%',
-          maxWidth: '320px',
-          margin: '0 auto',
         }}
       >
+        {/* Green check shield */}
         <div style={{
           width: '48px', height: '48px', borderRadius: '12px', flexShrink: 0,
           background: hovered ? '#16a34a' : 'rgba(22,163,74,0.08)',
@@ -478,18 +529,23 @@ const AboutPage = () => (
 
     {/* ══════════════════════════════════════════════════════════════
         1. PAGE HERO
+        Full-bleed image, dark green overlay, centred headline.
+        Matches HeroCarousel visual treatment.
     ══════════════════════════════════════════════════════════════ */}
-    <section style={{ position: 'relative', minHeight: '60vh', display: 'flex', alignItems: 'center', overflow: 'hidden' }}>
+    <section style={{ position: 'relative', minHeight: '70vh', display: 'flex', alignItems: 'center', overflow: 'hidden' }}>
+      {/* Background image */}
       <img
         src="https://images.unsplash.com/photo-1551076805-e1869033e561?auto=format&fit=crop&q=80&w=2000&h=900&crop=top"
         alt="RAAH Technologies team"
         style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 30%' }}
       />
+      {/* Overlay */}
       <div style={{ position: 'absolute', inset: 0, background: 'rgba(5,46,22,0.65)' }} aria-hidden="true" />
       <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent 40%, rgba(5,46,22,0.60) 100%)' }} aria-hidden="true" />
+      {/* Dot grid */}
       <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle, rgba(74,222,128,0.07) 1px, transparent 1px)', backgroundSize: '32px 32px', pointerEvents: 'none' }} aria-hidden="true" />
 
-      <div className="container-custom" style={{ position: 'relative', zIndex: 1, textAlign: 'center', padding: 'clamp(60px, 12vw, 120px) 24px' }}>
+      <div className="container-custom" style={{ position: 'relative', zIndex: 1, textAlign: 'center', padding: '120px 24px' }}>
         <Reveal delay={0}>
           <Eyebrow label="Our Story" light />
         </Reveal>
@@ -519,36 +575,24 @@ const AboutPage = () => (
       </div>
     </section>
 
-    <WaveDivider topColor="rgba(5,46,22,0.80)" bottomColor="#ffffff" />
+    <WaveDivider topColor="rgba(5,46,22,0.65)" bottomColor="#dff0df" />
 
     {/* ══════════════════════════════════════════════════════════════
-        2. OUR STORY
+        2. OUR STORY — 2-col, image left / narrative right
     ══════════════════════════════════════════════════════════════ */}
-    <section style={{ background: '#ffffff', padding: 'clamp(60px, 10vw, 130px) 0', position: 'relative', overflow: 'hidden' }}>
+    <section style={{ background: '#dff0df', padding: '130px 0', position: 'relative', overflow: 'hidden' }}>
       <DotGrid />
       <Watermark />
       <RadialGlow top="-60px" right="-60px" size={420} opacity={0.07} />
       <RadialGlow bottom="-60px" left="-60px" size={360} opacity={0.06} />
 
       <div className="container-custom" style={{ position: 'relative', zIndex: 1 }}>
-        <style>{`
-          .story-grid {
-            display: grid;
-            gap: 48px;
-            align-items: stretch;
-          }
-          @media (min-width: 768px) {
-            .story-grid {
-              grid-template-columns: repeat(2, 1fr);
-              gap: 80px;
-            }
-          }
-        `}</style>
-        <div className="story-grid">
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', alignItems: 'stretch' }} className="grid-cols-1 md:grid-cols-2">
 
           {/* Image */}
           <Reveal delay={0}>
-            <div style={{ position: 'relative', height: '100%', minHeight: 'clamp(320px, 50vw, 520px)' }}>
+            <div style={{ position: 'relative', height: '100%', minHeight: '520px' }}>
+              {/* Decorative offset border */}
               <div aria-hidden="true" style={{
                 position: 'absolute', top: '-24px', left: '-24px', right: '24px', bottom: '24px',
                 borderRadius: '24px', border: '1.5px solid rgba(22,163,74,0.15)', zIndex: 0,
@@ -561,17 +605,28 @@ const AboutPage = () => (
                 <img
                   src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=1200"
                   alt="RAAH team collaborating"
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block' }}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block',
+                    transition: 'transform 0.7s cubic-bezier(0.22, 1, 0.36, 1)' }}
+                  onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.04)'; }}
+                  onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; }}
                 />
+                {/* Left-edge fade — blends into section background */}
                 <div aria-hidden="true" style={{
                   position: 'absolute', inset: 0,
-                  background: 'linear-gradient(135deg, rgba(5,46,22,0.10) 0%, transparent 60%)',
+                  background: 'linear-gradient(to right, rgba(223,240,223,0.18) 0%, transparent 30%, transparent 70%, rgba(5,46,22,0.06) 100%)',
+                  pointerEvents: 'none',
+                }} />
+                {/* Top fade */}
+                <div aria-hidden="true" style={{
+                  position: 'absolute', top: 0, left: 0, right: 0, height: '80px',
+                  background: 'linear-gradient(to bottom, rgba(223,240,223,0.12) 0%, transparent 100%)',
+                  pointerEvents: 'none',
                 }} />
               </div>
-              {/* Floating pill — desktop only */}
+              {/* Floating pill */}
               <div className="hidden lg:flex" style={{
                 position: 'absolute', top: '-20px', right: '-20px', zIndex: 10,
-                background: 'linear-gradient(135deg, #052e16 0%, #14532d 100%)',
+                background: 'linear-gradient(135deg, #0d7a3e 0%, #16a34a 100%)',
                 borderRadius: '999px', padding: '10px 18px',
                 boxShadow: '0 8px 24px rgba(5,46,22,0.30)',
                 border: '1px solid rgba(74,222,128,0.20)',
@@ -608,17 +663,7 @@ const AboutPage = () => (
                 We built RAAH to be the platform we wished had existed. One system that handles every clinical, operational, and financial workflow from the first patient referral to the final 835 remittance posting. Built specifically for home health, designed without compromise.
               </p>
               {/* Core values row */}
-              <style>{`
-                .values-grid {
-                  display: grid;
-                  gap: 12px;
-                  grid-template-columns: 1fr;
-                }
-                @media (min-width: 480px) {
-                  .values-grid { grid-template-columns: repeat(2, 1fr); }
-                }
-              `}</style>
-              <div className="values-grid">
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                 {[
                   'HIPAA-Grade Security',
                   'Real-Time EVV Sync',
@@ -645,14 +690,14 @@ const AboutPage = () => (
       </div>
     </section>
 
-    <WaveDivider topColor="#ffffff" bottomColor="#052e16" flip={true} />
+    <WaveDivider topColor="#dff0df" bottomColor="#0d7a3e" flip={true} />
 
     {/* ══════════════════════════════════════════════════════════════
-        3. BY THE NUMBERS
+        3. BY THE NUMBERS — brand green gradient
     ══════════════════════════════════════════════════════════════ */}
     <section style={{
-      background: 'linear-gradient(160deg, #052e16 0%, #064e3b 55%, #052e16 100%)',
-      padding: 'clamp(60px, 10vw, 100px) 0', position: 'relative', overflow: 'hidden',
+      background: 'linear-gradient(160deg, #0d7a3e 0%, #16a34a 55%, #0d7a3e 100%)',
+      padding: '100px 0', position: 'relative', overflow: 'hidden',
     }}>
       <DotGrid color="rgba(74,222,128,0.08)" />
       <Watermark color="rgba(255,255,255,0.04)" />
@@ -662,7 +707,11 @@ const AboutPage = () => (
       <div className="container-custom" style={{ position: 'relative', zIndex: 1 }}>
         <Reveal delay={0}>
           <div style={{ textAlign: 'center', marginBottom: '60px' }}>
-            <Eyebrow label="By The Numbers" light />
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
+              <div style={{ width: '32px', height: '1.5px', background: '#ffffff', borderRadius: '999px' }} />
+              <span style={{ fontFamily: FP, fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#ffffff' }}>By The Numbers</span>
+              <div style={{ width: '32px', height: '1.5px', background: '#ffffff', borderRadius: '999px' }} />
+            </div>
             <h2 style={{
               fontFamily: FI, fontWeight: 900,
               fontSize: 'clamp(2.25rem, 5vw, 3.75rem)',
@@ -670,25 +719,12 @@ const AboutPage = () => (
               color: '#ffffff', maxWidth: '680px', margin: '0 auto',
             }}>
               Trusted Across the{' '}
-              <span style={{ color: '#4ade80' }}>Country</span>
+              <span style={{ color: '#ffffff', textDecoration: 'underline', textDecorationColor: 'rgba(255,255,255,0.40)', textUnderlineOffset: '6px' }}>Country</span>
             </h2>
           </div>
         </Reveal>
 
-        <style>{`
-          .stats-grid {
-            display: grid;
-            gap: 1px;
-            background: rgba(74,222,128,0.10);
-            border-radius: 16px;
-            overflow: hidden;
-            grid-template-columns: repeat(2, 1fr);
-          }
-          @media (min-width: 768px) {
-            .stats-grid { grid-template-columns: repeat(4, 1fr); }
-          }
-        `}</style>
-        <div className="stats-grid">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1px', background: 'rgba(74,222,128,0.10)', borderRadius: '16px', overflow: 'hidden' }} className="grid-cols-2 md:grid-cols-4">
           {[
             { value: '500+',  label: 'Agencies Served',       sub: 'Across 30 states' },
             { value: '1M+',   label: 'Visits Managed',        sub: 'Annually on the platform' },
@@ -698,7 +734,7 @@ const AboutPage = () => (
             <Reveal key={stat.label} delay={i * 80}>
               <div style={{
                 background: 'rgba(5,46,22,0.60)',
-                padding: 'clamp(32px, 5vw, 48px) 24px', textAlign: 'center',
+                padding: '48px 32px', textAlign: 'center',
               }}>
                 <p style={{
                   fontFamily: FI, fontWeight: 900,
@@ -715,12 +751,12 @@ const AboutPage = () => (
       </div>
     </section>
 
-    <WaveDivider topColor="#052e16" bottomColor="#ffffff" />
+    <WaveDivider topColor="#0d7a3e" bottomColor="#dff0df" />
 
     {/* ══════════════════════════════════════════════════════════════
-        4. WHAT DRIVES US
+        4. WHAT DRIVES US — white, 3 value cards
     ══════════════════════════════════════════════════════════════ */}
-    <section style={{ background: '#ffffff', padding: 'clamp(60px, 10vw, 130px) 0', position: 'relative', overflow: 'hidden' }}>
+    <section style={{ background: '#dff0df', padding: '130px 0', position: 'relative', overflow: 'hidden' }}>
       <DotGrid />
       <Watermark />
       <RadialGlow top="-60px" right="-60px" size={420} opacity={0.07} />
@@ -749,21 +785,7 @@ const AboutPage = () => (
           </div>
         </Reveal>
 
-        <style>{`
-          .values-card-grid {
-            display: grid;
-            gap: 24px;
-            justify-items: center;
-            grid-template-columns: 1fr;
-          }
-          @media (min-width: 640px) {
-            .values-card-grid { grid-template-columns: repeat(2, 1fr); }
-          }
-          @media (min-width: 1024px) {
-            .values-card-grid { grid-template-columns: repeat(3, 1fr); }
-          }
-        `}</style>
-        <div className="values-card-grid">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px', alignItems: 'stretch' }} className="grid-cols-1 md:grid-cols-3">
           <ValueCard
             delay={100}
             icon={<IconMission />}
@@ -789,14 +811,14 @@ const AboutPage = () => (
       </div>
     </section>
 
-    <WaveDivider topColor="#ffffff" bottomColor="#052e16" flip={true} />
+    <WaveDivider topColor="#dff0df" bottomColor="#0d7a3e" flip={true} />
 
     {/* ══════════════════════════════════════════════════════════════
-        5. HOW WE WORK
+        5. HOW WE WORK — dark green, 3-step process
     ══════════════════════════════════════════════════════════════ */}
     <section style={{
-      background: 'linear-gradient(160deg, #052e16 0%, #064e3b 55%, #052e16 100%)',
-      padding: 'clamp(60px, 10vw, 130px) 0', position: 'relative', overflow: 'hidden',
+      background: 'linear-gradient(160deg, #0d7a3e 0%, #16a34a 55%, #0d7a3e 100%)',
+      padding: '130px 0', position: 'relative', overflow: 'hidden',
     }}>
       <DotGrid color="rgba(74,222,128,0.08)" />
       <Watermark color="rgba(255,255,255,0.04)" />
@@ -805,7 +827,11 @@ const AboutPage = () => (
       <div className="container-custom" style={{ position: 'relative', zIndex: 1 }}>
         <Reveal delay={0}>
           <div style={{ textAlign: 'center', marginBottom: '80px' }}>
-            <Eyebrow label="How We Work" light />
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
+              <div style={{ width: '32px', height: '1.5px', background: '#ffffff', borderRadius: '999px' }} />
+              <span style={{ fontFamily: FP, fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#ffffff' }}>How We Work</span>
+              <div style={{ width: '32px', height: '1.5px', background: '#ffffff', borderRadius: '999px' }} />
+            </div>
             <h2 style={{
               fontFamily: FI, fontWeight: 900,
               fontSize: 'clamp(2.25rem, 5vw, 3.75rem)',
@@ -813,12 +839,12 @@ const AboutPage = () => (
               color: '#ffffff', maxWidth: '780px', margin: '0 auto 20px',
             }}>
               From Contract to{' '}
-              <span style={{ color: '#4ade80' }}>Fully Operational</span>
+              <span style={{ color: '#ffffff', textDecoration: 'underline', textDecorationColor: 'rgba(255,255,255,0.40)', textUnderlineOffset: '6px' }}>Fully Operational</span>
             </h2>
             <p style={{
               fontFamily: FP, fontSize: 'clamp(1.1rem, 1.6vw, 1.3rem)',
               fontWeight: 500, lineHeight: 1.75,
-              color: 'rgba(220,252,231,0.85)',
+              color: 'rgba(255,255,255,0.90)',
               maxWidth: '560px', margin: '0 auto',
             }}>
               Most agencies are live within 24 hours. No IT department required. No months-long implementations.
@@ -826,21 +852,7 @@ const AboutPage = () => (
           </div>
         </Reveal>
 
-        <style>{`
-          .process-grid {
-            display: grid;
-            gap: 48px;
-            justify-items: center;
-            grid-template-columns: 1fr;
-          }
-          @media (min-width: 768px) {
-            .process-grid {
-              grid-template-columns: repeat(3, 1fr);
-              gap: 48px;
-            }
-          }
-        `}</style>
-        <div className="process-grid">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '48px', position: 'relative' }} className="grid-cols-1 md:grid-cols-3">
           <ProcessStep
             delay={100} number="01" isLast={false}
             title="Guided Onboarding"
@@ -860,31 +872,18 @@ const AboutPage = () => (
       </div>
     </section>
 
-    <WaveDivider topColor="#052e16" bottomColor="#ffffff" />
+    <WaveDivider topColor="#0d7a3e" bottomColor="#dff0df" />
 
     {/* ══════════════════════════════════════════════════════════════
-        6. COMPLIANCE CREDENTIALS
+        6. COMPLIANCE CREDENTIALS — white, badge grid
     ══════════════════════════════════════════════════════════════ */}
-    <section style={{ background: '#ffffff', padding: 'clamp(60px, 10vw, 130px) 0', position: 'relative', overflow: 'hidden' }}>
+    <section style={{ background: '#dff0df', padding: '130px 0', position: 'relative', overflow: 'hidden' }}>
       <DotGrid />
       <Watermark />
       <RadialGlow top="-60px" right="-60px" size={420} opacity={0.07} />
 
       <div className="container-custom" style={{ position: 'relative', zIndex: 1 }}>
-        <style>{`
-          .compliance-grid {
-            display: grid;
-            gap: 80px;
-            align-items: center;
-          }
-          @media (min-width: 768px) {
-            .compliance-grid {
-              grid-template-columns: repeat(2, 1fr);
-              gap: 80px;
-            }
-          }
-        `}</style>
-        <div className="compliance-grid">
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', alignItems: 'center' }} className="grid-cols-1 md:grid-cols-2">
 
           {/* Left — narrative */}
           <Reveal delay={0}>
@@ -912,18 +911,7 @@ const AboutPage = () => (
           </Reveal>
 
           {/* Right — badge grid */}
-          <style>{`
-            .badge-grid {
-              display: grid;
-              gap: 16px;
-              justify-items: center;
-              grid-template-columns: 1fr;
-            }
-            @media (min-width: 480px) {
-              .badge-grid { grid-template-columns: repeat(2, 1fr); }
-            }
-          `}</style>
-          <div className="badge-grid">
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
             {[
               { title: 'HIPAA Compliant', subtitle: 'End-to-end encryption, BAA available', delay: 100 },
               { title: 'CMS Certified',   subtitle: 'OASIS, PDGM, and HH-CAHPS aligned', delay: 180 },
@@ -941,11 +929,11 @@ const AboutPage = () => (
     </section>
 
     {/* ══════════════════════════════════════════════════════════════
-        7. CTA
+        7. CTA — matches homepage
     ══════════════════════════════════════════════════════════════ */}
-    <section style={{ background: '#ffffff', padding: 'clamp(60px, 10vw, 120px) 0 clamp(70px, 12vw, 140px)', position: 'relative', overflow: 'hidden' }}>
+    <section style={{ background: '#dff0df', padding: '120px 0 140px', position: 'relative', overflow: 'hidden' }}>
       <DotGrid />
-      <Watermark color="rgba(5,46,22,0.09)" />
+      <Watermark color="transparent" />
       <RadialGlow top="-100px" right="-100px" size={600} opacity={0.07} />
       <RadialGlow bottom="-100px" left="-100px" size={500} opacity={0.06} />
 
@@ -979,7 +967,7 @@ const AboutPage = () => (
         </Reveal>
 
         <Reveal delay={220}>
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px' }} className="sm:flex-row sm:justify-center">
+          <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '14px' }}>
             <Link
               to="/demo"
               style={{
@@ -1037,7 +1025,7 @@ const AboutPage = () => (
           </div>
           <p style={{
             fontFamily: FP, fontSize: '0.8rem', fontWeight: 400,
-            color: 'rgba(22,163,74,0.55)', marginTop: '20px', letterSpacing: '0.04em',
+            color: '#16a34a', marginTop: '20px', letterSpacing: '0.04em',
           }}>
             No credit card required. Live in under 24 hours.
           </p>

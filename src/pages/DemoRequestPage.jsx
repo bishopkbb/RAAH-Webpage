@@ -1,13 +1,12 @@
 /**
  * DemoRequestPage.jsx — RAAH Technologies
  *
- * Architecture:
- *   Hero     — short, confident. Dark green overlay + eyebrow + heading.
- *   Body     — 2-col layout:
- *              Left:  what you'll see (features)
- *              Right: demo form
- *              Below: Testimonial + Trust cards in a shared aligned row
- *   Strip    — 3 reassurance stats (dark green section)
+ * Fully responsive layout with:
+ *   - Mobile-first grid stacking
+ *   - Form overflow prevention & responsive inputs
+ *   - Perfectly aligned testimonial + trust cards on all screens
+ *   - reCAPTCHA mobile scaling fix
+ *   - No sticky positioning on mobile to prevent overlap
  *
  * ESLint fixes:
  *   - Removed unused `onReset` prop from SuccessState
@@ -106,19 +105,13 @@ const IconSetup = ({ color = '#16a34a' }) => (
     <path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12" stroke={color} strokeWidth="1.5" strokeLinecap="round"/>
   </svg>
 );
-const IconShield = ({ color = '#16a34a' }) => (
-  <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
-    <path d="M12 2L4 5.5V11c0 5.25 3.5 9.74 8 11 4.5-1.26 8-5.75 8-11V5.5L12 2Z" stroke={color} strokeWidth="1.5" strokeLinejoin="round"/>
-    <path d="M9 12l2 2 4-4" stroke={color} strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
-);
 const CheckSvg = () => (
   <svg viewBox="0 0 16 16" fill="none" width="14" height="14" style={{ flexShrink: 0, marginTop: '2px' }}>
     <path d="M3 8L6.5 11.5L13 5" stroke="#16a34a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
   </svg>
 );
 
-// ─── What you'll see items ────────────────────────────────────────────────────
+// ─── Feature item ─────────────────────────────────────────────────────────────
 const DemoFeatureItem = ({ icon, title, body }) => {
   const [hovered, setHovered] = useState(false);
   return (
@@ -127,12 +120,13 @@ const DemoFeatureItem = ({ icon, title, body }) => {
       onMouseLeave={() => setHovered(false)}
       style={{
         display: 'flex', gap: 'clamp(12px, 2vw, 16px)', alignItems: 'flex-start',
-        padding: 'clamp(16px, 3vw, 20px)',
+        padding: 'clamp(14px, 3vw, 20px)',
         borderRadius: '14px',
         background: hovered ? 'rgba(22,163,74,0.06)' : 'transparent',
         border: `1px solid ${hovered ? 'rgba(22,163,74,0.20)' : 'transparent'}`,
         transition: 'all 0.25s ease',
         cursor: 'default',
+        boxSizing: 'border-box',
       }}
     >
       <div style={{
@@ -144,25 +138,25 @@ const DemoFeatureItem = ({ icon, title, body }) => {
       }}>
         {React.createElement(icon, { color: hovered ? '#ffffff' : '#16a34a' })}
       </div>
-      <div>
-        <p style={{ fontFamily: FI, fontWeight: 700, fontSize: 'clamp(0.9375rem, 2vw, 1rem)', color: '#0f172a', marginBottom: '4px' }}>{title}</p>
-        <p style={{ fontFamily: FP, fontWeight: 400, fontSize: 'clamp(0.85rem, 1.8vw, 0.9rem)', color: '#475569', lineHeight: 1.65 }}>{body}</p>
+      <div style={{ minWidth: 0 }}>
+        <p style={{ fontFamily: FI, fontWeight: 700, fontSize: 'clamp(0.875rem, 1.8vw, 1rem)', color: '#0f172a', marginBottom: '4px', lineHeight: 1.2 }}>{title}</p>
+        <p style={{ fontFamily: FP, fontWeight: 400, fontSize: 'clamp(0.8rem, 1.6vw, 0.9rem)', color: '#475569', lineHeight: 1.6 }}>{body}</p>
       </div>
     </div>
   );
 };
 
-// ─── Input field style ────────────────────────────────────────────────────────
+// ─── Input field styles ───────────────────────────────────────────────────────
 const inputStyle = {
-  width: '100%', fontFamily: FP, fontSize: 'clamp(0.875rem, 1.8vw, 0.9375rem)', fontWeight: 400,
+  width: '100%', fontFamily: FP, fontSize: 'clamp(0.85rem, 1.6vw, 0.9375rem)', fontWeight: 400,
   padding: 'clamp(11px, 2vw, 13px) clamp(14px, 3vw, 16px)', borderRadius: '10px', outline: 'none',
   border: '1.5px solid rgba(22,163,74,0.18)',
   color: '#0f172a', background: '#fafffe',
   transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
-  boxSizing: 'border-box',
+  boxSizing: 'border-box', maxWidth: '100%',
 };
 const labelStyle = {
-  fontFamily: FI, fontSize: 'clamp(0.72rem, 1.5vw, 0.78rem)', fontWeight: 700,
+  fontFamily: FI, fontSize: 'clamp(0.7rem, 1.4vw, 0.78rem)', fontWeight: 700,
   color: '#374151', marginBottom: '7px', display: 'block',
   letterSpacing: '0.05em', textTransform: 'uppercase',
 };
@@ -177,7 +171,7 @@ const onBlur = e => {
 
 // ─── Success state ────────────────────────────────────────────────────────────
 const SuccessState = () => (
-  <div style={{ textAlign: 'center', padding: 'clamp(32px, 6vw, 48px) clamp(24px, 5vw, 32px)' }}>
+  <div style={{ textAlign: 'center', padding: 'clamp(32px, 6vw, 48px) clamp(20px, 4vw, 32px)' }}>
     <div style={{
       width: 'clamp(64px, 12vw, 80px)', height: 'clamp(64px, 12vw, 80px)', borderRadius: '50%', margin: '0 auto 24px',
       background: 'linear-gradient(135deg, #0d7a3e 0%, #16a34a 100%)',
@@ -188,14 +182,14 @@ const SuccessState = () => (
         <path d="M5 13l4 4L19 7" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>
     </div>
-    <h3 style={{ fontFamily: FI, fontWeight: 800, fontSize: 'clamp(1.375rem, 3vw, 1.625rem)', color: '#0f172a', marginBottom: '12px', letterSpacing: '-0.02em' }}>
+    <h3 style={{ fontFamily: FI, fontWeight: 800, fontSize: 'clamp(1.25rem, 3vw, 1.625rem)', color: '#0f172a', marginBottom: '12px', letterSpacing: '-0.02em' }}>
       Request Received
     </h3>
-    <p style={{ fontFamily: FP, fontSize: 'clamp(0.9375rem, 2vw, 1rem)', color: '#475569', lineHeight: 1.75, maxWidth: '340px', margin: '0 auto 32px' }}>
+    <p style={{ fontFamily: FP, fontSize: 'clamp(0.9rem, 2vw, 1rem)', color: '#475569', lineHeight: 1.75, maxWidth: '340px', margin: '0 auto 32px' }}>
       A member of our implementation team will reach out within one business day to confirm your session.
     </p>
     <div style={{ background: '#dff0df', borderRadius: '14px', padding: 'clamp(16px, 3vw, 20px) clamp(20px, 4vw, 24px)', marginBottom: '28px', textAlign: 'left' }}>
-      <p style={{ fontFamily: FI, fontWeight: 700, fontSize: 'clamp(0.7rem, 1.5vw, 0.8rem)', color: '#16a34a', marginBottom: '12px', letterSpacing: '0.06em', textTransform: 'uppercase' }}>What happens next</p>
+      <p style={{ fontFamily: FI, fontWeight: 700, fontSize: 'clamp(0.7rem, 1.4vw, 0.8rem)', color: '#16a34a', marginBottom: '12px', letterSpacing: '0.06em', textTransform: 'uppercase' }}>What happens next</p>
       {[
         'We review your agency size and use case',
         'A specialist reaches out to confirm your time',
@@ -206,7 +200,7 @@ const SuccessState = () => (
           <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: '#16a34a', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: '1px' }}>
             <span style={{ fontFamily: FI, fontWeight: 900, fontSize: '0.65rem', color: '#ffffff' }}>{i + 1}</span>
           </div>
-          <p style={{ fontFamily: FP, fontSize: 'clamp(0.8rem, 1.8vw, 0.875rem)', color: '#374151', lineHeight: 1.5 }}>{step}</p>
+          <p style={{ fontFamily: FP, fontSize: 'clamp(0.8rem, 1.6vw, 0.875rem)', color: '#374151', lineHeight: 1.5 }}>{step}</p>
         </div>
       ))}
     </div>
@@ -269,18 +263,13 @@ const DemoForm = () => {
   if (submitted) return <SuccessState />;
 
   return (
-    <div style={{ padding: 'clamp(32px, 6vw, 40px)' }}>
-      <h2 style={{ fontFamily: FI, fontWeight: 800, fontSize: 'clamp(1.25rem, 3vw, 1.375rem)', color: '#0f172a', marginBottom: '6px', letterSpacing: '-0.02em' }}>
+    <div style={{ padding: 'clamp(28px, 5vw, 40px)' }}>
+      <h2 style={{ fontFamily: FI, fontWeight: 800, fontSize: 'clamp(1.2rem, 2.5vw, 1.375rem)', color: '#0f172a', marginBottom: '6px', letterSpacing: '-0.02em' }}>
         Schedule Your Demo
       </h2>
-      <p style={{ fontFamily: FP, fontSize: 'clamp(0.85rem, 1.8vw, 0.9rem)', color: '#64748b', marginBottom: 'clamp(24px, 5vw, 32px)', lineHeight: 1.6 }}>
+      <p style={{ fontFamily: FP, fontSize: 'clamp(0.85rem, 1.6vw, 0.9rem)', color: '#64748b', marginBottom: 'clamp(20px, 4vw, 32px)', lineHeight: 1.6 }}>
         Takes 90 seconds. We respond within one business day.
       </p>
-
-      <style>{`
-        .form-row { display: grid; gap: 16px; grid-template-columns: 1fr; }
-        @media (min-width: 480px) { .form-row { grid-template-columns: repeat(2, 1fr); } }
-      `}</style>
 
       <div className="form-row" style={{ marginBottom: '16px' }}>
         <div>
@@ -353,7 +342,7 @@ const DemoForm = () => {
         </div>
       </div>
 
-      <div style={{ display: 'flex', justifyContent: 'center', padding: 'clamp(12px, 2vw, 16px) 0 clamp(16px, 3vw, 20px)' }}>
+      <div className="recaptcha-wrapper">
         <ReCAPTCHA
           ref={recaptchaRef}
           sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
@@ -375,6 +364,7 @@ const DemoForm = () => {
           cursor: submitting ? 'not-allowed' : 'pointer',
           transition: 'all 0.25s ease',
           display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px',
+          boxSizing: 'border-box',
         }}
         onMouseEnter={e => { if (!submitting) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#16a34a'; e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = 'none'; } }}
         onMouseLeave={e => { e.currentTarget.style.background = '#16a34a'; e.currentTarget.style.color = '#ffffff'; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 6px 24px rgba(22,163,74,0.30)'; }}
@@ -397,10 +387,9 @@ const DemoForm = () => {
         )}
       </button>
 
-      <p style={{ fontFamily: FP, fontSize: 'clamp(0.72rem, 1.5vw, 0.78rem)', color: '#94a3b8', textAlign: 'center', marginTop: '14px' }}>
+      <p style={{ fontFamily: FP, fontSize: 'clamp(0.72rem, 1.4vw, 0.78rem)', color: '#94a3b8', textAlign: 'center', marginTop: '14px' }}>
         No commitment. No credit card. Responds within one business day.
       </p>
-      <style>{`@keyframes demo-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
     </div>
   );
 };
@@ -408,6 +397,27 @@ const DemoForm = () => {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 const DemoRequestPage = () => (
   <Layout>
+
+    {/* Global responsive styles */}
+    <style>{`
+      @keyframes demo-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+      .form-row { display: grid; gap: 16px; grid-template-columns: 1fr; }
+      @media (min-width: 480px) { .form-row { grid-template-columns: repeat(2, 1fr); } }
+      
+      .demo-top-row { display: grid; gap: clamp(32px, 6vw, 48px); align-items: start; }
+      @media (min-width: 1024px) { .demo-top-row { grid-template-columns: 1fr 1.15fr; gap: 64px; } }
+      @media (min-width: 1024px) { .demo-left-sticky { position: sticky; top: clamp(100px, 15vw, 140px); } }
+      
+      .cards-aligned-row { display: grid; grid-template-columns: 1fr; gap: 20px; align-items: stretch; margin-top: clamp(40px, 8vw, 56px); }
+      @media (min-width: 768px) { .cards-aligned-row { grid-template-columns: 1fr 1fr; gap: 28px; } }
+      
+      .recaptcha-wrapper { 
+        display: flex; justify-content: center; padding: clamp(8px, 2vw, 16px) 0 clamp(12px, 3vw, 20px);
+        overflow-x: auto; -webkit-overflow-scrolling: touch; max-width: 100%;
+      }
+      .recaptcha-wrapper > div { margin: 0 auto; }
+      @media (max-width: 420px) { .recaptcha-wrapper > div { transform: scale(0.9); transform-origin: left center; } }
+    `}</style>
 
     {/* ══ HERO ══ */}
     <section style={{ position: 'relative', minHeight: '50vh', display: 'flex', alignItems: 'center', overflow: 'hidden' }}>
@@ -423,24 +433,12 @@ const DemoRequestPage = () => (
       <div className="container-custom" style={{ position: 'relative', zIndex: 1, textAlign: 'center', padding: 'clamp(60px, 10vw, 100px) clamp(16px, 4vw, 24px) clamp(70px, 12vw, 110px)' }}>
         <Reveal delay={0}><Eyebrow label="Free 30-Minute Session" light /></Reveal>
         <Reveal delay={80}>
-          <h1 style={{
-            fontFamily: FI, fontWeight: 900,
-            fontSize: 'clamp(2.25rem, 6vw, 5rem)',
-            letterSpacing: '-0.03em', lineHeight: 1.05,
-            color: '#ffffff', maxWidth: '820px', margin: '0 auto 20px',
-          }}>
-            See RAAH{' '}
-            <span style={{ color: '#ffffff', textDecoration: 'underline', textDecorationColor: 'rgba(255,255,255,0.40)', textUnderlineOffset: '8px' }}>in Action</span>
-            {' '}for Your Agency
+          <h1 style={{ fontFamily: FI, fontWeight: 900, fontSize: 'clamp(2.25rem, 6vw, 5rem)', letterSpacing: '-0.03em', lineHeight: 1.05, color: '#ffffff', maxWidth: '820px', margin: '0 auto 20px' }}>
+            See RAAH{' '}<span style={{ color: '#ffffff', textDecoration: 'underline', textDecorationColor: 'rgba(255,255,255,0.40)', textUnderlineOffset: '8px' }}>in Action</span>{' '}for Your Agency
           </h1>
         </Reveal>
         <Reveal delay={160}>
-          <p style={{
-            fontFamily: FP, fontSize: 'clamp(1rem, 2vw, 1.2rem)',
-            fontWeight: 500, lineHeight: 1.75,
-            color: 'rgba(255,255,255,0.88)',
-            maxWidth: '560px', margin: '0 auto',
-          }}>
+          <p style={{ fontFamily: FP, fontSize: 'clamp(1rem, 2vw, 1.2rem)', fontWeight: 500, lineHeight: 1.75, color: 'rgba(255,255,255,0.88)', maxWidth: '560px', margin: '0 auto' }}>
             A personalised, no-script walkthrough built around your state, payer mix, and agency size. Not a generic product tour.
           </p>
         </Reveal>
@@ -457,20 +455,15 @@ const DemoRequestPage = () => (
 
       <div className="container-custom" style={{ position: 'relative', zIndex: 1 }}>
         
-        {/* ── Top Row: Left Features + Right Form ── */}
-        <style>{`
-          .demo-top-row { display: grid; gap: clamp(32px, 6vw, 48px); align-items: start; }
-          @media (min-width: 1024px) { .demo-top-row { grid-template-columns: 1fr 1.15fr; gap: 64px; } }
-        `}</style>
+        {/* ── Top Row: Features (Left) + Form (Right) ── */}
         <div className="demo-top-row">
-          {/* LEFT: What You Will See */}
-          <div style={{ position: 'sticky', top: 'clamp(100px, 15vw, 140px)' }}>
+          <div className="demo-left-sticky">
             <Reveal delay={0}>
               <Eyebrow label="What You Will See" />
               <h2 style={{ fontFamily: FI, fontWeight: 900, fontSize: 'clamp(1.75rem, 4vw, 2.75rem)', letterSpacing: '-0.03em', lineHeight: 1.1, color: '#0f172a', marginBottom: '8px' }}>
                 Built Around{' '}<span style={{ color: '#16a34a' }}>Your Workflow</span>
               </h2>
-              <p style={{ fontFamily: FP, fontSize: 'clamp(0.9375rem, 2vw, 1rem)', color: '#475569', lineHeight: 1.75, marginBottom: 'clamp(24px, 4vw, 32px)', maxWidth: '440px' }}>
+              <p style={{ fontFamily: FP, fontSize: 'clamp(0.9375rem, 2vw, 1rem)', color: '#475569', lineHeight: 1.75, marginBottom: 'clamp(20px, 4vw, 32px)', maxWidth: '440px' }}>
                 Every demo is configured for your specific disciplines, state EVV requirements, and payer mix before the session begins.
               </p>
             </Reveal>
@@ -485,13 +478,12 @@ const DemoRequestPage = () => (
             </Reveal>
           </div>
 
-          {/* RIGHT: Form */}
           <Reveal delay={120}>
             <div style={{
               background: '#ffffff', borderRadius: '20px',
               border: '1px solid rgba(22,163,74,0.14)',
               boxShadow: '0 8px 48px rgba(5,46,22,0.10), 0 2px 12px rgba(5,46,22,0.06)',
-              overflow: 'hidden',
+              overflow: 'hidden', width: '100%', boxSizing: 'border-box',
             }}>
               <div style={{ height: '3px', background: 'linear-gradient(to right, #16a34a, #4ade80, #16a34a)' }} />
               <DemoForm />
@@ -499,20 +491,7 @@ const DemoRequestPage = () => (
           </Reveal>
         </div>
 
-        {/* ── ✅ Bottom Row: Perfectly Aligned Cards ── */}
-        <style>{`
-          .cards-aligned-row {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 24px;
-            align-items: stretch;
-            margin-top: clamp(32px, 6vw, 48px);
-          }
-          @media (min-width: 768px) {
-            .cards-aligned-row { grid-template-columns: 1fr 1fr; gap: 32px; }
-          }
-        `}</style>
-        
+        {/* ── Bottom Row: Perfectly Aligned Cards ── */}
         <div className="cards-aligned-row">
           {/* LEFT CARD: Testimonial */}
           <Reveal delay={160}>
@@ -524,7 +503,7 @@ const DemoRequestPage = () => (
               boxShadow: '0 4px 20px rgba(5,46,22,0.08)',
               position: 'relative', overflow: 'hidden',
               display: 'flex', flexDirection: 'column',
-              height: '100%',
+              height: '100%', boxSizing: 'border-box',
             }}>
               <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '3px', background: 'linear-gradient(to right, #16a34a, #22c55e)' }} />
               <div style={{ display: 'flex', gap: '3px', marginBottom: '12px' }}>
@@ -534,7 +513,7 @@ const DemoRequestPage = () => (
                   </svg>
                 ))}
               </div>
-              <p style={{ fontFamily: FP, fontStyle: 'italic', fontSize: 'clamp(0.875rem, 1.8vw, 0.9375rem)', color: '#374151', lineHeight: 1.75, marginBottom: '16px', flexGrow: 1 }}>
+              <p style={{ fontFamily: FP, fontStyle: 'italic', fontSize: 'clamp(0.875rem, 1.8vw, 0.9375rem)', color: '#374151', lineHeight: 1.75, marginBottom: '16px', flexGrow: 1, wordBreak: 'break-word' }}>
                 "RAAH transformed our billing process completely. We reduced claim rejections by 90% in the first month and our cash flow has never been stronger."
               </p>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap', marginTop: 'auto' }}>
@@ -562,7 +541,7 @@ const DemoRequestPage = () => (
               border: '1px solid rgba(22,163,74,0.12)',
               boxShadow: '0 2px 12px rgba(5,46,22,0.06)',
               display: 'flex', flexDirection: 'column',
-              height: '100%',
+              height: '100%', boxSizing: 'border-box',
             }}>
               <p style={{ fontFamily: FI, fontWeight: 700, fontSize: 'clamp(0.72rem, 1.5vw, 0.8rem)', color: '#94a3b8', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 'clamp(12px, 2vw, 16px)' }}>
                 Trusted by agencies across 30 states
@@ -576,7 +555,7 @@ const DemoRequestPage = () => (
                 ].map((item, i) => (
                   <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
                     <CheckSvg />
-                    <span style={{ fontFamily: FP, fontSize: 'clamp(0.85rem, 1.8vw, 0.9rem)', color: '#374151', lineHeight: 1.5 }}>{item}</span>
+                    <span style={{ fontFamily: FP, fontSize: 'clamp(0.85rem, 1.8vw, 0.9rem)', color: '#374151', lineHeight: 1.5, wordBreak: 'break-word' }}>{item}</span>
                   </div>
                 ))}
               </div>
@@ -617,8 +596,8 @@ const DemoRequestPage = () => (
             { value: '1-on-1', label: 'Specialist Session', sub: 'Not a group webinar' },
           ].map((stat, i) => (
             <Reveal key={stat.label} delay={i * 60}>
-              <div style={{ background: 'rgba(5,46,22,0.45)', padding: 'clamp(28px, 5vw, 36px) clamp(20px, 4vw, 24px)', textAlign: 'center' }}>
-                <p style={{ fontFamily: FI, fontWeight: 900, fontSize: 'clamp(1.5rem, 3vw, 2.5rem)', letterSpacing: '-0.03em', lineHeight: 1, color: '#ffffff', marginBottom: '8px' }}>{stat.value}</p>
+              <div style={{ background: 'rgba(5,46,22,0.45)', padding: 'clamp(24px, 4vw, 36px) clamp(16px, 3vw, 24px)', textAlign: 'center', boxSizing: 'border-box' }}>
+                <p style={{ fontFamily: FI, fontWeight: 900, fontSize: 'clamp(1.375rem, 2.5vw, 2.5rem)', letterSpacing: '-0.03em', lineHeight: 1, color: '#ffffff', marginBottom: '8px' }}>{stat.value}</p>
                 <p style={{ fontFamily: FI, fontWeight: 700, fontSize: 'clamp(0.875rem, 1.8vw, 0.9375rem)', color: 'rgba(255,255,255,0.95)', marginBottom: '4px' }}>{stat.label}</p>
                 <p style={{ fontFamily: FP, fontWeight: 400, fontSize: 'clamp(0.7rem, 1.4vw, 0.75rem)', color: 'rgba(255,255,255,0.65)', letterSpacing: '0.04em' }}>{stat.sub}</p>
               </div>

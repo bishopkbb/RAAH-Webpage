@@ -902,6 +902,16 @@ const TESTIMONIALS = [
     metricLabel: 'Billing Accuracy Rate',
     color: '#16a34a',
   },
+  {
+    quote: 'The implementation was seamless. Within 24 hours we were live, and within a week our team was more productive than ever. The support team is responsive and truly understands home health.',
+    name: 'Lisa Thompson',
+    role: 'Operations Manager',
+    company: 'Premier Home Care',
+    initials: 'LT',
+    metric: '24hr',
+    metricLabel: 'Go-Live Time',
+    color: '#16a34a',
+  },
 ];
 
 // ─── Single testimonial card ──────────────────────────────────────────────────
@@ -1106,13 +1116,11 @@ const TestimonialCard = ({ t, visible }) => {
 
 // ─── Testimonials Section ─────────────────────────────────────────────────────
 const TestimonialsSection = () => {
-  const [current, setCurrent]   = useState(0);
+  const [current, setCurrent] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const [direction, setDirection] = useState(1); // 1=forward, -1=back
   const timerRef = useRef(null);
 
-  // Number of cards visible: 2 desktop, 1 mobile — handled via CSS
-  // Logical "pages": we advance by 1 testimonial at a time
   const total = TESTIMONIALS.length;
 
   const goTo = (index, dir = 1) => {
@@ -1124,9 +1132,9 @@ const TestimonialsSection = () => {
   };
 
   const prev = () => goTo(current - 1, -1);
-  const next = () => goTo(current + 1,  1);
+  const next = () => goTo(current + 1, 1);
 
-  // Auto-slides continuously — no pause on hover
+  // Auto-rotate through all testimonials
   useEffect(() => {
     timerRef.current = setInterval(() => {
       setDirection(1);
@@ -1137,7 +1145,7 @@ const TestimonialsSection = () => {
     return () => clearInterval(timerRef.current);
   }, [total]);
 
-  // Which two testimonials are visible (desktop shows current + next)
+  // Calculate which testimonials to show
   const visibleA = current;
   const visibleB = (current + 1) % total;
 
@@ -1155,6 +1163,18 @@ const TestimonialsSection = () => {
         @keyframes testimonialprogress {
           from { width: 0%; }
           to   { width: 100%; }
+        }
+        .testimonials-grid {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 24px;
+          align-items: stretch;
+          justify-items: center;
+        }
+        @media (min-width: 1024px) {
+          .testimonials-grid {
+            grid-template-columns: repeat(2, 1fr);
+          }
         }
       `}</style>
       {/* Dot grid texture */}
@@ -1255,21 +1275,12 @@ const TestimonialsSection = () => {
           </div>
         </Reveal>
 
-        {/* Carousel */}
+        {/* Carousel Grid */}
         <Reveal delay={150}>
           <div style={{ position: 'relative' }}>
 
             {/* Cards viewport */}
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: '1fr',
-                gap: '24px',
-                alignItems: 'stretch',
-                justifyItems: 'center',
-              }}
-              className="md:grid-cols-2"
-            >
+            <div className="testimonials-grid">
               {/* Card A */}
               <div
                 style={{
@@ -2379,8 +2390,8 @@ const HomePage = () => {
       {/* ══════════════════════════════════════════════════════════════
           TESTIMONIALS — Trusted by Leading Agencies
           White section, consistent with Why Choose Us + Workflow.
-          Auto-sliding carousel: 7 testimonials, 2 visible desktop,
-          1 mobile. Pauses on hover. Progress dots + prev/next.
+          Auto-sliding carousel: 8 testimonials, 2 visible desktop,
+          1 mobile. Progress dots + prev/next.
           No external deps — pure React state + CSS transitions.
       ══════════════════════════════════════════════════════════════ */}
       <TestimonialsSection />
@@ -2520,17 +2531,14 @@ const HomePage = () => {
 
           {/* Stat callouts — social proof at the decision moment */}
           <Reveal delay={220}>
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'center',
-                flexWrap: 'wrap',
-                gap: '0',
-                marginBottom: '56px',
-                maxWidth: '680px',
-                margin: '0 auto 56px',
-              }}
-            >
+            <div style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              width: '100%',
+              maxWidth: '720px',
+              margin: '0 auto 56px',
+            }}>
               {[
                 { value: '99.2%', label: 'Billing Accuracy' },
                 { value: '90%',   label: 'Fewer Claim Rejections' },
@@ -2539,19 +2547,18 @@ const HomePage = () => {
                 <div
                   key={stat.label}
                   style={{
-                    flex: '1 1 100%',
-                    minWidth: '160px',
-                    padding: '28px 24px',
-                    borderRight: i < 2 ? '1px solid rgba(22,163,74,0.28)' : 'none',
+                    flex: 1,
+                    minWidth: 0,
+                    padding: 'clamp(20px, 4vw, 32px) clamp(12px, 2vw, 20px)',
+                    borderRight: i < 2 ? '2px solid #16a34a' : 'none',
                     textAlign: 'center',
                   }}
-                  className="sm:flex-1 sm:border-r sm:last:border-r-0"
                 >
                   <p
                     style={{
                       fontFamily: "'Inter', sans-serif",
                       fontWeight: 900,
-                      fontSize: 'clamp(2rem, 3.5vw, 2.75rem)',
+                      fontSize: 'clamp(1.25rem, 4vw, 2.25rem)',
                       letterSpacing: '-0.03em',
                       color: '#0a6b30',
                       lineHeight: 1,
@@ -2563,11 +2570,11 @@ const HomePage = () => {
                   <p
                     style={{
                       fontFamily: "'Poppins', sans-serif",
-                      fontSize: '0.78rem',
-                      fontWeight: 500,
+                      fontSize: 'clamp(0.65rem, 1.5vw, 0.85rem)',
+                      fontWeight: 600,
                       color: '#64748b',
                       textTransform: 'uppercase',
-                      letterSpacing: '0.12em',
+                      letterSpacing: '0.1em',
                     }}
                   >
                     {stat.label}

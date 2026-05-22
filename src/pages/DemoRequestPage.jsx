@@ -130,7 +130,7 @@ const DemoFeatureItem = ({ icon, title, body }) => {
       }}
     >
       <div style={{
-        width: 'clamp(40px, 7vw, 46px)', height: 'clamp(40px, 7vw, 46px)', borderRadius: '12px', flexShrink: 0,
+        width: 'clamp(44px, 7vw, 52px)', height: 'clamp(44px, 7vw, 52px)', borderRadius: '13px', flexShrink: 0,
         background: hovered ? '#16a34a' : 'rgba(22,163,74,0.08)',
         border: `1.5px solid ${hovered ? '#16a34a' : 'rgba(22,163,74,0.20)'}`,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -139,8 +139,8 @@ const DemoFeatureItem = ({ icon, title, body }) => {
         {React.createElement(icon, { color: hovered ? '#ffffff' : '#16a34a' })}
       </div>
       <div style={{ minWidth: 0 }}>
-        <p style={{ fontFamily: FI, fontWeight: 700, fontSize: 'clamp(0.875rem, 1.8vw, 1rem)', color: '#0f172a', marginBottom: '4px', lineHeight: 1.2 }}>{title}</p>
-        <p style={{ fontFamily: FP, fontWeight: 400, fontSize: 'clamp(0.8rem, 1.6vw, 0.9rem)', color: '#475569', lineHeight: 1.6 }}>{body}</p>
+        <p style={{ fontFamily: FI, fontWeight: 700, fontSize: 'clamp(0.9375rem, 1.8vw, 1.0625rem)', color: '#0a0a0a', marginBottom: '5px', lineHeight: 1.2 }}>{title}</p>
+        <p style={{ fontFamily: FP, fontWeight: 500, fontSize: 'clamp(0.875rem, 1.6vw, 0.9375rem)', color: '#374151', lineHeight: 1.65 }}>{body}</p>
       </div>
     </div>
   );
@@ -148,16 +148,16 @@ const DemoFeatureItem = ({ icon, title, body }) => {
 
 // ─── Input field styles ───────────────────────────────────────────────────────
 const inputStyle = {
-  width: '100%', fontFamily: FP, fontSize: 'clamp(0.85rem, 1.6vw, 0.9375rem)', fontWeight: 400,
-  padding: 'clamp(11px, 2vw, 13px) clamp(14px, 3vw, 16px)', borderRadius: '10px', outline: 'none',
-  border: '1.5px solid rgba(22,163,74,0.18)',
-  color: '#0f172a', background: '#fafffe',
+  width: '100%', fontFamily: FP, fontSize: 'clamp(0.9375rem, 1.8vw, 1.0625rem)', fontWeight: 400,
+  padding: 'clamp(13px, 2.5vw, 16px) clamp(16px, 3vw, 20px)', borderRadius: '12px', outline: 'none',
+  border: '1.5px solid rgba(22,163,74,0.22)',
+  color: '#0a0a0a', background: '#f8fffc',
   transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
   boxSizing: 'border-box', maxWidth: '100%',
 };
 const labelStyle = {
-  fontFamily: FI, fontSize: 'clamp(0.7rem, 1.4vw, 0.78rem)', fontWeight: 700,
-  color: '#374151', marginBottom: '7px', display: 'block',
+  fontFamily: FI, fontSize: 'clamp(0.75rem, 1.4vw, 0.8125rem)', fontWeight: 700,
+  color: '#0a0a0a', marginBottom: '9px', display: 'block',
   letterSpacing: '0.05em', textTransform: 'uppercase',
 };
 const onFocus = e => {
@@ -165,13 +165,36 @@ const onFocus = e => {
   e.target.style.boxShadow = '0 0 0 3px rgba(22,163,74,0.10)';
 };
 const onBlur = e => {
-  e.target.style.borderColor = 'rgba(22,163,74,0.18)';
+  e.target.style.borderColor = 'rgba(22,163,74,0.22)';
   e.target.style.boxShadow = 'none';
+};
+
+// ─── Field error style ────────────────────────────────────────────────────────
+const FieldError = ({ msg }) => msg ? (
+  <p style={{ fontFamily: FP, fontSize: '0.78rem', color: '#dc2626', marginTop: '5px', display: 'flex', alignItems: 'center', gap: '5px' }}>
+    <svg viewBox="0 0 16 16" fill="none" width="12" height="12" style={{ flexShrink: 0 }}>
+      <circle cx="8" cy="8" r="7" stroke="#dc2626" strokeWidth="1.5"/>
+      <path d="M8 5v3M8 11v.5" stroke="#dc2626" strokeWidth="1.5" strokeLinecap="round"/>
+    </svg>
+    {msg}
+  </p>
+) : null;
+
+// ─── Validate fields ─────────────────────────────────────────────────────────
+const validate = (fields) => {
+  const errs = {};
+  if (!fields.agency_name.trim()) errs.agency_name = 'Agency name is required.';
+  if (!fields.contact_name.trim()) errs.contact_name = 'Contact name is required.';
+  if (!fields.contact_email.trim()) errs.contact_email = 'Email address is required.';
+  else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(fields.contact_email)) errs.contact_email = 'Enter a valid email address.';
+  if (fields.contact_phone && !/^[\d\s+\-()\s]{7,20}$/.test(fields.contact_phone)) errs.contact_phone = 'Enter a valid phone number.';
+  if (!fields.estimated_patients) errs.estimated_patients = 'Please select your patient volume.';
+  return errs;
 };
 
 // ─── Success state ────────────────────────────────────────────────────────────
 const SuccessState = () => (
-  <div style={{ textAlign: 'center', padding: 'clamp(32px, 6vw, 48px) clamp(20px, 4vw, 32px)' }}>
+  <div style={{ textAlign: 'center', padding: 'clamp(40px, 8vw, 72px) clamp(24px, 5vw, 48px)' }}>
     <div style={{
       width: 'clamp(64px, 12vw, 80px)', height: 'clamp(64px, 12vw, 80px)', borderRadius: '50%', margin: '0 auto 24px',
       background: 'linear-gradient(135deg, #0d7a3e 0%, #16a34a 100%)',
@@ -182,14 +205,14 @@ const SuccessState = () => (
         <path d="M5 13l4 4L19 7" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>
     </div>
-    <h3 style={{ fontFamily: FI, fontWeight: 800, fontSize: 'clamp(1.25rem, 3vw, 1.625rem)', color: '#0f172a', marginBottom: '12px', letterSpacing: '-0.02em' }}>
+    <h3 style={{ fontFamily: FI, fontWeight: 800, fontSize: 'clamp(1.375rem, 3vw, 1.875rem)', color: '#0a0a0a', marginBottom: '12px', letterSpacing: '-0.02em' }}>
       Request Received
     </h3>
-    <p style={{ fontFamily: FP, fontSize: 'clamp(0.9rem, 2vw, 1rem)', color: '#475569', lineHeight: 1.75, maxWidth: '340px', margin: '0 auto 32px' }}>
+    <p style={{ fontFamily: FP, fontSize: 'clamp(0.9375rem, 2vw, 1rem)', fontWeight: 500, color: '#374151', lineHeight: 1.75, maxWidth: '340px', margin: '0 auto 32px' }}>
       A member of our implementation team will reach out within one business day to confirm your session.
     </p>
     <div style={{ background: '#dff0df', borderRadius: '14px', padding: 'clamp(16px, 3vw, 20px) clamp(20px, 4vw, 24px)', marginBottom: '28px', textAlign: 'left' }}>
-      <p style={{ fontFamily: FI, fontWeight: 700, fontSize: 'clamp(0.7rem, 1.4vw, 0.8rem)', color: '#16a34a', marginBottom: '12px', letterSpacing: '0.06em', textTransform: 'uppercase' }}>What happens next</p>
+      <p style={{ fontFamily: FI, fontWeight: 700, fontSize: '0.8rem', color: '#16a34a', marginBottom: '12px', letterSpacing: '0.06em', textTransform: 'uppercase' }}>What happens next</p>
       {[
         'We review your agency size and use case',
         'A specialist reaches out to confirm your time',
@@ -200,13 +223,13 @@ const SuccessState = () => (
           <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: '#16a34a', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: '1px' }}>
             <span style={{ fontFamily: FI, fontWeight: 900, fontSize: '0.65rem', color: '#ffffff' }}>{i + 1}</span>
           </div>
-          <p style={{ fontFamily: FP, fontSize: 'clamp(0.8rem, 1.6vw, 0.875rem)', color: '#374151', lineHeight: 1.5 }}>{step}</p>
+          <p style={{ fontFamily: FP, fontSize: 'clamp(0.875rem, 1.6vw, 0.9375rem)', fontWeight: 500, color: '#374151', lineHeight: 1.5 }}>{step}</p>
         </div>
       ))}
     </div>
     <Link to="/" style={{
-      fontFamily: FI, fontWeight: 700, fontSize: 'clamp(0.8rem, 1.5vw, 0.85rem)', letterSpacing: '0.06em', textTransform: 'uppercase',
-      padding: 'clamp(11px, 2vw, 13px) clamp(24px, 4vw, 28px)', borderRadius: '999px', background: 'transparent',
+      fontFamily: FI, fontWeight: 700, fontSize: '0.85rem', letterSpacing: '0.06em', textTransform: 'uppercase',
+      padding: '13px 28px', borderRadius: '999px', background: 'transparent',
       color: '#16a34a', border: '2px solid #16a34a', textDecoration: 'none',
       display: 'inline-flex', alignItems: 'center', gap: '8px', transition: 'all 0.22s ease',
     }}
@@ -225,15 +248,40 @@ const DemoForm = () => {
     contact_phone: '', estimated_patients: '', preferred_demo_date: '',
     demo_format: 'live', primary_challenge: '',
   });
+  const [errors, setErrors] = useState({});
+  const [touched, setTouched] = useState({});
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [recaptchaToken, setRecaptchaToken] = useState(null);
   const recaptchaRef = useRef();
 
-  const handleChange = e => setFields(f => ({ ...f, [e.target.name]: e.target.value }));
+  const handleChange = e => {
+    const { name, value } = e.target;
+    setFields(f => ({ ...f, [name]: value }));
+    if (touched[name]) {
+      const errs = validate({ ...fields, [name]: value });
+      setErrors(prev => ({ ...prev, [name]: errs[name] || null }));
+    }
+  };
+
+  const handleBlurField = e => {
+    const { name } = e.target;
+    setTouched(prev => ({ ...prev, [name]: true }));
+    const errs = validate(fields);
+    setErrors(prev => ({ ...prev, [name]: errs[name] || null }));
+    onBlur(e);
+  };
 
   const handleSubmit = async e => {
     e.preventDefault();
+    const allTouched = Object.fromEntries(Object.keys(fields).map(k => [k, true]));
+    setTouched(allTouched);
+    const errs = validate(fields);
+    setErrors(errs);
+    if (Object.keys(errs).length > 0) {
+      toast.error('Please fix the highlighted fields before submitting.');
+      return;
+    }
     if (!recaptchaToken) { toast.error('Please verify you are human.'); return; }
     setSubmitting(true);
     const payload = {
@@ -262,43 +310,61 @@ const DemoForm = () => {
 
   if (submitted) return <SuccessState />;
 
+  const fieldStyle = name => ({ ...inputStyle, borderColor: errors[name] ? '#dc2626' : undefined });
+
   return (
-    <div style={{ padding: 'clamp(28px, 5vw, 40px)' }}>
-      <h2 style={{ fontFamily: FI, fontWeight: 800, fontSize: 'clamp(1.2rem, 2.5vw, 1.375rem)', color: '#0f172a', marginBottom: '6px', letterSpacing: '-0.02em' }}>
+    <div style={{ padding: 'clamp(32px, 5vw, 52px)' }}>
+      <h2 style={{ fontFamily: FI, fontWeight: 900, fontSize: 'clamp(1.375rem, 3vw, 1.875rem)', color: '#0a0a0a', marginBottom: '8px', letterSpacing: '-0.02em' }}>
         Schedule Your Demo
       </h2>
-      <p style={{ fontFamily: FP, fontSize: 'clamp(0.85rem, 1.6vw, 0.9rem)', color: '#64748b', marginBottom: 'clamp(20px, 4vw, 32px)', lineHeight: 1.6 }}>
+      <p style={{ fontFamily: FP, fontSize: 'clamp(0.9375rem, 1.8vw, 1rem)', fontWeight: 500, color: '#374151', marginBottom: 'clamp(24px, 4vw, 40px)', lineHeight: 1.6 }}>
         Takes 90 seconds. We respond within one business day.
       </p>
 
-      <div className="form-row" style={{ marginBottom: '16px' }}>
+      {/* Row 1 */}
+      <div className="form-row" style={{ marginBottom: '20px' }}>
         <div>
           <label style={labelStyle} htmlFor="agency_name">Agency Name *</label>
-          <input id="agency_name" name="agency_name" type="text" required placeholder="Caring Hands Health" value={fields.agency_name} onChange={handleChange} style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
+          <input id="agency_name" name="agency_name" type="text" required placeholder="Caring Hands Health"
+            value={fields.agency_name} onChange={handleChange} style={fieldStyle('agency_name')}
+            onFocus={onFocus} onBlur={handleBlurField} />
+          <FieldError msg={errors.agency_name} />
         </div>
         <div>
           <label style={labelStyle} htmlFor="contact_name">Contact Name *</label>
-          <input id="contact_name" name="contact_name" type="text" required placeholder="Sarah Johnson" value={fields.contact_name} onChange={handleChange} style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
+          <input id="contact_name" name="contact_name" type="text" required placeholder="Sarah Johnson"
+            value={fields.contact_name} onChange={handleChange} style={fieldStyle('contact_name')}
+            onFocus={onFocus} onBlur={handleBlurField} />
+          <FieldError msg={errors.contact_name} />
         </div>
       </div>
 
-      <div className="form-row" style={{ marginBottom: '16px' }}>
+      {/* Row 2 */}
+      <div className="form-row" style={{ marginBottom: '20px' }}>
         <div>
           <label style={labelStyle} htmlFor="contact_email">Work Email *</label>
-          <input id="contact_email" name="contact_email" type="email" required placeholder="sarah@agency.org" value={fields.contact_email} onChange={handleChange} style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
+          <input id="contact_email" name="contact_email" type="email" required placeholder="sarah@agency.org"
+            value={fields.contact_email} onChange={handleChange} style={fieldStyle('contact_email')}
+            onFocus={onFocus} onBlur={handleBlurField} />
+          <FieldError msg={errors.contact_email} />
         </div>
         <div>
           <label style={labelStyle} htmlFor="contact_phone">Phone Number</label>
-          <input id="contact_phone" name="contact_phone" type="tel" placeholder="+1 (720) 000-0000" value={fields.contact_phone} onChange={handleChange} style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
+          <input id="contact_phone" name="contact_phone" type="tel" placeholder="+1 (720) 000-0000"
+            value={fields.contact_phone} onChange={handleChange} style={fieldStyle('contact_phone')}
+            onFocus={onFocus} onBlur={handleBlurField} />
+          <FieldError msg={errors.contact_phone} />
         </div>
       </div>
 
-      <div className="form-row" style={{ marginBottom: '16px' }}>
+      {/* Row 3 */}
+      <div className="form-row" style={{ marginBottom: '20px' }}>
         <div>
           <label style={labelStyle} htmlFor="estimated_patients">Patient Volume *</label>
-          <select id="estimated_patients" name="estimated_patients" required value={fields.estimated_patients} onChange={handleChange}
-            style={{ ...inputStyle, cursor: 'pointer', color: fields.estimated_patients ? '#0f172a' : '#94a3b8' }}
-            onFocus={onFocus} onBlur={onBlur}>
+          <select id="estimated_patients" name="estimated_patients" required
+            value={fields.estimated_patients} onChange={handleChange}
+            style={{ ...fieldStyle('estimated_patients'), cursor: 'pointer', color: fields.estimated_patients ? '#0a0a0a' : '#94a3b8' }}
+            onFocus={onFocus} onBlur={handleBlurField}>
             <option value="" disabled>Select range</option>
             <option value="25">1 to 25 patients</option>
             <option value="50">26 to 50 patients</option>
@@ -307,10 +373,12 @@ const DemoForm = () => {
             <option value="500">251 to 500 patients</option>
             <option value="1000">500+ patients</option>
           </select>
+          <FieldError msg={errors.estimated_patients} />
         </div>
         <div>
           <label style={labelStyle} htmlFor="demo_format">Demo Format</label>
-          <select id="demo_format" name="demo_format" value={fields.demo_format} onChange={handleChange}
+          <select id="demo_format" name="demo_format"
+            value={fields.demo_format} onChange={handleChange}
             style={{ ...inputStyle, cursor: 'pointer' }} onFocus={onFocus} onBlur={onBlur}>
             <option value="live">Live Video Call</option>
             <option value="screen_share">Screen Share Walkthrough</option>
@@ -320,11 +388,13 @@ const DemoForm = () => {
         </div>
       </div>
 
-      <div className="form-row" style={{ marginBottom: '16px' }}>
+      {/* Row 4 */}
+      <div className="form-row" style={{ marginBottom: '24px' }}>
         <div>
           <label style={labelStyle} htmlFor="primary_challenge">Primary Challenge</label>
-          <select id="primary_challenge" name="primary_challenge" value={fields.primary_challenge} onChange={handleChange}
-            style={{ ...inputStyle, cursor: 'pointer', color: fields.primary_challenge ? '#0f172a' : '#94a3b8' }}
+          <select id="primary_challenge" name="primary_challenge"
+            value={fields.primary_challenge} onChange={handleChange}
+            style={{ ...inputStyle, cursor: 'pointer', color: fields.primary_challenge ? '#0a0a0a' : '#94a3b8' }}
             onFocus={onFocus} onBlur={onBlur}>
             <option value="">Select a topic</option>
             <option value="billing">Billing and Revenue Cycle</option>
@@ -337,11 +407,13 @@ const DemoForm = () => {
         </div>
         <div>
           <label style={labelStyle} htmlFor="preferred_demo_date">Preferred Date</label>
-          <input id="preferred_demo_date" name="preferred_demo_date" type="date" value={fields.preferred_demo_date} onChange={handleChange}
+          <input id="preferred_demo_date" name="preferred_demo_date" type="date"
+            value={fields.preferred_demo_date} onChange={handleChange}
             style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
         </div>
       </div>
 
+      {/* reCAPTCHA */}
       <div className="recaptcha-wrapper">
         <ReCAPTCHA
           ref={recaptchaRef}
@@ -350,12 +422,13 @@ const DemoForm = () => {
         />
       </div>
 
+      {/* Submit */}
       <button
         type="submit"
         disabled={submitting}
         onClick={handleSubmit}
         style={{
-          width: '100%', fontFamily: FI, fontWeight: 700, fontSize: 'clamp(0.85rem, 1.8vw, 0.9rem)',
+          width: '100%', fontFamily: FI, fontWeight: 700, fontSize: 'clamp(0.9rem, 1.8vw, 0.9375rem)',
           letterSpacing: '0.07em', textTransform: 'uppercase',
           padding: 'clamp(14px, 3vw, 16px) clamp(24px, 5vw, 32px)', borderRadius: '999px',
           background: submitting ? '#15803d' : '#16a34a',
@@ -387,7 +460,7 @@ const DemoForm = () => {
         )}
       </button>
 
-      <p style={{ fontFamily: FP, fontSize: 'clamp(0.72rem, 1.4vw, 0.78rem)', color: '#94a3b8', textAlign: 'center', marginTop: '14px' }}>
+      <p style={{ fontFamily: FP, fontSize: 'clamp(0.8125rem, 1.5vw, 0.875rem)', fontWeight: 500, color: '#475569', textAlign: 'center', marginTop: '18px' }}>
         No commitment. No credit card. Responds within one business day.
       </p>
     </div>
@@ -401,17 +474,17 @@ const DemoRequestPage = () => (
     {/* Global responsive styles */}
     <style>{`
       @keyframes demo-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-      .form-row { display: grid; gap: 16px; grid-template-columns: 1fr; }
+      .form-row { display: grid; gap: 18px; grid-template-columns: 1fr; }
       @media (min-width: 480px) { .form-row { grid-template-columns: repeat(2, 1fr); } }
-      
+
       .demo-top-row { display: grid; gap: clamp(32px, 6vw, 48px); align-items: start; }
       @media (min-width: 1024px) { .demo-top-row { grid-template-columns: 1fr 1.15fr; gap: 64px; } }
       @media (min-width: 1024px) { .demo-left-sticky { position: sticky; top: clamp(100px, 15vw, 140px); } }
-      
+
       .cards-aligned-row { display: grid; grid-template-columns: 1fr; gap: 20px; align-items: stretch; margin-top: clamp(40px, 8vw, 56px); }
       @media (min-width: 768px) { .cards-aligned-row { grid-template-columns: 1fr 1fr; gap: 28px; } }
-      
-      .recaptcha-wrapper { 
+
+      .recaptcha-wrapper {
         display: flex; justify-content: center; padding: clamp(8px, 2vw, 16px) 0 clamp(12px, 3vw, 20px);
         overflow-x: auto; -webkit-overflow-scrolling: touch; max-width: 100%;
       }
@@ -420,7 +493,7 @@ const DemoRequestPage = () => (
     `}</style>
 
     {/* ══ HERO ══ */}
-    <section style={{ position: 'relative', minHeight: '50vh', display: 'flex', alignItems: 'center', overflow: 'hidden' }}>
+    <section style={{ position: 'relative', minHeight: '52vh', display: 'flex', alignItems: 'center', overflow: 'hidden' }}>
       <img
         src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&q=80&w=2000&h=800&crop=top"
         alt="RAAH Technologies demo"
@@ -430,15 +503,30 @@ const DemoRequestPage = () => (
       <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent 30%, rgba(5,46,22,0.55) 100%)' }} aria-hidden="true" />
       <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle, rgba(74,222,128,0.07) 1px, transparent 1px)', backgroundSize: '32px 32px', pointerEvents: 'none' }} aria-hidden="true" />
 
-      <div className="container-custom" style={{ position: 'relative', zIndex: 1, textAlign: 'center', padding: 'clamp(60px, 10vw, 100px) clamp(16px, 4vw, 24px) clamp(70px, 12vw, 110px)' }}>
-        <Reveal delay={0}><Eyebrow label="Free 30-Minute Session" light /></Reveal>
+      <div className="container-custom" style={{ position: 'relative', zIndex: 1, textAlign: 'center', padding: '120px 24px' }}>
+        <Reveal delay={0}>
+          <Eyebrow label="Free 30-Minute Session" light />
+        </Reveal>
         <Reveal delay={80}>
-          <h1 style={{ fontFamily: FI, fontWeight: 900, fontSize: 'clamp(2.25rem, 6vw, 5rem)', letterSpacing: '-0.03em', lineHeight: 1.05, color: '#ffffff', maxWidth: '820px', margin: '0 auto 20px' }}>
-            See RAAH{' '}<span style={{ color: '#ffffff', textDecoration: 'underline', textDecorationColor: 'rgba(255,255,255,0.40)', textUnderlineOffset: '8px' }}>in Action</span>{' '}for Your Agency
+          <h1 style={{
+            fontFamily: FI, fontWeight: 900,
+            fontSize: 'clamp(2.5rem, 6vw, 5rem)',
+            letterSpacing: '-0.03em', lineHeight: 1.05,
+            color: '#ffffff', marginBottom: '24px',
+            maxWidth: '900px', margin: '0 auto 24px',
+          }}>
+            See RAAH{' '}
+            <span style={{ color: '#4ade80' }}>in Action</span>{' '}
+            for Your Agency
           </h1>
         </Reveal>
         <Reveal delay={160}>
-          <p style={{ fontFamily: FP, fontSize: 'clamp(1rem, 2vw, 1.2rem)', fontWeight: 500, lineHeight: 1.75, color: 'rgba(255,255,255,0.88)', maxWidth: '560px', margin: '0 auto' }}>
+          <p style={{
+            fontFamily: FP, fontSize: 'clamp(1.05rem, 1.6vw, 1.25rem)',
+            fontWeight: 500, lineHeight: 1.75,
+            color: 'rgba(220,252,231,0.85)',
+            maxWidth: '620px', margin: '0 auto 40px',
+          }}>
             A personalised, no-script walkthrough built around your state, payer mix, and agency size. Not a generic product tour.
           </p>
         </Reveal>
@@ -454,7 +542,7 @@ const DemoRequestPage = () => (
       <RadialGlow bottom="-60px" left="-60px" size={380} opacity={0.05} />
 
       <div className="container-custom" style={{ position: 'relative', zIndex: 1 }}>
-        
+
         {/* ── Top Row: Features (Left) + Form (Right) ── */}
         <div className="demo-top-row">
           <div className="demo-left-sticky">
@@ -463,7 +551,7 @@ const DemoRequestPage = () => (
               <h2 style={{ fontFamily: FI, fontWeight: 900, fontSize: 'clamp(1.75rem, 4vw, 2.75rem)', letterSpacing: '-0.03em', lineHeight: 1.1, color: '#0f172a', marginBottom: '8px' }}>
                 Built Around{' '}<span style={{ color: '#16a34a' }}>Your Workflow</span>
               </h2>
-              <p style={{ fontFamily: FP, fontSize: 'clamp(0.9375rem, 2vw, 1rem)', color: '#475569', lineHeight: 1.75, marginBottom: 'clamp(20px, 4vw, 32px)', maxWidth: '440px' }}>
+              <p style={{ fontFamily: FP, fontSize: 'clamp(0.9375rem, 2vw, 1rem)', fontWeight: 500, color: '#374151', lineHeight: 1.75, marginBottom: 'clamp(20px, 4vw, 32px)', maxWidth: '440px' }}>
                 Every demo is configured for your specific disciplines, state EVV requirements, and payer mix before the session begins.
               </p>
             </Reveal>
@@ -496,9 +584,8 @@ const DemoRequestPage = () => (
           {/* LEFT CARD: Testimonial */}
           <Reveal delay={160}>
             <div style={{
-              background: '#ffffff',
-              borderRadius: '16px',
-              padding: 'clamp(20px, 4vw, 24px)',
+              background: '#ffffff', borderRadius: '16px',
+              padding: 'clamp(22px, 4vw, 28px)',
               border: '1px solid rgba(22,163,74,0.14)',
               boxShadow: '0 4px 20px rgba(5,46,22,0.08)',
               position: 'relative', overflow: 'hidden',
@@ -506,27 +593,27 @@ const DemoRequestPage = () => (
               height: '100%', boxSizing: 'border-box',
             }}>
               <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '3px', background: 'linear-gradient(to right, #16a34a, #22c55e)' }} />
-              <div style={{ display: 'flex', gap: '3px', marginBottom: '12px' }}>
+              <div style={{ display: 'flex', gap: '3px', marginBottom: '14px' }}>
                 {[1,2,3,4,5].map(s => (
                   <svg key={s} width="14" height="14" viewBox="0 0 16 16" fill="#f59e0b">
                     <path d="M8 1l1.854 3.756L14 5.528l-3 2.923.708 4.129L8 10.5l-3.708 2.08L5 8.451 2 5.528l4.146-.772z"/>
                   </svg>
                 ))}
               </div>
-              <p style={{ fontFamily: FP, fontStyle: 'italic', fontSize: 'clamp(0.875rem, 1.8vw, 0.9375rem)', color: '#374151', lineHeight: 1.75, marginBottom: '16px', flexGrow: 1, wordBreak: 'break-word' }}>
+              <p style={{ fontFamily: FP, fontStyle: 'italic', fontSize: 'clamp(0.9375rem, 1.8vw, 1rem)', fontWeight: 400, color: '#1e293b', lineHeight: 1.75, marginBottom: '18px', flexGrow: 1, wordBreak: 'break-word' }}>
                 "RAAH transformed our billing process completely. We reduced claim rejections by 90% in the first month and our cash flow has never been stronger."
               </p>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap', marginTop: 'auto' }}>
-                <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'linear-gradient(135deg, #16a34a 0%, #0d7a3e 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <div style={{ width: '42px', height: '42px', borderRadius: '50%', background: 'linear-gradient(135deg, #16a34a 0%, #0d7a3e 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                   <span style={{ fontFamily: FI, fontWeight: 800, fontSize: '0.8rem', color: '#ffffff' }}>SJ</span>
                 </div>
                 <div>
-                  <p style={{ fontFamily: FI, fontWeight: 700, fontSize: 'clamp(0.85rem, 1.8vw, 0.9rem)', color: '#0f172a', lineHeight: 1.2 }}>Sarah Johnson</p>
-                  <p style={{ fontFamily: FP, fontSize: 'clamp(0.72rem, 1.5vw, 0.78rem)', color: '#16a34a', lineHeight: 1.3 }}>Director of Operations, Caring Hands Home Health</p>
+                  <p style={{ fontFamily: FI, fontWeight: 700, fontSize: 'clamp(0.875rem, 1.8vw, 0.9375rem)', color: '#0a0a0a', lineHeight: 1.2 }}>Sarah Johnson</p>
+                  <p style={{ fontFamily: FP, fontSize: 'clamp(0.78rem, 1.5vw, 0.8125rem)', fontWeight: 500, color: '#16a34a', lineHeight: 1.3 }}>Director of Operations, Caring Hands Home Health</p>
                 </div>
                 <div style={{ marginLeft: 'auto', textAlign: 'right', flexShrink: 0 }}>
-                  <p style={{ fontFamily: FI, fontWeight: 900, fontSize: 'clamp(1.125rem, 2.5vw, 1.25rem)', color: '#052e16', lineHeight: 1, letterSpacing: '-0.02em' }}>90%</p>
-                  <p style={{ fontFamily: FP, fontSize: 'clamp(0.6rem, 1.2vw, 0.65rem)', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Fewer Rejections</p>
+                  <p style={{ fontFamily: FI, fontWeight: 900, fontSize: 'clamp(1.25rem, 2.5vw, 1.5rem)', color: '#0a6b30', lineHeight: 1, letterSpacing: '-0.02em' }}>90%</p>
+                  <p style={{ fontFamily: FP, fontSize: 'clamp(0.65rem, 1.2vw, 0.72rem)', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Fewer Rejections</p>
                 </div>
               </div>
             </div>
@@ -535,18 +622,17 @@ const DemoRequestPage = () => (
           {/* RIGHT CARD: Trust Strip */}
           <Reveal delay={220}>
             <div style={{
-              background: '#ffffff',
-              borderRadius: '14px',
-              padding: 'clamp(20px, 4vw, 24px)',
+              background: '#ffffff', borderRadius: '14px',
+              padding: 'clamp(22px, 4vw, 28px)',
               border: '1px solid rgba(22,163,74,0.12)',
               boxShadow: '0 2px 12px rgba(5,46,22,0.06)',
               display: 'flex', flexDirection: 'column',
               height: '100%', boxSizing: 'border-box',
             }}>
-              <p style={{ fontFamily: FI, fontWeight: 700, fontSize: 'clamp(0.72rem, 1.5vw, 0.8rem)', color: '#94a3b8', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 'clamp(12px, 2vw, 16px)' }}>
+              <p style={{ fontFamily: FI, fontWeight: 700, fontSize: 'clamp(0.72rem, 1.5vw, 0.8rem)', color: '#64748b', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 'clamp(14px, 2vw, 18px)' }}>
                 Trusted by agencies across 30 states
               </p>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(10px, 2vw, 12px)', flexGrow: 1 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(12px, 2vw, 14px)', flexGrow: 1 }}>
                 {[
                   'HIPAA-compliant platform — BAA included',
                   'No credit card required to book',
@@ -555,7 +641,7 @@ const DemoRequestPage = () => (
                 ].map((item, i) => (
                   <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
                     <CheckSvg />
-                    <span style={{ fontFamily: FP, fontSize: 'clamp(0.85rem, 1.8vw, 0.9rem)', color: '#374151', lineHeight: 1.5, wordBreak: 'break-word' }}>{item}</span>
+                    <span style={{ fontFamily: FP, fontSize: 'clamp(0.875rem, 1.8vw, 0.9375rem)', fontWeight: 500, color: '#1e293b', lineHeight: 1.5, wordBreak: 'break-word' }}>{item}</span>
                   </div>
                 ))}
               </div>

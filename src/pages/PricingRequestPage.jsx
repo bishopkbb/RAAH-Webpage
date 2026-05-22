@@ -221,21 +221,69 @@ const SuccessState = () => (
   </div>
 );
 
+// ─── Validation ──────────────────────────────────────────────────────────────
+const validate = (fields) => {
+  const errs = {};
+  if (!fields.agency_name.trim())    errs.agency_name    = 'Agency name is required.';
+  if (!fields.contact_name.trim())   errs.contact_name   = 'Contact name is required.';
+  if (!fields.contact_email.trim())  errs.contact_email  = 'Email address is required.';
+  else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(fields.contact_email))
+                                     errs.contact_email  = 'Enter a valid email address.';
+  if (fields.contact_phone && !/^[\d\s+\-()]{7,20}$/.test(fields.contact_phone))
+                                     errs.contact_phone  = 'Enter a valid phone number.';
+  return errs;
+};
+
+const FieldError = ({ msg }) => msg ? (
+  <p style={{ fontFamily: FP, fontSize: '0.78rem', color: '#dc2626', marginTop: '5px', display: 'flex', alignItems: 'center', gap: '5px' }}>
+    <svg viewBox="0 0 16 16" fill="none" width="12" height="12" style={{ flexShrink: 0 }}>
+      <circle cx="8" cy="8" r="7" stroke="#dc2626" strokeWidth="1.5"/>
+      <path d="M8 5v3M8 11v.5" stroke="#dc2626" strokeWidth="1.5" strokeLinecap="round"/>
+    </svg>
+    {msg}
+  </p>
+) : null;
+
 // ─── Pricing Form ─────────────────────────────────────────────────────────────
 const PricingForm = () => {
   const [fields, setFields] = useState({
     agency_name: '', contact_name: '', contact_email: '',
     contact_phone: '', estimated_patients: '', notes: '',
   });
+  const [errors, setErrors] = useState({});
+  const [touched, setTouched] = useState({});
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [recaptchaToken, setRecaptchaToken] = useState(null);
   const recaptchaRef = useRef();
 
-  const handleChange = e => setFields(f => ({ ...f, [e.target.name]: e.target.value }));
+  const handleChange = e => {
+    const { name, value } = e.target;
+    setFields(f => ({ ...f, [name]: value }));
+    if (touched[name]) {
+      const errs = validate({ ...fields, [name]: value });
+      setErrors(prev => ({ ...prev, [name]: errs[name] || null }));
+    }
+  };
+
+  const handleBlurField = e => {
+    const { name } = e.target;
+    setTouched(prev => ({ ...prev, [name]: true }));
+    const errs = validate(fields);
+    setErrors(prev => ({ ...prev, [name]: errs[name] || null }));
+    onBlur(e);
+  };
 
   const handleSubmit = async e => {
     e.preventDefault();
+    const allTouched = Object.fromEntries(Object.keys(fields).map(k => [k, true]));
+    setTouched(allTouched);
+    const errs = validate(fields);
+    setErrors(errs);
+    if (Object.keys(errs).length > 0) {
+      toast.error('Please fix the highlighted fields before submitting.');
+      return;
+    }
     if (!recaptchaToken) { toast.error('Please verify you are human.'); return; }
     setSubmitting(true);
     const payload = {
@@ -263,6 +311,8 @@ const PricingForm = () => {
 
   if (submitted) return <SuccessState />;
 
+  const fieldStyle = name => ({ ...inputStyle, borderColor: errors[name] ? '#dc2626' : undefined });
+
   return (
     <div style={{ padding: '52px 52px 48px' }}>
       <h2 style={{ fontFamily: FI, fontWeight: 900, fontSize: '1.875rem', color: '#0a0a0a', marginBottom: '8px', letterSpacing: '-0.02em' }}>
@@ -276,11 +326,13 @@ const PricingForm = () => {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '18px', marginBottom: '22px' }} className="pricing-row">
         <div>
           <label style={labelStyle} htmlFor="p_agency_name">Agency Name *</label>
-          <input id="p_agency_name" name="agency_name" type="text" required placeholder="Caring Hearts Health" value={fields.agency_name} onChange={handleChange} style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
+          <input id="p_agency_name" name="agency_name" type="text" required placeholder="Caring Hearts Health" value={fields.agency_name} onChange={handleChange} style={fieldStyle('agency_name')} onFocus={onFocus} onBlur={handleBlurField} />
+          <FieldError msg={errors.agency_name} />
         </div>
         <div>
           <label style={labelStyle} htmlFor="p_contact_name">Contact Name *</label>
-          <input id="p_contact_name" name="contact_name" type="text" required placeholder="Sarah Johnson" value={fields.contact_name} onChange={handleChange} style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
+          <input id="p_contact_name" name="contact_name" type="text" required placeholder="Sarah Johnson" value={fields.contact_name} onChange={handleChange} style={fieldStyle('contact_name')} onFocus={onFocus} onBlur={handleBlurField} />
+          <FieldError msg={errors.contact_name} />
         </div>
       </div>
 
@@ -288,11 +340,13 @@ const PricingForm = () => {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '18px', marginBottom: '22px' }} className="pricing-row">
         <div>
           <label style={labelStyle} htmlFor="p_contact_email">Work Email *</label>
-          <input id="p_contact_email" name="contact_email" type="email" required placeholder="sarah@agency.org" value={fields.contact_email} onChange={handleChange} style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
+          <input id="p_contact_email" name="contact_email" type="email" required placeholder="sarah@agency.org" value={fields.contact_email} onChange={handleChange} style={fieldStyle('contact_email')} onFocus={onFocus} onBlur={handleBlurField} />
+          <FieldError msg={errors.contact_email} />
         </div>
         <div>
           <label style={labelStyle} htmlFor="p_contact_phone">Phone Number</label>
-          <input id="p_contact_phone" name="contact_phone" type="tel" placeholder="+1 (720) 000-0000" value={fields.contact_phone} onChange={handleChange} style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
+          <input id="p_contact_phone" name="contact_phone" type="tel" placeholder="+1 (720) 000-0000" value={fields.contact_phone} onChange={handleChange} style={fieldStyle('contact_phone')} onFocus={onFocus} onBlur={handleBlurField} />
+          <FieldError msg={errors.contact_phone} />
         </div>
       </div>
 

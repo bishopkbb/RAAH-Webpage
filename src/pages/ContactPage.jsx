@@ -204,18 +204,80 @@ const ChatIcon = (props) => (
   </svg>
 );
 
+// ─── Validation ──────────────────────────────────────────────────────────────
+const validateContact = (fields) => {
+  const errs = {};
+  if (!fields.name.trim())    errs.name    = 'Full name is required.';
+  if (!fields.agency.trim())  errs.agency  = 'Agency name is required.';
+  if (!fields.email.trim())   errs.email   = 'Email address is required.';
+  else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(fields.email))
+                              errs.email   = 'Enter a valid email address.';
+  if (fields.phone && !/^[\d\s+\-()]{7,20}$/.test(fields.phone))
+                              errs.phone   = 'Enter a valid phone number.';
+  if (!fields.subject)        errs.subject = 'Please select a subject.';
+  if (!fields.message.trim()) errs.message = 'Message is required.';
+  return errs;
+};
+
+const FieldError = ({ msg }) => msg ? (
+  <p style={{ fontFamily: FP, fontSize: '0.78rem', color: '#dc2626', marginTop: '5px', display: 'flex', alignItems: 'center', gap: '5px' }}>
+    <svg viewBox="0 0 16 16" fill="none" width="12" height="12" style={{ flexShrink: 0 }}>
+      <circle cx="8" cy="8" r="7" stroke="#dc2626" strokeWidth="1.5"/>
+      <path d="M8 5v3M8 11v.5" stroke="#dc2626" strokeWidth="1.5" strokeLinecap="round"/>
+    </svg>
+    {msg}
+  </p>
+) : null;
+
 // ─── Contact form ─────────────────────────────────────────────────────────────
 const ContactForm = () => {
   const [fields, setFields] = useState({ name: '', email: '', agency: '', phone: '', subject: '', message: '' });
+  const [errors, setErrors] = useState({});
+  const [touched, setTouched] = useState({});
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
-  const handleChange = (e) => setFields(f => ({ ...f, [e.target.name]: e.target.value }));
+  const handleChange = e => {
+    const { name, value } = e.target;
+    setFields(f => ({ ...f, [name]: value }));
+    if (touched[name]) {
+      const errs = validateContact({ ...fields, [name]: value });
+      setErrors(prev => ({ ...prev, [name]: errs[name] || null }));
+    }
+  };
 
-  const handleSubmit = (e) => {
+  const handleBlurField = e => {
+    const { name } = e.target;
+    setTouched(prev => ({ ...prev, [name]: true }));
+    const errs = validateContact(fields);
+    setErrors(prev => ({ ...prev, [name]: errs[name] || null }));
+    e.target.style.borderColor = errors[name] ? '#dc2626' : 'rgba(22,163,74,0.18)';
+    e.target.style.boxShadow = 'none';
+  };
+
+  const handleSubmit = e => {
     e.preventDefault();
+    const allTouched = Object.fromEntries(Object.keys(fields).map(k => [k, true]));
+    setTouched(allTouched);
+    const errs = validateContact(fields);
+    setErrors(errs);
+    if (Object.keys(errs).length > 0) {
+      // eslint-disable-next-line no-undef
+      if (typeof toast !== 'undefined') toast.error('Please fix the highlighted fields before submitting.');
+      return;
+    }
     setSubmitting(true);
     setTimeout(() => { setSubmitting(false); setSubmitted(true); }, 1400);
+  };
+
+  const fieldStyle = name => ({
+    ...inputStyle,
+    borderColor: errors[name] ? '#dc2626' : undefined,
+  });
+
+  const onFocusField = e => {
+    e.target.style.borderColor = '#16a34a';
+    e.target.style.boxShadow = '0 0 0 3px rgba(22,163,74,0.10)';
   };
 
   const inputStyle = {
@@ -254,7 +316,7 @@ const ContactForm = () => {
           Thank you for reaching out. A member of our team will be in touch within one business day.
         </p>
         <button
-          onClick={() => { setSubmitted(false); setFields({ name: '', email: '', agency: '', phone: '', subject: '', message: '' }); }}
+          onClick={() => { setSubmitted(false); setFields({ name: '', email: '', agency: '', phone: '', subject: '', message: '' }); setErrors({}); setTouched({}); }}
           style={{ fontFamily: FI, fontWeight: 700, fontSize: '0.85rem', letterSpacing: '0.06em', textTransform: 'uppercase', padding: '12px 28px', borderRadius: '999px', background: 'transparent', color: '#16a34a', border: '2px solid #16a34a', cursor: 'pointer', transition: 'all 0.22s ease' }}
           onMouseEnter={e => { e.currentTarget.style.background = '#16a34a'; e.currentTarget.style.color = '#ffffff'; }}
           onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#16a34a'; }}
@@ -278,17 +340,13 @@ const ContactForm = () => {
       <div style={{ display: 'grid', gap: '18px', marginBottom: '22px' }} className="contact-form-row">
         <div>
           <label style={labelStyle} htmlFor="name">Full Name *</label>
-          <input id="name" name="name" type="text" required placeholder="Sarah Johnson" value={fields.name} onChange={handleChange} style={inputStyle}
-            onFocus={e => { e.target.style.borderColor = '#16a34a'; e.target.style.boxShadow = '0 0 0 3px rgba(22,163,74,0.10)'; }}
-            onBlur={e => { e.target.style.borderColor = 'rgba(22,163,74,0.18)'; e.target.style.boxShadow = 'none'; }}
-          />
+          <input id="name" name="name" type="text" required placeholder="Sarah Johnson" value={fields.name} onChange={handleChange} style={fieldStyle('name')} onFocus={onFocusField} onBlur={handleBlurField} />
+          <FieldError msg={errors.name} />
         </div>
         <div>
           <label style={labelStyle} htmlFor="agency">Agency Name *</label>
-          <input id="agency" name="agency" type="text" required placeholder="Caring Hands Home Health" value={fields.agency} onChange={handleChange} style={inputStyle}
-            onFocus={e => { e.target.style.borderColor = '#16a34a'; e.target.style.boxShadow = '0 0 0 3px rgba(22,163,74,0.10)'; }}
-            onBlur={e => { e.target.style.borderColor = 'rgba(22,163,74,0.18)'; e.target.style.boxShadow = 'none'; }}
-          />
+          <input id="agency" name="agency" type="text" required placeholder="Caring Hands Home Health" value={fields.agency} onChange={handleChange} style={fieldStyle('agency')} onFocus={onFocusField} onBlur={handleBlurField} />
+          <FieldError msg={errors.agency} />
         </div>
       </div>
 
@@ -296,17 +354,13 @@ const ContactForm = () => {
       <div style={{ display: 'grid', gap: '18px', marginBottom: '22px' }} className="contact-form-row">
         <div>
           <label style={labelStyle} htmlFor="email">Email Address *</label>
-          <input id="email" name="email" type="email" required placeholder="sarah@caringhands.org" value={fields.email} onChange={handleChange} style={inputStyle}
-            onFocus={e => { e.target.style.borderColor = '#16a34a'; e.target.style.boxShadow = '0 0 0 3px rgba(22,163,74,0.10)'; }}
-            onBlur={e => { e.target.style.borderColor = 'rgba(22,163,74,0.18)'; e.target.style.boxShadow = 'none'; }}
-          />
+          <input id="email" name="email" type="email" required placeholder="sarah@caringhands.org" value={fields.email} onChange={handleChange} style={fieldStyle('email')} onFocus={onFocusField} onBlur={handleBlurField} />
+          <FieldError msg={errors.email} />
         </div>
         <div>
           <label style={labelStyle} htmlFor="phone">Phone Number</label>
-          <input id="phone" name="phone" type="tel" placeholder="+1 (720) 000-0000" value={fields.phone} onChange={handleChange} style={inputStyle}
-            onFocus={e => { e.target.style.borderColor = '#16a34a'; e.target.style.boxShadow = '0 0 0 3px rgba(22,163,74,0.10)'; }}
-            onBlur={e => { e.target.style.borderColor = 'rgba(22,163,74,0.18)'; e.target.style.boxShadow = 'none'; }}
-          />
+          <input id="phone" name="phone" type="tel" placeholder="+1 (720) 000-0000" value={fields.phone} onChange={handleChange} style={fieldStyle('phone')} onFocus={onFocusField} onBlur={handleBlurField} />
+          <FieldError msg={errors.phone} />
         </div>
       </div>
 
@@ -314,9 +368,8 @@ const ContactForm = () => {
       <div style={{ marginBottom: '22px' }}>
         <label style={labelStyle} htmlFor="subject">Subject *</label>
         <select id="subject" name="subject" required value={fields.subject} onChange={handleChange}
-          style={{ ...inputStyle, cursor: 'pointer', color: fields.subject ? '#0f172a' : '#94a3b8' }}
-          onFocus={e => { e.target.style.borderColor = '#16a34a'; e.target.style.boxShadow = '0 0 0 3px rgba(22,163,74,0.10)'; }}
-          onBlur={e => { e.target.style.borderColor = 'rgba(22,163,74,0.18)'; e.target.style.boxShadow = 'none'; }}
+          style={{ ...fieldStyle('subject'), cursor: 'pointer', color: fields.subject ? '#0f172a' : '#94a3b8' }}
+          onFocus={onFocusField} onBlur={handleBlurField}
         >
           <option value="" disabled>Select a topic</option>
           <option value="demo">Request a Demo</option>
@@ -327,16 +380,17 @@ const ContactForm = () => {
           <option value="partnership">Partnership</option>
           <option value="other">Other</option>
         </select>
+        <FieldError msg={errors.subject} />
       </div>
 
       {/* Message */}
       <div style={{ marginBottom: '36px' }}>
         <label style={labelStyle} htmlFor="message">Message *</label>
         <textarea id="message" name="message" required rows={4} placeholder="Tell us about your agency, what you are looking for, or any questions you have..." value={fields.message} onChange={handleChange}
-          style={{ ...inputStyle, resize: 'vertical', minHeight: '160px' }}
-          onFocus={e => { e.target.style.borderColor = '#16a34a'; e.target.style.boxShadow = '0 0 0 3px rgba(22,163,74,0.10)'; }}
-          onBlur={e => { e.target.style.borderColor = 'rgba(22,163,74,0.18)'; e.target.style.boxShadow = 'none'; }}
+          style={{ ...fieldStyle('message'), resize: 'vertical', minHeight: '160px' }}
+          onFocus={onFocusField} onBlur={handleBlurField}
         />
+        <FieldError msg={errors.message} />
       </div>
 
       {/* Submit */}

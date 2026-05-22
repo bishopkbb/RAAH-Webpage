@@ -277,9 +277,6 @@ const FeatureCard = ({ feature, delay }) => {
           cursor: 'default',
           border: '1px solid',
           borderColor: hovered ? 'rgba(74,222,128,0.30)' : 'rgba(22,163,74,0.14)',
-          width: '100%',
-          maxWidth: '420px',
-          margin: '0 auto',
         }}
       >
         {/* Shimmer sweep on hover */}
@@ -325,7 +322,6 @@ const FeatureCard = ({ feature, delay }) => {
               marginBottom: '28px',
               transition: 'all 0.35s ease',
               position: 'relative',
-              margin: '0 auto 28px',
             }}
           >
             {/* Radial glow behind icon */}
@@ -355,7 +351,6 @@ const FeatureCard = ({ feature, delay }) => {
               color: hovered ? '#ffffff' : '#16a34a',
               marginBottom: '8px',
               transition: 'color 0.3s ease',
-              textAlign: 'center',
             }}
           >
             {label}
@@ -372,7 +367,6 @@ const FeatureCard = ({ feature, delay }) => {
               marginBottom: '14px',
               lineHeight: 1.25,
               transition: 'color 0.3s ease',
-              textAlign: 'center',
             }}
           >
             {title}
@@ -388,7 +382,6 @@ const FeatureCard = ({ feature, delay }) => {
               color: hovered ? '#ffffff' : '#1a1a1a',
               marginBottom: '28px',
               transition: 'color 0.3s ease',
-              textAlign: 'center',
             }}
           >
             {desc}
@@ -401,7 +394,6 @@ const FeatureCard = ({ feature, delay }) => {
               borderTop: `1px solid ${hovered ? 'rgba(255,255,255,0.25)' : 'rgba(22,163,74,0.15)'}`,
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center',
               gap: '14px',
               transition: 'all 0.35s ease',
             }}
@@ -506,9 +498,6 @@ const CaregiverCard = ({ item, delay }) => {
           cursor: 'default',
           border: '1px solid',
           borderColor: hovered ? 'rgba(22,163,74,0.35)' : 'rgba(22,163,74,0.14)',
-          width: '100%',
-          maxWidth: '420px',
-          margin: '0 auto',
         }}
       >
         {/* Top accent bar — hairline at rest, full sweep on hover */}
@@ -560,7 +549,6 @@ const CaregiverCard = ({ item, delay }) => {
               transform: hovered ? 'translateY(-4px) scale(1.06)' : 'translateY(0) scale(1)',
               position: 'relative',
               flexShrink: 0,
-              margin: '0 auto 28px',
             }}
           >
             {/* Glow behind icon on hover */}
@@ -590,7 +578,6 @@ const CaregiverCard = ({ item, delay }) => {
               textTransform: 'uppercase',
               color: '#16a34a',
               marginBottom: '8px',
-              textAlign: 'center',
             }}
           >
             {label}
@@ -607,7 +594,6 @@ const CaregiverCard = ({ item, delay }) => {
               marginBottom: '14px',
               lineHeight: 1.25,
               transition: 'color 0.3s ease',
-              textAlign: 'center',
             }}
           >
             {title}
@@ -623,7 +609,6 @@ const CaregiverCard = ({ item, delay }) => {
               color: hovered ? '#111111' : '#1a1a1a',
               marginBottom: '28px',
               transition: 'color 0.3s ease',
-              textAlign: 'center',
             }}
           >
             {desc}
@@ -636,7 +621,6 @@ const CaregiverCard = ({ item, delay }) => {
               borderTop: `1px solid ${hovered ? 'rgba(22,163,74,0.22)' : 'rgba(22,163,74,0.12)'}`,
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center',
               gap: '14px',
               transition: 'all 0.35s ease',
             }}
@@ -696,15 +680,7 @@ const WorkflowStep = ({ step, isLast }) => {
 
   return (
     <div
-      style={{ 
-        display: 'flex', 
-        gap: '20px', 
-        position: 'relative',
-        flexDirection: 'column',
-        alignItems: 'center',
-        textAlign: 'center',
-      }}
-      className="sm:flex-row sm:text-left sm:items-start"
+      style={{ display: 'flex', gap: '20px', position: 'relative' }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
@@ -776,11 +752,9 @@ const WorkflowStep = ({ step, isLast }) => {
           style={{
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
             gap: '10px',
             marginBottom: '8px',
           }}
-          className="sm:justify-start"
         >
           {/* Small inline icon */}
           <div
@@ -902,16 +876,6 @@ const TESTIMONIALS = [
     metricLabel: 'Billing Accuracy Rate',
     color: '#16a34a',
   },
-  {
-    quote: 'The implementation was seamless. Within 24 hours we were live, and within a week our team was more productive than ever. The support team is responsive and truly understands home health.',
-    name: 'Lisa Thompson',
-    role: 'Operations Manager',
-    company: 'Premier Home Care',
-    initials: 'LT',
-    metric: '24hr',
-    metricLabel: 'Go-Live Time',
-    color: '#16a34a',
-  },
 ];
 
 // ─── Single testimonial card ──────────────────────────────────────────────────
@@ -940,9 +904,6 @@ const TestimonialCard = ({ t, visible }) => {
         transition: 'all 0.35s cubic-bezier(0.22, 1, 0.36, 1)',
         opacity: visible ? 1 : 0,
         cursor: 'default',
-        width: '100%',
-        maxWidth: '520px',
-        margin: '0 auto',
       }}
     >
       {/* Top green accent bar — slides in on hover */}
@@ -978,7 +939,7 @@ const TestimonialCard = ({ t, visible }) => {
       </div>
 
       {/* Stars */}
-      <div style={{ display: 'flex', gap: '3px', marginBottom: '20px', justifyContent: 'center' }}>
+      <div style={{ display: 'flex', gap: '3px', marginBottom: '20px' }}>
         {[1,2,3,4,5].map(s => (
           <svg key={s} width="16" height="16" viewBox="0 0 16 16" fill="#f59e0b">
             <path d="M8 1l1.854 3.756L14 5.528l-3 2.923.708 4.129L8 10.5l-3.708 2.08L5 8.451 2 5.528l4.146-.772z"/>
@@ -997,7 +958,6 @@ const TestimonialCard = ({ t, visible }) => {
           marginBottom: '28px',
           flexGrow: 1,
           fontStyle: 'italic',
-          textAlign: 'center',
         }}
       >
         "{t.quote}"
@@ -1014,7 +974,7 @@ const TestimonialCard = ({ t, visible }) => {
       />
 
       {/* Bottom row — avatar + name/role + metric */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', flexWrap: 'wrap' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px' }}>
 
         {/* Avatar + identity */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
@@ -1052,7 +1012,6 @@ const TestimonialCard = ({ t, visible }) => {
                 color: '#0f172a',
                 lineHeight: 1.2,
                 marginBottom: '2px',
-                textAlign: 'center',
               }}
             >
               {t.name}
@@ -1064,7 +1023,6 @@ const TestimonialCard = ({ t, visible }) => {
                 fontWeight: 400,
                 color: '#16a34a',
                 lineHeight: 1.3,
-                textAlign: 'center',
               }}
             >
               {t.role}, {t.company}
@@ -1075,7 +1033,7 @@ const TestimonialCard = ({ t, visible }) => {
         {/* Metric callout */}
         <div
           style={{
-            textAlign: 'center',
+            textAlign: 'right',
             flexShrink: 0,
             opacity: hovered ? 1 : 0.70,
             transition: 'opacity 0.35s ease',
@@ -1116,11 +1074,13 @@ const TestimonialCard = ({ t, visible }) => {
 
 // ─── Testimonials Section ─────────────────────────────────────────────────────
 const TestimonialsSection = () => {
-  const [current, setCurrent] = useState(0);
+  const [current, setCurrent]   = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const [direction, setDirection] = useState(1); // 1=forward, -1=back
   const timerRef = useRef(null);
 
+  // Number of cards visible: 2 desktop, 1 mobile — handled via CSS
+  // Logical "pages": we advance by 1 testimonial at a time
   const total = TESTIMONIALS.length;
 
   const goTo = (index, dir = 1) => {
@@ -1132,9 +1092,9 @@ const TestimonialsSection = () => {
   };
 
   const prev = () => goTo(current - 1, -1);
-  const next = () => goTo(current + 1, 1);
+  const next = () => goTo(current + 1,  1);
 
-  // Auto-rotate through all testimonials
+  // Auto-slides continuously — no pause on hover
   useEffect(() => {
     timerRef.current = setInterval(() => {
       setDirection(1);
@@ -1145,7 +1105,7 @@ const TestimonialsSection = () => {
     return () => clearInterval(timerRef.current);
   }, [total]);
 
-  // Calculate which testimonials to show
+  // Which two testimonials are visible (desktop shows current + next)
   const visibleA = current;
   const visibleB = (current + 1) % total;
 
@@ -1153,7 +1113,7 @@ const TestimonialsSection = () => {
     <section
       style={{
         background: '#dff0df',
-        padding: 'clamp(60px, 10vw, 120px) 0 clamp(70px, 12vw, 140px)',
+        padding: '120px 0 140px',
         position: 'relative',
         overflow: 'hidden',
       }}
@@ -1163,18 +1123,6 @@ const TestimonialsSection = () => {
         @keyframes testimonialprogress {
           from { width: 0%; }
           to   { width: 100%; }
-        }
-        .testimonials-grid {
-          display: grid;
-          grid-template-columns: 1fr;
-          gap: 24px;
-          align-items: stretch;
-          justify-items: center;
-        }
-        @media (min-width: 1024px) {
-          .testimonials-grid {
-            grid-template-columns: repeat(2, 1fr);
-          }
         }
       `}</style>
       {/* Dot grid texture */}
@@ -1275,12 +1223,20 @@ const TestimonialsSection = () => {
           </div>
         </Reveal>
 
-        {/* Carousel Grid */}
+        {/* Carousel */}
         <Reveal delay={150}>
           <div style={{ position: 'relative' }}>
 
             {/* Cards viewport */}
-            <div className="testimonials-grid">
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(2, 1fr)',
+                gap: '24px',
+                alignItems: 'stretch',
+              }}
+              className="grid-cols-1 md:grid-cols-2"
+            >
               {/* Card A */}
               <div
                 style={{
@@ -1289,7 +1245,6 @@ const TestimonialsSection = () => {
                     ? `translateX(${direction > 0 ? '-40px' : '40px'})`
                     : 'translateX(0)',
                   transition: 'opacity 0.45s ease, transform 0.45s cubic-bezier(0.22,1,0.36,1)',
-                  width: '100%',
                 }}
               >
                 <TestimonialCard t={TESTIMONIALS[visibleA]} visible={true} />
@@ -1304,7 +1259,6 @@ const TestimonialsSection = () => {
                     ? `translateX(${direction > 0 ? '40px' : '-40px'})`
                     : 'translateX(0)',
                   transition: 'opacity 0.45s ease 0.06s, transform 0.45s cubic-bezier(0.22,1,0.36,1) 0.06s',
-                  width: '100%',
                 }}
               >
                 <TestimonialCard t={TESTIMONIALS[visibleB]} visible={true} />
@@ -1319,7 +1273,6 @@ const TestimonialsSection = () => {
                 justifyContent: 'center',
                 gap: '16px',
                 marginTop: '48px',
-                flexWrap: 'wrap',
               }}
             >
               {/* Prev */}
@@ -1361,7 +1314,7 @@ const TestimonialsSection = () => {
               </button>
 
               {/* Progress dots — active pip has a fill sweep animation */}
-              <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
+              <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                 {TESTIMONIALS.map((_, i) => (
                   <button
                     key={i}
@@ -1482,7 +1435,7 @@ const HomePage = () => {
         ref={sectionRef}
         style={{
           background: '#dff0df',
-          padding: 'clamp(60px, 10vw, 120px) 0 clamp(70px, 12vw, 140px)',
+          padding: '120px 0 140px',
           position: 'relative',
           overflow: 'hidden',
         }}
@@ -1621,20 +1574,18 @@ const HomePage = () => {
 
           {/* Cards grid */}
           <style>{`
-            .features-grid {
-              display: grid;
-              gap: 24px;
-              justify-items: center;
-              grid-template-columns: 1fr;
-            }
-            @media (min-width: 640px) {
-              .features-grid { grid-template-columns: repeat(2, 1fr); }
-            }
-            @media (min-width: 1024px) {
-              .features-grid { grid-template-columns: repeat(3, 1fr); }
-            }
+            @media (max-width: 1023px) { .features-grid { grid-template-columns: repeat(2, 1fr) !important; } }
+            @media (max-width: 639px)  { .features-grid { grid-template-columns: 1fr !important; } }
           `}</style>
-          <div className="features-grid">
+          <div
+            className="features-grid"
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(3, 1fr)',
+              gap: '24px',
+              alignItems: 'stretch',
+            }}
+          >
             {FEATURES.map((feature, i) => (
               <FeatureCard
                 key={feature.title}
@@ -1706,7 +1657,7 @@ const HomePage = () => {
       <section
         style={{
           background: '#dff0df',
-          padding: 'clamp(60px, 10vw, 120px) 0 clamp(60px, 10vw, 130px)',
+          padding: '120px 0 130px',
           position: 'relative',
           overflow: 'hidden',
         }}
@@ -1768,19 +1719,13 @@ const HomePage = () => {
 
         <div className="container-custom" style={{ position: 'relative', zIndex: 1 }}>
           <style>{`
-            .workflow-grid {
-              display: grid;
-              gap: 48px;
-              align-items: stretch;
-            }
-            @media (min-width: 768px) {
-              .workflow-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 80px;
-              }
-            }
-          `}</style>
-          <div className="workflow-grid">
+              @media (min-width: 768px) { .workflow-grid { grid-template-columns: repeat(2, 1fr); gap: 80px; } }
+              @media (max-width: 767px) { .workflow-grid { grid-template-columns: 1fr; gap: 48px; } }
+            `}</style>
+          <div
+            className="workflow-grid"
+            style={{ display: 'grid', alignItems: 'stretch' }}
+          >
 
             {/* ── LEFT — Image ── */}
             <Reveal delay={0} className="order-2 md:order-1">
@@ -1815,7 +1760,7 @@ const HomePage = () => {
                   }}
                 >
                   <img
-                    src="assets\workflow home page.jpeg"
+                    src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1200"
                     alt="RAAH Platform Dashboard"
                     style={{
                       width: '100%',
@@ -1853,34 +1798,30 @@ const HomePage = () => {
                   />
                 </div>
 
-                {/* ✅ Floating stat card — FIXED: responsive positioning to prevent overflow */}
+                {/* Floating stat card — bottom right */}
                 <div
                   style={{
                     position: 'absolute',
-                    bottom: 'clamp(-12px, -2vw, -28px)',
-                    right: 'clamp(8px, 2vw, -28px)',
-                    left: 'clamp(8px, auto, auto)',
+                    bottom: '-28px',
+                    right: '-28px',
                     zIndex: 10,
                     background: '#ffffff',
                     borderRadius: '16px',
-                    padding: '16px 20px',
+                    padding: '20px 24px',
                     boxShadow: '0 20px 60px rgba(5,46,22,0.16), 0 4px 16px rgba(5,46,22,0.08)',
                     border: '1px solid rgba(22,163,74,0.12)',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '12px',
-                    maxWidth: '280px',
-                    width: 'calc(100% - 16px)',
-                    boxSizing: 'border-box',
+                    gap: '16px',
                   }}
                   className="hidden lg:flex"
                 >
                   {/* Icon */}
                   <div
                     style={{
-                      width: '40px',
-                      height: '40px',
-                      borderRadius: '10px',
+                      width: '48px',
+                      height: '48px',
+                      borderRadius: '12px',
                       background: 'linear-gradient(135deg, #0d7a3e 0%, #16a34a 100%)',
                       display: 'flex',
                       alignItems: 'center',
@@ -1888,19 +1829,18 @@ const HomePage = () => {
                       flexShrink: 0,
                     }}
                   >
-                    <BarChart3 style={{ color: '#4ade80', width: '18px', height: '18px' }} />
+                    <BarChart3 style={{ color: '#4ade80', width: '22px', height: '22px' }} />
                   </div>
                   <div>
                     <p
                       style={{
                         fontFamily: "'Poppins', sans-serif",
-                        fontSize: '0.62rem',
+                        fontSize: '0.68rem',
                         fontWeight: 600,
                         letterSpacing: '0.14em',
                         textTransform: 'uppercase',
                         color: '#16a34a',
                         marginBottom: '2px',
-                        lineHeight: 1.2,
                       }}
                     >
                       Operational Efficiency
@@ -1908,7 +1848,7 @@ const HomePage = () => {
                     <p
                       style={{
                         fontFamily: "'Inter', sans-serif",
-                        fontSize: '1.5rem',
+                        fontSize: '2rem',
                         fontWeight: 900,
                         color: '#0f172a',
                         lineHeight: 1,
@@ -2036,16 +1976,13 @@ const HomePage = () => {
                     color: '#374151',
                     marginBottom: '44px',
                     maxWidth: '520px',
-                    margin: '0 auto 44px',
-                    textAlign: 'center',
                   }}
-                  className="md:text-left md:ml-0"
                 >
                   One connected platform unifies every workflow from first referral to final payment, cutting administrative overhead so your team can focus entirely on delivering care.
                 </p>
 
                 {/* Steps */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0', maxWidth: '520px', margin: '0 auto' }} className="md:ml-0">
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
                   {[
                     {
                       number: '01',
@@ -2091,7 +2028,7 @@ const HomePage = () => {
                 </div>
 
                 {/* CTA */}
-                <div style={{ marginTop: '48px', textAlign: 'center' }} className="md:text-left">
+                <div style={{ marginTop: '48px' }}>
                   <Link
                     to="/demo"
                     style={{
@@ -2149,7 +2086,7 @@ const HomePage = () => {
       <section
         style={{
           background: 'linear-gradient(160deg, #0d7a3e 0%, #16a34a 55%, #0d7a3e 100%)',
-          padding: 'clamp(60px, 10vw, 120px) 0 clamp(60px, 10vw, 130px)',
+          padding: '120px 0 130px',
           position: 'relative',
           overflow: 'hidden',
         }}
@@ -2285,21 +2222,14 @@ const HomePage = () => {
           </Reveal>
 
           {/* ── Cards grid ── */}
-          <style>{`
-            .caregiver-grid {
-              display: grid;
-              gap: 24px;
-              justify-items: center;
-              grid-template-columns: 1fr;
-            }
-            @media (min-width: 640px) {
-              .caregiver-grid { grid-template-columns: repeat(2, 1fr); }
-            }
-            @media (min-width: 1024px) {
-              .caregiver-grid { grid-template-columns: repeat(3, 1fr); }
-            }
-          `}</style>
-          <div className="caregiver-grid">
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+              gap: '24px',
+              alignItems: 'stretch',
+            }}
+          >
             {[
               {
                 label: 'Connectivity',
@@ -2390,8 +2320,8 @@ const HomePage = () => {
       {/* ══════════════════════════════════════════════════════════════
           TESTIMONIALS — Trusted by Leading Agencies
           White section, consistent with Why Choose Us + Workflow.
-          Auto-sliding carousel: 8 testimonials, 2 visible desktop,
-          1 mobile. Progress dots + prev/next.
+          Auto-sliding carousel: 7 testimonials, 2 visible desktop,
+          1 mobile. Pauses on hover. Progress dots + prev/next.
           No external deps — pure React state + CSS transitions.
       ══════════════════════════════════════════════════════════════ */}
       <TestimonialsSection />
@@ -2405,7 +2335,7 @@ const HomePage = () => {
       <section
         style={{
           background: '#dff0df',
-          padding: 'clamp(60px, 10vw, 120px) 0 clamp(60px, 10vw, 130px)',
+          padding: '120px 0 130px',
           position: 'relative',
           overflow: 'hidden',
         }}
@@ -2531,14 +2461,17 @@ const HomePage = () => {
 
           {/* Stat callouts — social proof at the decision moment */}
           <Reveal delay={220}>
-            <div style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              width: '100%',
-              maxWidth: '720px',
-              margin: '0 auto clamp(32px, 6vw, 48px)', // ✅ Improved responsive spacing
-            }}>
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                flexWrap: 'wrap',
+                gap: '0',
+                marginBottom: '56px',
+                maxWidth: '680px',
+                margin: '0 auto 56px',
+              }}
+            >
               {[
                 { value: '99.2%', label: 'Billing Accuracy' },
                 { value: '90%',   label: 'Fewer Claim Rejections' },
@@ -2547,10 +2480,10 @@ const HomePage = () => {
                 <div
                   key={stat.label}
                   style={{
-                    flex: 1,
-                    minWidth: 0,
-                    padding: 'clamp(20px, 4vw, 32px) clamp(12px, 2vw, 20px)',
-                    borderRight: i < 2 ? '2px solid #16a34a' : 'none',
+                    flex: '1',
+                    minWidth: '160px',
+                    padding: '28px 24px',
+                    borderRight: i < 2 ? '1px solid rgba(22,163,74,0.28)' : 'none',
                     textAlign: 'center',
                   }}
                 >
@@ -2558,7 +2491,7 @@ const HomePage = () => {
                     style={{
                       fontFamily: "'Inter', sans-serif",
                       fontWeight: 900,
-                      fontSize: 'clamp(1.25rem, 4vw, 2.25rem)',
+                      fontSize: 'clamp(2rem, 3.5vw, 2.75rem)',
                       letterSpacing: '-0.03em',
                       color: '#0a6b30',
                       lineHeight: 1,
@@ -2570,11 +2503,11 @@ const HomePage = () => {
                   <p
                     style={{
                       fontFamily: "'Poppins', sans-serif",
-                      fontSize: 'clamp(0.65rem, 1.5vw, 0.85rem)',
-                      fontWeight: 600,
+                      fontSize: '0.78rem',
+                      fontWeight: 500,
                       color: '#64748b',
                       textTransform: 'uppercase',
-                      letterSpacing: '0.1em',
+                      letterSpacing: '0.12em',
                     }}
                   >
                     {stat.label}

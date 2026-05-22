@@ -16,6 +16,8 @@
 import React, { useRef, useEffect, useState } from 'react';
 import Layout from '../components/layout/Layout';
 import { Link } from 'react-router-dom';
+import { publicApi } from '../api/services';
+import toast from 'react-hot-toast';
 
 const FI = "'Inter', sans-serif";
 const FP = "'Poppins', sans-serif";
@@ -255,19 +257,44 @@ const ContactForm = () => {
     e.target.style.boxShadow = 'none';
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
     const allTouched = Object.fromEntries(Object.keys(fields).map(k => [k, true]));
     setTouched(allTouched);
     const errs = validateContact(fields);
     setErrors(errs);
     if (Object.keys(errs).length > 0) {
-      // eslint-disable-next-line no-undef
-      if (typeof toast !== 'undefined') toast.error('Please fix the highlighted fields before submitting.');
+      toast.error('Please fix the highlighted fields before submitting.');
       return;
     }
     setSubmitting(true);
-    setTimeout(() => { setSubmitting(false); setSubmitted(true); }, 1400);
+    try {
+      await publicApi.submitContact({
+        name:    fields.name,
+        agency:  fields.agency,
+        email:   fields.email,
+        phone:   fields.phone || undefined,
+        subject: fields.subject,
+        message: fields.message,
+      });
+      setSubmitted(true);
+      toast.success('Message sent! We will be in touch within one business day.');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (error) {
+      // Surface Laravel 422 field errors inline if present
+      if (error.fieldErrors) {
+        const mapped = {};
+        Object.entries(error.fieldErrors).forEach(([key, msgs]) => {
+          mapped[key] = msgs[0];
+        });
+        setErrors(prev => ({ ...prev, ...mapped }));
+        toast.error('Please fix the highlighted fields before submitting.');
+      } else {
+        toast.error(error.message || 'Something went wrong. Please try again.');
+      }
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const fieldStyle = name => ({

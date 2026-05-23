@@ -53,12 +53,197 @@ const Reveal = ({ children, delay = 0, className = '' }) => {
   );
 };
 
+// ─── Global responsive CSS variables ──────────────────────────────────────────
+const HomeStyles = () => (
+  <style>{`
+    :root {
+      /* Typography */
+      --font-eyebrow: clamp(0.65rem, 1.4vw, 0.75rem);
+      --font-h2: clamp(1.75rem, 5vw, 3.75rem);
+      --font-h3: clamp(1.125rem, 2.5vw, 1.375rem);
+      --font-h4: clamp(1.1rem, 2.2vw, 1.375rem);
+      --font-body-lg: clamp(1.1rem, 1.8vw, 1.3rem);
+      --font-body: clamp(0.875rem, 1.7vw, 1rem);
+      --font-body-sm: clamp(0.7rem, 1.4vw, 0.8rem);
+      --font-metric: clamp(1.25rem, 3vw, 1.625rem);
+      --font-metric-lg: clamp(1.5rem, 4vw, 2rem);
+      --font-step-number: clamp(0.75rem, 1.5vw, 0.85rem);
+      --font-testimonial: clamp(0.875rem, 1.8vw, 0.9875rem);
+      --font-cta: clamp(0.8rem, 1.6vw, 0.9375rem);
+      --font-cta-small: clamp(0.7rem, 1.4vw, 0.8rem);
+      
+      /* Spacing */
+      --padding-section: clamp(60px, 10vw, 120px) 0 clamp(70px, 12vw, 140px);
+      --padding-card: clamp(24px, 4vw, 36px) clamp(20px, 4vw, 32px) clamp(20px, 4vw, 32px);
+      --padding-testimonial: clamp(32px, 5vw, 40px) clamp(28px, 4vw, 36px) clamp(24px, 4vw, 32px);
+      --padding-stat: clamp(16px, 3vw, 20px) clamp(20px, 4vw, 24px);
+      --padding-step: clamp(8px, 1.5vw, 10px) clamp(0px, 0vw, 0px) clamp(0px, 0vw, 36px);
+      --margin-eyebrow: clamp(16px, 3vw, 20px);
+      --margin-section-title: clamp(16px, 3vw, 20px);
+      --margin-section-body: clamp(0px, 0vw, 0px);
+      --margin-card-icon: clamp(20px, 4vw, 28px);
+      --margin-card-label: clamp(6px, 1vw, 8px);
+      --margin-card-title: clamp(10px, 2vw, 14px);
+      --margin-card-desc: clamp(20px, 4vw, 28px);
+      --margin-card-metric: clamp(16px, 3vw, 20px);
+      --margin-testimonial-quote: clamp(20px, 4vw, 28px);
+      --margin-testimonial-divider: clamp(16px, 3vw, 24px);
+      --margin-cta: clamp(48px, 8vw, 72px);
+      --margin-cta-buttons: clamp(12px, 2vw, 16px);
+      --margin-cta-reassurance: clamp(20px, 4vw, 24px);
+      --gap-card-icon: clamp(12px, 2.5vw, 14px);
+      --gap-card-metric: clamp(12px, 2vw, 14px);
+      --gap-testimonial-bottom: clamp(14px, 2.5vw, 16px);
+      --gap-step: clamp(16px, 3vw, 20px);
+      --gap-step-icon: clamp(8px, 1.5vw, 10px);
+      --gap-cta-buttons: clamp(14px, 2.5vw, 16px);
+      --gap-cta-icon: clamp(8px, 1.5vw, 10px);
+      
+      /* Dimensions */
+      --width-container: clamp(280px, 95vw, 1200px);
+      --width-card-max: clamp(280px, 90vw, 420px);
+      --width-testimonial-max: clamp(280px, 90vw, 520px);
+      --width-step-number: clamp(44px, 8vw, 52px);
+      --width-step-icon: clamp(28px, 5vw, 32px);
+      --width-icon-container: clamp(56px, 10vw, 72px);
+      --width-testimonial-avatar: clamp(40px, 7vw, 48px);
+      --width-stat-metric: clamp(90px, 20vw, 120px);
+      --height-icon-container: clamp(56px, 10vw, 72px);
+      --height-stat-bar: clamp(32px, 6vw, 36px);
+      --height-stat-bar-hover: clamp(36px, 7vw, 42px);
+      --radius-card: clamp(16px, 3vw, 20px);
+      --radius-icon: clamp(14px, 2.5vw, 18px);
+      --radius-step-number: clamp(12px, 2vw, 14px);
+      --radius-testimonial: clamp(16px, 3vw, 20px);
+      --radius-cta: 999px;
+      --size-icon: clamp(32px, 6vw, 42px);
+      --size-icon-small: clamp(16px, 3vw, 18px);
+      --size-nav-btn: clamp(36px, 7vw, 44px);
+      --size-pip: clamp(6px, 1vw, 8px);
+      --size-pip-active: clamp(32px, 6vw, 36px);
+      --size-dot: clamp(5px, 1vw, 7px);
+      
+      /* Borders & Shadows */
+      --border-card: 1px solid;
+      --border-card-hover: 1px solid rgba(74,222,128,0.30);
+      --border-card-rest: 1px solid rgba(22,163,74,0.14);
+      --border-icon-hover: 1.5px solid rgba(255,255,255,0.80);
+      --border-icon-rest: 1.5px solid rgba(22,163,74,0.20);
+      --border-step-hover: 2px solid #16a34a;
+      --border-step-rest: 2px solid rgba(22,163,74,0.25);
+      --border-testimonial-hover: 1px solid rgba(22,163,74,0.25);
+      --border-testimonial-rest: 1px solid rgba(22,163,74,0.10);
+      --border-cta: clamp(1.5px, 0.3vw, 2px) solid;
+      --shadow-card-hover: 0 clamp(20px, 4vw, 24px) clamp(56px, 10vw, 64px) rgba(5,46,22,0.28), 0 clamp(4px, 0.8vw, 16px) rgba(22,163,74,0.20), inset 0 1px 0 rgba(74,222,128,0.15);
+      --shadow-card-rest: 0 clamp(4px, 0.8vw, 20px) rgba(5,46,22,0.08), 0 clamp(1px, 0.2vw, 4px) rgba(5,46,22,0.04);
+      --shadow-testimonial-hover: 0 clamp(16px, 3vw, 20px) clamp(48px, 9vw, 60px) rgba(5,46,22,0.12), 0 clamp(4px, 0.8vw, 16px) rgba(22,163,74,0.08);
+      --shadow-testimonial-rest: 0 clamp(4px, 0.8vw, 24px) rgba(5,46,22,0.10);
+      --shadow-cta: 0 clamp(6px, 1vw, 8px) clamp(28px, 5vw, 32px) rgba(22,163,74,0.40);
+      --shadow-cta-lg: 0 clamp(8px, 1.5vw, 32px) rgba(22,163,74,0.40);
+      
+      /* Colors */
+      --color-bg-section-light: #dff0df;
+      --color-bg-section-dark: linear-gradient(160deg, #0d7a3e 0%, #16a34a 55%, #0d7a3e 100%);
+      --color-bg-card-rest: #ffffff;
+      --color-bg-card-hover: linear-gradient(145deg, #1db954 0%, #16a34a 60%, #0d8a3e 100%);
+      --color-bg-icon-rest: rgba(22,163,74,0.07);
+      --color-bg-icon-hover: #ffffff;
+      --color-bg-step-rest: #ffffff;
+      --color-bg-step-hover: linear-gradient(135deg, #0d7a3e 0%, #16a34a 100%);
+      --color-bg-testimonial: #ffffff;
+      --color-bg-cta-solid: #16a34a;
+      --color-bg-cta-ghost: transparent;
+      --color-text-primary: #0f172a;
+      --color-text-secondary: #374151;
+      --color-text-tertiary: #475569;
+      --color-text-muted: #64748b;
+      --color-text-white: #ffffff;
+      --color-text-green: #16a34a;
+      --color-text-green-dark: #0a6b30;
+      --color-text-green-light: #4ade80;
+      --color-accent-green: #16a34a;
+      --color-accent-green-light: #4ade80;
+      --color-accent-green-dim: rgba(22,163,74,0.10);
+      --color-accent-green-dimmer: rgba(22,163,74,0.07);
+      --color-overlay: rgba(5,46,22,0.38);
+      --color-dot-grid: rgba(5,46,22,0.06);
+      --color-dot-grid-dark: rgba(74,222,128,0.10);
+      --color-watermark: transparent;
+      --color-watermark-dark: rgba(255,255,255,0.055);
+      --color-radial-glow: rgba(22,163,74,0.07);
+      --color-radial-glow-dark: rgba(22,163,74,0.14);
+      --color-shimmer: linear-gradient(105deg, transparent 20%, rgba(255,255,255,0.06) 50%, transparent 80%);
+      --color-glow-icon: radial-gradient(circle, rgba(74,222,128,0.20) 0%, transparent 70%);
+      --color-glow-icon-rest: radial-gradient(circle, rgba(22,163,74,0.10) 0%, transparent 70%);
+      --color-glow-step: radial-gradient(circle, rgba(22,163,74,0.14) 0%, transparent 70%);
+      --color-edge-fade: linear-gradient(to right, rgba(255,255,255,0.18) 0%, transparent 30%, transparent 70%, rgba(5,46,22,0.06) 100%);
+      --color-top-fade: linear-gradient(to bottom, rgba(255,255,255,0.12) 0%, transparent 100%);
+      
+      /* Transitions */
+      --transition-card: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+      --transition-icon: all 0.35s ease;
+      --transition-text: color 0.3s ease;
+      --transition-shimmer: left 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+      --transition-step: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+      --transition-testimonial: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+      --transition-cta: all 0.25s ease;
+      --transition-pip: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+      
+      /* Grid */
+      --grid-features: repeat(3, 1fr);
+      --grid-caregiver: repeat(auto-fit, minmax(280px, 1fr));
+    }
+    
+    /* Mobile-specific adjustments */
+    @media (max-width: 767px) {
+      :root {
+        --grid-features: repeat(2, 1fr);
+        --font-h2: clamp(1.5rem, 6vw, 3rem);
+        --font-h3: clamp(1rem, 3vw, 1.25rem);
+        --padding-card: clamp(20px, 4vw, 28px) clamp(16px, 3vw, 24px) clamp(16px, 3vw, 24px);
+      }
+    }
+    
+    @media (max-width: 480px) {
+      :root {
+        --grid-features: 1fr;
+        --font-h2: clamp(1.25rem, 7vw, 2.25rem);
+        --font-h3: clamp(0.9375rem, 3.5vw, 1.125rem);
+        --font-body: clamp(0.8125rem, 2vw, 0.9375rem);
+        --padding-section: clamp(48px, 12vw, 96px) 0 clamp(56px, 14vw, 112px);
+      }
+    }
+    
+    /* Ensure full viewport width safety */
+    .home-page, .home-page * {
+      max-width: 100vw;
+      overflow-x: hidden;
+      box-sizing: border-box;
+    }
+    
+    /* Improve touch targets on mobile */
+    @media (hover: none) and (pointer: coarse) {
+      .home-cta, .home-nav-btn, .home-pip {
+        min-height: 44px;
+        min-width: 44px;
+        touch-action: manipulation;
+      }
+    }
+    
+    /* Prevent text overflow */
+    .home-text {
+      word-break: break-word;
+      hyphens: auto;
+    }
+  `}</style>
+);
+
 // ─── Bespoke SVG Icons ────────────────────────────────────────────────────────
 // Each is a geometric brand-mark — not stock icons.
 // Designed on a 48×48 viewBox with 2px stroke, no fill unless specified.
 
 const IconShield = () => (
-  <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" width="42" height="42">
+  <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" width="var(--size-icon)" height="var(--size-icon)">
     {/* Outer shield */}
     <path
       d="M24 4L8 11V22C8 31.94 15.08 41.22 24 44C32.92 41.22 40 31.94 40 22V11L24 4Z"
@@ -80,7 +265,7 @@ const IconShield = () => (
 );
 
 const IconEVV = () => (
-  <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" width="42" height="42">
+  <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" width="var(--size-icon)" height="var(--size-icon)">
     {/* Map pin outer */}
     <path
       d="M24 4C17.37 4 12 9.37 12 16C12 24 24 44 24 44C24 44 36 24 36 16C36 9.37 30.63 4 24 4Z"
@@ -99,7 +284,7 @@ const IconEVV = () => (
 );
 
 const IconAnalytics = () => (
-  <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" width="42" height="42">
+  <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" width="var(--size-icon)" height="var(--size-icon)">
     {/* Chart area background */}
     <rect x="6" y="6" width="36" height="36" rx="4" fill="rgba(22,163,74,0.10)" stroke="#16a34a" strokeWidth="1.5"/>
     {/* Bar chart bars */}
@@ -121,7 +306,7 @@ const IconAnalytics = () => (
 );
 
 const IconBilling = () => (
-  <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" width="42" height="42">
+  <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" width="var(--size-icon)" height="var(--size-icon)">
     {/* Document */}
     <path
       d="M10 6H32L42 16V42H10V6Z"
@@ -143,7 +328,7 @@ const IconBilling = () => (
 );
 
 const IconSchedule = () => (
-  <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" width="42" height="42">
+  <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" width="var(--size-icon)" height="var(--size-icon)">
     {/* Calendar */}
     <rect x="6" y="10" width="36" height="32" rx="4" fill="rgba(22,163,74,0.10)" stroke="#16a34a" strokeWidth="1.5"/>
     {/* Header bar */}
@@ -168,7 +353,7 @@ const IconSchedule = () => (
 );
 
 const IconCompliance = () => (
-  <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" width="42" height="42">
+  <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" width="var(--size-icon)" height="var(--size-icon)">
     {/* Outer hexagon — CMS/regulatory badge metaphor */}
     <path
       d="M24 4L40 13V31L24 40L8 31V13L24 4Z"
@@ -262,21 +447,24 @@ const FeatureCard = ({ feature, delay }) => {
         onMouseLeave={() => setHovered(false)}
         style={{
           background: hovered
-            ? 'linear-gradient(145deg, #1db954 0%, #16a34a 60%, #0d8a3e 100%)'
-            : '#ffffff',
-          borderRadius: '20px',
+            ? 'var(--color-bg-card-hover)'
+            : 'var(--color-bg-card-rest)',
+          borderRadius: 'var(--radius-card)',
           padding: '0',
           overflow: 'hidden',
           position: 'relative',
           height: '100%',
           boxShadow: hovered
-            ? '0 24px 64px rgba(5,46,22,0.28), 0 4px 16px rgba(22,163,74,0.20), inset 0 1px 0 rgba(74,222,128,0.15)'
-            : '0 4px 20px rgba(5,46,22,0.08), 0 1px 4px rgba(5,46,22,0.04)',
+            ? 'var(--shadow-card-hover)'
+            : 'var(--shadow-card-rest)',
           transform: hovered ? 'translateY(-8px) scale(1.01)' : 'translateY(0) scale(1)',
-          transition: 'all 0.4s cubic-bezier(0.22, 1, 0.36, 1)',
+          transition: 'var(--transition-card)',
           cursor: 'default',
-          border: '1px solid',
-          borderColor: hovered ? 'rgba(74,222,128,0.30)' : 'rgba(22,163,74,0.14)',
+          border: 'var(--border-card)',
+          borderColor: hovered ? 'var(--border-card-hover)' : 'var(--border-card-rest)',
+          width: '100%',
+          maxWidth: 'var(--width-card-max)',
+          margin: '0 auto',
         }}
       >
         {/* Shimmer sweep on hover */}
@@ -287,9 +475,9 @@ const FeatureCard = ({ feature, delay }) => {
             left: hovered ? '120%' : '-60%',
             width: '50%',
             height: '100%',
-            background: 'linear-gradient(105deg, transparent 20%, rgba(255,255,255,0.06) 50%, transparent 80%)',
+            background: 'var(--color-shimmer)',
             transform: 'skewX(-15deg)',
-            transition: 'left 0.7s cubic-bezier(0.22, 1, 0.36, 1)',
+            transition: 'var(--transition-shimmer)',
             pointerEvents: 'none',
           }}
           aria-hidden="true"
@@ -298,7 +486,7 @@ const FeatureCard = ({ feature, delay }) => {
         {/* Top accent line — green on rest, mint on hover */}
         <div
           style={{
-            height: '3px',
+            height: 'clamp(2px, 0.4vw, 3px)',
             background: hovered
               ? 'linear-gradient(to right, #4ade80, #86efac, #4ade80)'
               : 'linear-gradient(to right, #16a34a, #22c55e)',
@@ -306,32 +494,33 @@ const FeatureCard = ({ feature, delay }) => {
           }}
         />
 
-        <div style={{ padding: '36px 32px 32px', position: 'relative', zIndex: 1 }}>
+        <div style={{ padding: 'var(--padding-card)', position: 'relative', zIndex: 1 }}>
 
           {/* Icon container */}
           <div
             style={{
-              width: '72px',
-              height: '72px',
-              borderRadius: '18px',
-              background: hovered ? '#ffffff' : 'rgba(22,163,74,0.07)',
-              border: hovered ? '1.5px solid rgba(255,255,255,0.80)' : '1.5px solid rgba(22,163,74,0.20)',
+              width: 'var(--width-icon-container)',
+              height: 'var(--height-icon-container)',
+              borderRadius: 'var(--radius-icon)',
+              background: hovered ? 'var(--color-bg-icon-hover)' : 'var(--color-bg-icon-rest)',
+              border: hovered ? 'var(--border-icon-hover)' : 'var(--border-icon-rest)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              marginBottom: '28px',
-              transition: 'all 0.35s ease',
+              marginBottom: 'var(--margin-card-icon)',
+              transition: 'var(--transition-icon)',
               position: 'relative',
+              margin: '0 auto var(--margin-card-icon)',
             }}
           >
             {/* Radial glow behind icon */}
             <div style={{
               position: 'absolute',
-              inset: '-10px',
-              borderRadius: '26px',
+              inset: 'clamp(-8px, -1.5vw, -10px)',
+              borderRadius: 'clamp(20px, 4vw, 26px)',
               background: hovered
-                ? 'radial-gradient(circle, rgba(74,222,128,0.20) 0%, transparent 70%)'
-                : 'radial-gradient(circle, rgba(22,163,74,0.10) 0%, transparent 70%)',
+                ? 'var(--color-glow-icon)'
+                : 'var(--color-glow-icon-rest)',
               pointerEvents: 'none',
               transition: 'background 0.4s ease',
             }} />
@@ -342,15 +531,17 @@ const FeatureCard = ({ feature, delay }) => {
 
           {/* Label */}
           <p
+            className="home-text"
             style={{
               fontFamily: "'Poppins', sans-serif",
-              fontSize: '0.78rem',
+              fontSize: 'var(--font-eyebrow)',
               fontWeight: 600,
               letterSpacing: '0.18em',
               textTransform: 'uppercase',
-              color: hovered ? '#ffffff' : '#16a34a',
-              marginBottom: '8px',
-              transition: 'color 0.3s ease',
+              color: hovered ? 'var(--color-text-white)' : 'var(--color-text-green)',
+              marginBottom: 'var(--margin-card-label)',
+              transition: 'var(--transition-text)',
+              textAlign: 'center',
             }}
           >
             {label}
@@ -358,15 +549,17 @@ const FeatureCard = ({ feature, delay }) => {
 
           {/* Title — RAAH brand green at rest, white on hover */}
           <h3
+            className="home-text"
             style={{
               fontFamily: "'Inter', sans-serif",
-              fontSize: '1.375rem',
+              fontSize: 'var(--font-h3)',
               fontWeight: 800,
               letterSpacing: '-0.02em',
-              color: hovered ? '#ffffff' : '#16a34a',
-              marginBottom: '14px',
+              color: hovered ? 'var(--color-text-white)' : 'var(--color-text-green)',
+              marginBottom: 'var(--margin-card-title)',
               lineHeight: 1.25,
-              transition: 'color 0.3s ease',
+              transition: 'var(--transition-text)',
+              textAlign: 'center',
             }}
           >
             {title}
@@ -374,14 +567,16 @@ const FeatureCard = ({ feature, delay }) => {
 
           {/* Description — near-black at rest, white on hover */}
           <p
+            className="home-text"
             style={{
               fontFamily: "'Poppins', sans-serif",
-              fontSize: '1rem',
+              fontSize: 'var(--font-body)',
               fontWeight: 400,
               lineHeight: 1.80,
-              color: hovered ? '#ffffff' : '#1a1a1a',
-              marginBottom: '28px',
-              transition: 'color 0.3s ease',
+              color: hovered ? 'var(--color-text-white)' : '#1a1a1a',
+              marginBottom: 'var(--margin-card-desc)',
+              transition: 'var(--transition-text)',
+              textAlign: 'center',
             }}
           >
             {desc}
@@ -390,51 +585,54 @@ const FeatureCard = ({ feature, delay }) => {
           {/* Metric */}
           <div
             style={{
-              paddingTop: '20px',
+              paddingTop: 'var(--margin-card-metric)',
               borderTop: `1px solid ${hovered ? 'rgba(255,255,255,0.25)' : 'rgba(22,163,74,0.15)'}`,
               display: 'flex',
               alignItems: 'center',
-              gap: '14px',
-              transition: 'all 0.35s ease',
+              justifyContent: 'center',
+              gap: 'var(--gap-card-metric)',
+              transition: 'var(--transition-card)',
             }}
           >
             {/* Accent bar */}
             <div
               style={{
-                width: '4px',
-                height: '36px',
+                width: 'clamp(3px, 0.6vw, 4px)',
+                height: hovered ? 'var(--height-stat-bar-hover)' : 'var(--height-stat-bar)',
                 borderRadius: '999px',
                 background: hovered
                   ? 'linear-gradient(to bottom, #86efac, #4ade80)'
                   : 'linear-gradient(to bottom, #16a34a, rgba(22,163,74,0.40))',
                 flexShrink: 0,
-                transition: 'background 0.35s ease',
+                transition: 'background 0.35s ease, height 0.35s cubic-bezier(0.22, 1, 0.36, 1)',
               }}
             />
             <div>
               <p
+                className="home-text"
                 style={{
                   fontFamily: "'Inter', sans-serif",
-                  fontSize: '1.625rem',
+                  fontSize: 'var(--font-metric)',
                   fontWeight: 900,
-                  color: hovered ? '#ffffff' : '#0a6b30',
+                  color: hovered ? 'var(--color-text-white)' : 'var(--color-text-green-dark)',
                   lineHeight: 1,
                   letterSpacing: '-0.02em',
-                  transition: 'color 0.3s ease',
+                  transition: 'var(--transition-text)',
                 }}
               >
                 {metric}
               </p>
               <p
+                className="home-text"
                 style={{
                   fontFamily: "'Poppins', sans-serif",
-                  fontSize: '0.78rem',
+                  fontSize: 'var(--font-body-sm)',
                   fontWeight: 500,
-                  color: hovered ? '#ffffff' : '#16a34a',
+                  color: hovered ? 'var(--color-text-white)' : 'var(--color-text-green)',
                   textTransform: 'uppercase',
                   letterSpacing: '0.1em',
-                  marginTop: '3px',
-                  transition: 'color 0.3s ease',
+                  marginTop: 'clamp(2px, 0.5vw, 3px)',
+                  transition: 'var(--transition-text)',
                 }}
               >
                 {metricLabel}
@@ -485,19 +683,22 @@ const CaregiverCard = ({ item, delay }) => {
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
         style={{
-          background: '#ffffff',
-          borderRadius: '20px',
+          background: 'var(--color-bg-card-rest)',
+          borderRadius: 'var(--radius-card)',
           overflow: 'hidden',
           position: 'relative',
           height: '100%',
           boxShadow: hovered
-            ? '0 20px 56px rgba(5,46,22,0.22), 0 4px 16px rgba(22,163,74,0.16)'
-            : '0 4px 20px rgba(5,46,22,0.10)',
+            ? '0 clamp(16px, 3vw, 20px) clamp(48px, 9vw, 56px) rgba(5,46,22,0.22), 0 clamp(4px, 0.8vw, 16px) rgba(22,163,74,0.16)'
+            : 'var(--shadow-card-rest)',
           transform: hovered ? 'translateY(-8px) scale(1.01)' : 'translateY(0) scale(1)',
-          transition: 'all 0.4s cubic-bezier(0.22, 1, 0.36, 1)',
+          transition: 'var(--transition-card)',
           cursor: 'default',
-          border: '1px solid',
-          borderColor: hovered ? 'rgba(22,163,74,0.35)' : 'rgba(22,163,74,0.14)',
+          border: 'var(--border-card)',
+          borderColor: hovered ? 'rgba(22,163,74,0.35)' : 'var(--border-card-rest)',
+          width: '100%',
+          maxWidth: 'var(--width-card-max)',
+          margin: '0 auto',
         }}
       >
         {/* Top accent bar — hairline at rest, full sweep on hover */}
@@ -505,7 +706,7 @@ const CaregiverCard = ({ item, delay }) => {
           style={{
             position: 'absolute',
             top: 0, left: 0, right: 0,
-            height: '3px',
+            height: 'clamp(2px, 0.4vw, 3px)',
             background: 'linear-gradient(to right, #16a34a, #22c55e)',
             transform: hovered ? 'scaleX(1)' : 'scaleX(0.12)',
             transformOrigin: 'left',
@@ -531,24 +732,25 @@ const CaregiverCard = ({ item, delay }) => {
           }}
         />
 
-        <div style={{ padding: '36px 32px 32px', position: 'relative', zIndex: 1 }}>
+        <div style={{ padding: 'var(--padding-card)', position: 'relative', zIndex: 1 }}>
 
           {/* Icon container — bounces on hover */}
           <div
             style={{
-              width: '72px',
-              height: '72px',
-              borderRadius: '18px',
-              background: hovered ? 'rgba(22,163,74,0.08)' : 'rgba(22,163,74,0.06)',
+              width: 'var(--width-icon-container)',
+              height: 'var(--height-icon-container)',
+              borderRadius: 'var(--radius-icon)',
+              background: hovered ? 'rgba(22,163,74,0.08)' : 'var(--color-bg-icon-rest)',
               border: `1.5px solid ${hovered ? 'rgba(22,163,74,0.30)' : 'rgba(22,163,74,0.18)'}`,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              marginBottom: '28px',
-              transition: 'all 0.4s cubic-bezier(0.22, 1, 0.36, 1)',
+              marginBottom: 'var(--margin-card-icon)',
+              transition: 'var(--transition-card)',
               transform: hovered ? 'translateY(-4px) scale(1.06)' : 'translateY(0) scale(1)',
               position: 'relative',
               flexShrink: 0,
+              margin: '0 auto var(--margin-card-icon)',
             }}
           >
             {/* Glow behind icon on hover */}
@@ -556,10 +758,10 @@ const CaregiverCard = ({ item, delay }) => {
               aria-hidden="true"
               style={{
                 position: 'absolute',
-                inset: '-8px',
-                borderRadius: '24px',
+                inset: 'clamp(-6px, -1vw, -8px)',
+                borderRadius: 'clamp(18px, 3.5vw, 24px)',
                 background: hovered
-                  ? 'radial-gradient(circle, rgba(22,163,74,0.14) 0%, transparent 70%)'
+                  ? 'var(--color-glow-step)'
                   : 'radial-gradient(circle, rgba(22,163,74,0.04) 0%, transparent 70%)',
                 pointerEvents: 'none',
                 transition: 'background 0.4s ease',
@@ -570,14 +772,16 @@ const CaregiverCard = ({ item, delay }) => {
 
           {/* Label */}
           <p
+            className="home-text"
             style={{
               fontFamily: "'Poppins', sans-serif",
-              fontSize: '0.78rem',
+              fontSize: 'var(--font-eyebrow)',
               fontWeight: 600,
               letterSpacing: '0.18em',
               textTransform: 'uppercase',
-              color: '#16a34a',
-              marginBottom: '8px',
+              color: 'var(--color-text-green)',
+              marginBottom: 'var(--margin-card-label)',
+              textAlign: 'center',
             }}
           >
             {label}
@@ -585,15 +789,17 @@ const CaregiverCard = ({ item, delay }) => {
 
           {/* Title — RAAH green, darkens slightly on hover */}
           <h3
+            className="home-text"
             style={{
               fontFamily: "'Inter', sans-serif",
-              fontSize: '1.375rem',
+              fontSize: 'var(--font-h3)',
               fontWeight: 800,
               letterSpacing: '-0.02em',
-              color: hovered ? '#0a6b30' : '#16a34a',
-              marginBottom: '14px',
+              color: hovered ? 'var(--color-text-green-dark)' : 'var(--color-text-green)',
+              marginBottom: 'var(--margin-card-title)',
               lineHeight: 1.25,
-              transition: 'color 0.3s ease',
+              transition: 'var(--transition-text)',
+              textAlign: 'center',
             }}
           >
             {title}
@@ -601,14 +807,16 @@ const CaregiverCard = ({ item, delay }) => {
 
           {/* Description — near-black, deepens on hover */}
           <p
+            className="home-text"
             style={{
               fontFamily: "'Poppins', sans-serif",
-              fontSize: '1rem',
+              fontSize: 'var(--font-body)',
               fontWeight: 400,
               lineHeight: 1.80,
               color: hovered ? '#111111' : '#1a1a1a',
-              marginBottom: '28px',
-              transition: 'color 0.3s ease',
+              marginBottom: 'var(--margin-card-desc)',
+              transition: 'var(--transition-text)',
+              textAlign: 'center',
             }}
           >
             {desc}
@@ -617,19 +825,20 @@ const CaregiverCard = ({ item, delay }) => {
           {/* Metric */}
           <div
             style={{
-              paddingTop: '20px',
+              paddingTop: 'var(--margin-card-metric)',
               borderTop: `1px solid ${hovered ? 'rgba(22,163,74,0.22)' : 'rgba(22,163,74,0.12)'}`,
               display: 'flex',
               alignItems: 'center',
-              gap: '14px',
-              transition: 'all 0.35s ease',
+              justifyContent: 'center',
+              gap: 'var(--gap-card-metric)',
+              transition: 'var(--transition-card)',
             }}
           >
             {/* Accent bar — grows on hover */}
             <div
               style={{
-                width: '4px',
-                height: hovered ? '42px' : '36px',
+                width: 'clamp(3px, 0.6vw, 4px)',
+                height: hovered ? 'var(--height-stat-bar-hover)' : 'var(--height-stat-bar)',
                 borderRadius: '999px',
                 background: 'linear-gradient(to bottom, #16a34a, rgba(22,163,74,0.40))',
                 flexShrink: 0,
@@ -638,27 +847,29 @@ const CaregiverCard = ({ item, delay }) => {
             />
             <div>
               <p
+                className="home-text"
                 style={{
                   fontFamily: "'Inter', sans-serif",
-                  fontSize: '1.625rem',
+                  fontSize: 'var(--font-metric)',
                   fontWeight: 900,
-                  color: hovered ? '#052e16' : '#0a6b30',
+                  color: hovered ? 'var(--color-text-primary)' : 'var(--color-text-green-dark)',
                   lineHeight: 1,
                   letterSpacing: '-0.02em',
-                  transition: 'color 0.3s ease',
+                  transition: 'var(--transition-text)',
                 }}
               >
                 {metric}
               </p>
               <p
+                className="home-text"
                 style={{
                   fontFamily: "'Poppins', sans-serif",
-                  fontSize: '0.78rem',
+                  fontSize: 'var(--font-body-sm)',
                   fontWeight: 500,
-                  color: '#16a34a',
+                  color: 'var(--color-text-green)',
                   textTransform: 'uppercase',
                   letterSpacing: '0.1em',
-                  marginTop: '3px',
+                  marginTop: 'clamp(2px, 0.5vw, 3px)',
                 }}
               >
                 {metricLabel}
@@ -680,7 +891,15 @@ const WorkflowStep = ({ step, isLast }) => {
 
   return (
     <div
-      style={{ display: 'flex', gap: '20px', position: 'relative' }}
+      style={{ 
+        display: 'flex', 
+        gap: 'var(--gap-step)', 
+        position: 'relative',
+        flexDirection: 'column',
+        alignItems: 'center',
+        textAlign: 'center',
+      }}
+      className="sm:flex-row sm:text-left sm:items-start"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
@@ -696,33 +915,34 @@ const WorkflowStep = ({ step, isLast }) => {
         {/* Number badge */}
         <div
           style={{
-            width: '52px',
-            height: '52px',
-            borderRadius: '14px',
+            width: 'var(--width-step-number)',
+            height: 'var(--width-step-number)',
+            borderRadius: 'var(--radius-step-number)',
             background: hovered
-              ? 'linear-gradient(135deg, #0d7a3e 0%, #16a34a 100%)'
-              : '#ffffff',
-            border: `2px solid ${hovered ? '#16a34a' : 'rgba(22,163,74,0.25)'}`,
+              ? 'var(--color-bg-step-hover)'
+              : 'var(--color-bg-step-rest)',
+            border: `2px solid ${hovered ? 'var(--color-text-green)' : 'rgba(22,163,74,0.25)'}`,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             flexShrink: 0,
             boxShadow: hovered
-              ? '0 8px 24px rgba(5,46,22,0.20)'
-              : '0 2px 8px rgba(5,46,22,0.06)',
-            transition: 'all 0.3s cubic-bezier(0.22, 1, 0.36, 1)',
+              ? '0 clamp(6px, 1vw, 8px) clamp(20px, 4vw, 24px) rgba(5,46,22,0.20)'
+              : '0 clamp(2px, 0.4vw, 8px) rgba(5,46,22,0.06)',
+            transition: 'var(--transition-step)',
             position: 'relative',
             zIndex: 1,
           }}
         >
           <span
+            className="home-text"
             style={{
               fontFamily: "'Inter', sans-serif",
-              fontSize: '0.85rem',
+              fontSize: 'var(--font-step-number)',
               fontWeight: 900,
               letterSpacing: '0.06em',
-              color: hovered ? '#ffffff' : '#16a34a',
-              transition: 'color 0.3s ease',
+              color: hovered ? 'var(--color-text-white)' : 'var(--color-text-green)',
+              transition: 'var(--transition-text)',
             }}
           >
             {step.number}
@@ -733,35 +953,37 @@ const WorkflowStep = ({ step, isLast }) => {
         {!isLast && (
           <div
             style={{
-              width: '2px',
+              width: 'clamp(1.5px, 0.3vw, 2px)',
               flexGrow: 1,
-              minHeight: '40px',
+              minHeight: 'clamp(32px, 6vw, 40px)',
               background: 'linear-gradient(to bottom, rgba(22,163,74,0.40), rgba(22,163,74,0.08))',
               borderRadius: '999px',
-              margin: '6px 0',
+              margin: 'clamp(4px, 0.8vw, 6px) 0',
             }}
           />
         )}
       </div>
 
       {/* Right: text content */}
-      <div style={{ paddingTop: '10px', paddingBottom: isLast ? '0' : '36px' }}>
+      <div style={{ paddingTop: 'clamp(8px, 1.5vw, 10px)', paddingBottom: isLast ? '0' : 'var(--padding-step)' }}>
 
         {/* Icon + title row */}
         <div
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '10px',
-            marginBottom: '8px',
+            justifyContent: 'center',
+            gap: 'var(--gap-step-icon)',
+            marginBottom: 'clamp(6px, 1vw, 8px)',
           }}
+          className="sm:justify-start"
         >
           {/* Small inline icon */}
           <div
             style={{
-              width: '32px',
-              height: '32px',
-              borderRadius: '8px',
+              width: 'var(--width-step-icon)',
+              height: 'var(--width-step-icon)',
+              borderRadius: 'clamp(6px, 1vw, 8px)',
               background: hovered ? 'rgba(22,163,74,0.10)' : 'rgba(22,163,74,0.06)',
               display: 'flex',
               alignItems: 'center',
@@ -774,14 +996,15 @@ const WorkflowStep = ({ step, isLast }) => {
           </div>
 
           <h4
+            className="home-text"
             style={{
               fontFamily: "'Inter', sans-serif",
               fontWeight: 800,
-              fontSize: '1.375rem',
+              fontSize: 'var(--font-h4)',
               letterSpacing: '-0.02em',
-              color: hovered ? '#0a6b30' : '#0f172a',
+              color: hovered ? 'var(--color-text-green-dark)' : 'var(--color-text-primary)',
               lineHeight: 1.2,
-              transition: 'color 0.3s ease',
+              transition: 'var(--transition-text)',
             }}
           >
             {step.title}
@@ -789,12 +1012,13 @@ const WorkflowStep = ({ step, isLast }) => {
         </div>
 
         <p
+          className="home-text"
           style={{
             fontFamily: "'Poppins', sans-serif",
-            fontSize: '1rem',
+            fontSize: 'var(--font-body)',
             fontWeight: 400,
             lineHeight: 1.75,
-            color: '#475569',
+            color: 'var(--color-text-tertiary)',
           }}
         >
           {step.text}
@@ -887,23 +1111,26 @@ const TestimonialCard = ({ t, visible }) => {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
-        background: '#ffffff',
-        borderRadius: '20px',
-        padding: '40px 36px 32px',
+        background: 'var(--color-bg-testimonial)',
+        borderRadius: 'var(--radius-testimonial)',
+        padding: 'var(--padding-testimonial)',
         position: 'relative',
         overflow: 'hidden',
         height: '100%',
         display: 'flex',
         flexDirection: 'column',
-        border: '1px solid',
-        borderColor: hovered ? 'rgba(22,163,74,0.25)' : 'rgba(22,163,74,0.10)',
+        border: 'var(--border-card)',
+        borderColor: hovered ? 'var(--border-testimonial-hover)' : 'var(--border-testimonial-rest)',
         boxShadow: hovered
-          ? '0 20px 60px rgba(5,46,22,0.12), 0 4px 16px rgba(22,163,74,0.08)'
-          : '0 4px 24px rgba(5,46,22,0.10)',
+          ? 'var(--shadow-testimonial-hover)'
+          : 'var(--shadow-testimonial-rest)',
         transform: hovered ? 'translateY(-4px)' : 'translateY(0)',
-        transition: 'all 0.35s cubic-bezier(0.22, 1, 0.36, 1)',
+        transition: 'var(--transition-testimonial)',
         opacity: visible ? 1 : 0,
         cursor: 'default',
+        width: '100%',
+        maxWidth: 'var(--width-testimonial-max)',
+        margin: '0 auto',
       }}
     >
       {/* Top green accent bar — slides in on hover */}
@@ -911,12 +1138,12 @@ const TestimonialCard = ({ t, visible }) => {
         style={{
           position: 'absolute',
           top: 0, left: 0, right: 0,
-          height: '3px',
+          height: 'clamp(2px, 0.4vw, 3px)',
           background: 'linear-gradient(to right, #16a34a, #4ade80)',
           transform: hovered ? 'scaleX(1)' : 'scaleX(0)',
           transformOrigin: 'left',
           transition: 'transform 0.4s cubic-bezier(0.22, 1, 0.36, 1)',
-          borderRadius: '20px 20px 0 0',
+          borderRadius: 'var(--radius-testimonial) var(--radius-testimonial) 0 0',
         }}
       />
 
@@ -925,8 +1152,8 @@ const TestimonialCard = ({ t, visible }) => {
         aria-hidden="true"
         style={{
           position: 'absolute',
-          top: '24px',
-          right: '28px',
+          top: 'clamp(20px, 4vw, 24px)',
+          right: 'clamp(24px, 4vw, 28px)',
           opacity: hovered ? 0.18 : 0.08,
           transition: 'opacity 0.35s ease',
         }}
@@ -939,7 +1166,7 @@ const TestimonialCard = ({ t, visible }) => {
       </div>
 
       {/* Stars */}
-      <div style={{ display: 'flex', gap: '3px', marginBottom: '20px' }}>
+      <div style={{ display: 'flex', gap: 'clamp(2px, 0.5vw, 3px)', marginBottom: 'clamp(16px, 3vw, 20px)', justifyContent: 'center' }}>
         {[1,2,3,4,5].map(s => (
           <svg key={s} width="16" height="16" viewBox="0 0 16 16" fill="#f59e0b">
             <path d="M8 1l1.854 3.756L14 5.528l-3 2.923.708 4.129L8 10.5l-3.708 2.08L5 8.451 2 5.528l4.146-.772z"/>
@@ -949,15 +1176,17 @@ const TestimonialCard = ({ t, visible }) => {
 
       {/* Quote text */}
       <p
+        className="home-text"
         style={{
           fontFamily: "'Poppins', sans-serif",
-          fontSize: '0.9875rem',
+          fontSize: 'var(--font-testimonial)',
           fontWeight: 400,
           lineHeight: 1.80,
-          color: '#374151',
-          marginBottom: '28px',
+          color: 'var(--color-text-secondary)',
+          marginBottom: 'var(--margin-testimonial-quote)',
           flexGrow: 1,
           fontStyle: 'italic',
+          textAlign: 'center',
         }}
       >
         "{t.quote}"
@@ -966,37 +1195,38 @@ const TestimonialCard = ({ t, visible }) => {
       {/* Divider */}
       <div
         style={{
-          height: '1px',
+          height: 'clamp(1px, 0.2vw, 1px)',
           background: hovered ? 'rgba(22,163,74,0.18)' : 'rgba(0,0,0,0.06)',
-          marginBottom: '24px',
+          marginBottom: 'var(--margin-testimonial-divider)',
           transition: 'background 0.35s ease',
         }}
       />
 
       {/* Bottom row — avatar + name/role + metric */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 'var(--gap-testimonial-bottom)', flexWrap: 'wrap' }}>
 
         {/* Avatar + identity */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'clamp(12px, 2vw, 14px)' }}>
           <div
             style={{
-              width: '48px',
-              height: '48px',
+              width: 'var(--width-testimonial-avatar)',
+              height: 'var(--width-testimonial-avatar)',
               borderRadius: '50%',
               background: `linear-gradient(135deg, ${t.color} 0%, #16a34a 100%)`,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               flexShrink: 0,
-              boxShadow: '0 4px 12px rgba(5,46,22,0.20)',
+              boxShadow: '0 clamp(4px, 0.8vw, 12px) rgba(5,46,22,0.20)',
             }}
           >
             <span
+              className="home-text"
               style={{
                 fontFamily: "'Inter', sans-serif",
                 fontWeight: 800,
-                fontSize: '0.875rem',
-                color: '#ffffff',
+                fontSize: 'clamp(0.75rem, 1.5vw, 0.875rem)',
+                color: 'var(--color-text-white)',
                 letterSpacing: '0.02em',
               }}
             >
@@ -1005,24 +1235,28 @@ const TestimonialCard = ({ t, visible }) => {
           </div>
           <div>
             <p
+              className="home-text"
               style={{
                 fontFamily: "'Inter', sans-serif",
                 fontWeight: 700,
-                fontSize: '1rem',
-                color: '#0f172a',
+                fontSize: 'clamp(0.875rem, 1.6vw, 1rem)',
+                color: 'var(--color-text-primary)',
                 lineHeight: 1.2,
-                marginBottom: '2px',
+                marginBottom: 'clamp(1px, 0.3vw, 2px)',
+                textAlign: 'center',
               }}
             >
               {t.name}
             </p>
             <p
+              className="home-text"
               style={{
                 fontFamily: "'Poppins', sans-serif",
-                fontSize: '0.8rem',
+                fontSize: 'var(--font-body-sm)',
                 fontWeight: 400,
-                color: '#16a34a',
+                color: 'var(--color-text-green)',
                 lineHeight: 1.3,
+                textAlign: 'center',
               }}
             >
               {t.role}, {t.company}
@@ -1033,18 +1267,19 @@ const TestimonialCard = ({ t, visible }) => {
         {/* Metric callout */}
         <div
           style={{
-            textAlign: 'right',
+            textAlign: 'center',
             flexShrink: 0,
             opacity: hovered ? 1 : 0.70,
             transition: 'opacity 0.35s ease',
           }}
         >
           <p
+            className="home-text"
             style={{
               fontFamily: "'Inter', sans-serif",
-              fontSize: '1.25rem',
+              fontSize: 'var(--font-metric)',
               fontWeight: 900,
-              color: '#0a6b30',
+              color: 'var(--color-text-green-dark)',
               lineHeight: 1,
               letterSpacing: '-0.02em',
             }}
@@ -1052,15 +1287,16 @@ const TestimonialCard = ({ t, visible }) => {
             {t.metric}
           </p>
           <p
+            className="home-text"
             style={{
               fontFamily: "'Poppins', sans-serif",
-              fontSize: '0.65rem',
+              fontSize: 'clamp(0.55rem, 1.2vw, 0.65rem)',
               fontWeight: 500,
-              color: '#64748b',
+              color: 'var(--color-text-muted)',
               textTransform: 'uppercase',
               letterSpacing: '0.08em',
-              marginTop: '2px',
-              maxWidth: '90px',
+              marginTop: 'clamp(1px, 0.3vw, 2px)',
+              maxWidth: 'var(--width-stat-metric)',
             }}
           >
             {t.metricLabel}
@@ -1112,8 +1348,8 @@ const TestimonialsSection = () => {
   return (
     <section
       style={{
-        background: '#dff0df',
-        padding: '120px 0 140px',
+        background: 'var(--color-bg-section-light)',
+        padding: 'var(--padding-section)',
         position: 'relative',
         overflow: 'hidden',
       }}
@@ -1131,7 +1367,7 @@ const TestimonialsSection = () => {
         style={{
           position: 'absolute',
           inset: 0,
-          backgroundImage: 'radial-gradient(circle, rgba(5,46,22,0.06) 1px, transparent 1px)',
+          backgroundImage: 'radial-gradient(circle, var(--color-dot-grid) 1px, transparent 1px)',
           backgroundSize: '32px 32px',
           pointerEvents: 'none',
         }}
@@ -1147,8 +1383,8 @@ const TestimonialsSection = () => {
           transform: 'translate(-50%, -50%)',
           fontFamily: "'Inter', sans-serif",
           fontWeight: 900,
-          fontSize: 'clamp(80px, 14vw, 180px)',
-          color: 'transparent',
+          fontSize: 'clamp(60px, 12vw, 180px)',
+          color: 'var(--color-watermark)',
           letterSpacing: '-0.05em',
           whiteSpace: 'nowrap',
           userSelect: 'none',
@@ -1160,60 +1396,63 @@ const TestimonialsSection = () => {
       </div>
 
       {/* Corner glows */}
-      <div aria-hidden="true" style={{ position: 'absolute', top: '-60px', right: '-60px', width: '420px', height: '420px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(22,163,74,0.07) 0%, transparent 70%)', pointerEvents: 'none' }} />
-      <div aria-hidden="true" style={{ position: 'absolute', bottom: '-60px', left: '-60px', width: '360px', height: '360px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(22,163,74,0.06) 0%, transparent 70%)', pointerEvents: 'none' }} />
+      <div aria-hidden="true" style={{ position: 'absolute', top: 'clamp(-48px, -8vw, -60px)', right: 'clamp(-48px, -8vw, -60px)', width: 'clamp(320px, 60vw, 420px)', height: 'clamp(320px, 60vw, 420px)', borderRadius: '50%', background: 'radial-gradient(circle, rgba(22,163,74,0.07) 0%, transparent 70%)', pointerEvents: 'none' }} />
+      <div aria-hidden="true" style={{ position: 'absolute', bottom: 'clamp(-48px, -8vw, -60px)', left: 'clamp(-48px, -8vw, -60px)', width: 'clamp(280px, 50vw, 360px)', height: 'clamp(280px, 50vw, 360px)', borderRadius: '50%', background: 'radial-gradient(circle, rgba(22,163,74,0.06) 0%, transparent 70%)', pointerEvents: 'none' }} />
 
       <div className="container-custom" style={{ position: 'relative', zIndex: 1 }}>
 
         {/* Section header */}
         <Reveal delay={0}>
-          <div style={{ textAlign: 'center', marginBottom: '72px' }}>
+          <div style={{ textAlign: 'center', marginBottom: 'clamp(56px, 10vw, 72px)' }}>
 
             {/* Eyebrow */}
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
-              <div style={{ width: '32px', height: '1.5px', background: '#16a34a', borderRadius: '999px' }} />
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 'clamp(8px, 1.5vw, 10px)', marginBottom: 'var(--margin-eyebrow)' }}>
+              <div style={{ width: 'clamp(24px, 4vw, 32px)', height: 'clamp(1px, 0.2vw, 1.5px)', background: 'var(--color-text-green)', borderRadius: '999px' }} />
               <span
+                className="home-text"
                 style={{
                   fontFamily: "'Poppins', sans-serif",
-                  fontSize: '0.75rem',
+                  fontSize: 'var(--font-eyebrow)',
                   fontWeight: 600,
                   letterSpacing: '0.2em',
                   textTransform: 'uppercase',
-                  color: '#16a34a',
+                  color: 'var(--color-text-green)',
                 }}
               >
                 Client Stories
               </span>
-              <div style={{ width: '32px', height: '1.5px', background: '#16a34a', borderRadius: '999px' }} />
+              <div style={{ width: 'clamp(24px, 4vw, 32px)', height: 'clamp(1px, 0.2vw, 1.5px)', background: 'var(--color-text-green)', borderRadius: '999px' }} />
             </div>
 
             {/* Heading */}
             <h2
+              className="home-text"
               style={{
                 fontFamily: "'Inter', sans-serif",
                 fontWeight: 900,
-                fontSize: 'clamp(2.25rem, 5vw, 3.75rem)',
+                fontSize: 'var(--font-h2)',
                 letterSpacing: '-0.03em',
                 lineHeight: 1.08,
-                color: '#0f172a',
-                marginBottom: '20px',
-                maxWidth: '780px',
-                margin: '0 auto 20px',
+                color: 'var(--color-text-primary)',
+                marginBottom: 'var(--margin-section-title)',
+                maxWidth: 'clamp(280px, 90vw, 780px)',
+                margin: '0 auto var(--margin-section-title)',
               }}
             >
               Trusted by{' '}
-              <span style={{ color: '#16a34a' }}>Leading Agencies</span>
+              <span style={{ color: 'var(--color-text-green)' }}>Leading Agencies</span>
             </h2>
 
             {/* Sub */}
             <p
+              className="home-text"
               style={{
                 fontFamily: "'Poppins', sans-serif",
-                fontSize: 'clamp(1.1rem, 1.6vw, 1.3rem)',
+                fontSize: 'var(--font-body-lg)',
                 fontWeight: 500,
                 lineHeight: 1.75,
-                color: '#374151',
-                maxWidth: '560px',
+                color: 'var(--color-text-secondary)',
+                maxWidth: 'clamp(280px, 90vw, 560px)',
                 margin: '0 auto',
               }}
             >
@@ -1232,7 +1471,7 @@ const TestimonialsSection = () => {
               style={{
                 display: 'grid',
                 gridTemplateColumns: 'repeat(2, 1fr)',
-                gap: '24px',
+                gap: 'clamp(20px, 4vw, 24px)',
                 alignItems: 'stretch',
               }}
               className="grid-cols-1 md:grid-cols-2"
@@ -1245,6 +1484,7 @@ const TestimonialsSection = () => {
                     ? `translateX(${direction > 0 ? '-40px' : '40px'})`
                     : 'translateX(0)',
                   transition: 'opacity 0.45s ease, transform 0.45s cubic-bezier(0.22,1,0.36,1)',
+                  width: '100%',
                 }}
               >
                 <TestimonialCard t={TESTIMONIALS[visibleA]} visible={true} />
@@ -1259,6 +1499,7 @@ const TestimonialsSection = () => {
                     ? `translateX(${direction > 0 ? '40px' : '-40px'})`
                     : 'translateX(0)',
                   transition: 'opacity 0.45s ease 0.06s, transform 0.45s cubic-bezier(0.22,1,0.36,1) 0.06s',
+                  width: '100%',
                 }}
               >
                 <TestimonialCard t={TESTIMONIALS[visibleB]} visible={true} />
@@ -1271,39 +1512,42 @@ const TestimonialsSection = () => {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                gap: '16px',
-                marginTop: '48px',
+                gap: 'clamp(12px, 2vw, 16px)',
+                marginTop: 'clamp(40px, 7vw, 48px)',
+                flexWrap: 'wrap',
               }}
             >
               {/* Prev */}
               <button
                 onClick={prev}
                 aria-label="Previous testimonials"
+                className="home-nav-btn"
                 style={{
-                  width: '44px',
-                  height: '44px',
+                  width: 'var(--size-nav-btn)',
+                  height: 'var(--size-nav-btn)',
                   borderRadius: '50%',
-                  border: '1.5px solid rgba(22,163,74,0.30)',
+                  border: 'clamp(1px, 0.2vw, 1.5px) solid rgba(22,163,74,0.30)',
                   background: 'transparent',
-                  color: '#16a34a',
+                  color: 'var(--color-text-green)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   cursor: 'pointer',
-                  transition: 'all 0.2s ease',
+                  transition: 'var(--transition-step)',
                   flexShrink: 0,
+                  touchAction: 'manipulation',
                 }}
                 onMouseEnter={e => {
                   e.currentTarget.style.background   = '#052e16';
                   e.currentTarget.style.borderColor  = '#052e16';
-                  e.currentTarget.style.color        = '#ffffff';
+                  e.currentTarget.style.color        = 'var(--color-text-white)';
                   e.currentTarget.style.transform    = 'scale(1.1)';
-                  e.currentTarget.style.boxShadow    = '0 4px 16px rgba(5,46,22,0.20)';
+                  e.currentTarget.style.boxShadow    = '0 clamp(4px, 0.8vw, 16px) rgba(5,46,22,0.20)';
                 }}
                 onMouseLeave={e => {
                   e.currentTarget.style.background   = 'transparent';
                   e.currentTarget.style.borderColor  = 'rgba(22,163,74,0.30)';
-                  e.currentTarget.style.color        = '#16a34a';
+                  e.currentTarget.style.color        = 'var(--color-text-green)';
                   e.currentTarget.style.transform    = 'scale(1)';
                   e.currentTarget.style.boxShadow    = 'none';
                 }}
@@ -1314,15 +1558,16 @@ const TestimonialsSection = () => {
               </button>
 
               {/* Progress dots — active pip has a fill sweep animation */}
-              <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+              <div style={{ display: 'flex', gap: 'clamp(6px, 1vw, 8px)', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
                 {TESTIMONIALS.map((_, i) => (
                   <button
                     key={i}
                     onClick={() => goTo(i, i > current ? 1 : -1)}
                     aria-label={`Go to testimonial ${i + 1}`}
+                    className="home-pip"
                     style={{
-                      width: i === current ? '36px' : '8px',
-                      height: '8px',
+                      width: i === current ? 'var(--size-pip-active)' : 'var(--size-pip)',
+                      height: 'var(--size-pip)',
                       borderRadius: '999px',
                       background: i === current
                         ? 'rgba(22,163,74,0.20)'
@@ -1334,7 +1579,8 @@ const TestimonialsSection = () => {
                       padding: 0,
                       position: 'relative',
                       overflow: 'hidden',
-                      transition: 'all 0.35s cubic-bezier(0.22, 1, 0.36, 1)',
+                      transition: 'var(--transition-pip)',
+                      touchAction: 'manipulation',
                     }}
                   >
                     {i === current && (
@@ -1344,7 +1590,7 @@ const TestimonialsSection = () => {
                           position: 'absolute',
                           top: 0, left: 0, bottom: 0,
                           borderRadius: '999px',
-                          background: '#16a34a',
+                          background: 'var(--color-text-green)',
                           animation: 'testimonialprogress 5s linear forwards',
                         }}
                       />
@@ -1357,31 +1603,33 @@ const TestimonialsSection = () => {
               <button
                 onClick={next}
                 aria-label="Next testimonials"
+                className="home-nav-btn"
                 style={{
-                  width: '44px',
-                  height: '44px',
+                  width: 'var(--size-nav-btn)',
+                  height: 'var(--size-nav-btn)',
                   borderRadius: '50%',
-                  border: '1.5px solid rgba(22,163,74,0.30)',
+                  border: 'clamp(1px, 0.2vw, 1.5px) solid rgba(22,163,74,0.30)',
                   background: 'transparent',
-                  color: '#16a34a',
+                  color: 'var(--color-text-green)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   cursor: 'pointer',
-                  transition: 'all 0.2s ease',
+                  transition: 'var(--transition-step)',
                   flexShrink: 0,
+                  touchAction: 'manipulation',
                 }}
                 onMouseEnter={e => {
-                  e.currentTarget.style.background   = '#16a34a';
-                  e.currentTarget.style.borderColor  = '#16a34a';
-                  e.currentTarget.style.color        = '#ffffff';
+                  e.currentTarget.style.background   = 'var(--color-text-green)';
+                  e.currentTarget.style.borderColor  = 'var(--color-text-green)';
+                  e.currentTarget.style.color        = 'var(--color-text-white)';
                   e.currentTarget.style.transform    = 'scale(1.1)';
-                  e.currentTarget.style.boxShadow    = '0 4px 16px rgba(22,163,74,0.28)';
+                  e.currentTarget.style.boxShadow    = '0 clamp(4px, 0.8vw, 16px) rgba(22,163,74,0.28)';
                 }}
                 onMouseLeave={e => {
                   e.currentTarget.style.background   = 'transparent';
                   e.currentTarget.style.borderColor  = 'rgba(22,163,74,0.30)';
-                  e.currentTarget.style.color        = '#16a34a';
+                  e.currentTarget.style.color        = 'var(--color-text-green)';
                   e.currentTarget.style.transform    = 'scale(1)';
                   e.currentTarget.style.boxShadow    = 'none';
                 }}
@@ -1395,13 +1643,14 @@ const TestimonialsSection = () => {
 
             {/* Testimonial counter */}
             <p
+              className="home-text"
               style={{
                 fontFamily: "'Poppins', sans-serif",
-                fontSize: '0.78rem',
+                fontSize: 'var(--font-body-sm)',
                 fontWeight: 500,
-                color: '#94a3b8',
+                color: 'var(--color-text-muted)',
                 textAlign: 'center',
-                marginTop: '16px',
+                marginTop: 'clamp(12px, 2vw, 16px)',
                 letterSpacing: '0.06em',
               }}
             >
@@ -1422,6 +1671,7 @@ const HomePage = () => {
 
   return (
     <Layout hideNav>
+      <HomeStyles />
 
       {/* Hero */}
       <HeroCarousel navbar={<Navbar heroMode />} />
@@ -1434,8 +1684,8 @@ const HomePage = () => {
       <section
         ref={sectionRef}
         style={{
-          background: '#dff0df',
-          padding: '120px 0 140px',
+          background: 'var(--color-bg-section-light)',
+          padding: 'var(--padding-section)',
           position: 'relative',
           overflow: 'hidden',
         }}
@@ -1446,7 +1696,7 @@ const HomePage = () => {
           style={{
             position: 'absolute',
             inset: 0,
-            backgroundImage: 'radial-gradient(circle, rgba(5,46,22,0.06) 1px, transparent 1px)',
+            backgroundImage: 'radial-gradient(circle, var(--color-dot-grid) 1px, transparent 1px)',
             backgroundSize: '32px 32px',
             pointerEvents: 'none',
           }}
@@ -1462,8 +1712,8 @@ const HomePage = () => {
             transform: 'translate(-50%, -50%)',
             fontFamily: "'Inter', sans-serif",
             fontWeight: 900,
-            fontSize: 'clamp(80px, 14vw, 180px)',
-            color: 'transparent',
+            fontSize: 'clamp(60px, 12vw, 180px)',
+            color: 'var(--color-watermark)',
             letterSpacing: '-0.05em',
             whiteSpace: 'nowrap',
             userSelect: 'none',
@@ -1479,12 +1729,12 @@ const HomePage = () => {
           aria-hidden="true"
           style={{
             position: 'absolute',
-            top: '-60px',
-            right: '-60px',
-            width: '420px',
-            height: '420px',
+            top: 'clamp(-48px, -8vw, -60px)',
+            right: 'clamp(-48px, -8vw, -60px)',
+            width: 'clamp(320px, 60vw, 420px)',
+            height: 'clamp(320px, 60vw, 420px)',
             borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(22,163,74,0.07) 0%, transparent 70%)',
+            background: 'radial-gradient(circle, var(--color-radial-glow) 0%, transparent 70%)',
             pointerEvents: 'none',
           }}
         />
@@ -1493,12 +1743,12 @@ const HomePage = () => {
           aria-hidden="true"
           style={{
             position: 'absolute',
-            bottom: '-60px',
-            left: '-60px',
-            width: '360px',
-            height: '360px',
+            bottom: 'clamp(-48px, -8vw, -60px)',
+            left: 'clamp(-48px, -8vw, -60px)',
+            width: 'clamp(280px, 50vw, 360px)',
+            height: 'clamp(280px, 50vw, 360px)',
             borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(22,163,74,0.06) 0%, transparent 70%)',
+            background: 'radial-gradient(circle, var(--color-radial-glow) 0%, transparent 70%)',
             pointerEvents: 'none',
           }}
         />
@@ -1507,62 +1757,65 @@ const HomePage = () => {
 
           {/* Section header */}
           <Reveal delay={0}>
-            <div style={{ textAlign: 'center', marginBottom: '80px' }}>
+            <div style={{ textAlign: 'center', marginBottom: 'clamp(64px, 11vw, 80px)' }}>
 
               {/* Eyebrow */}
               <div
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
-                  gap: '10px',
-                  marginBottom: '20px',
+                  gap: 'clamp(8px, 1.5vw, 10px)',
+                  marginBottom: 'var(--margin-eyebrow)',
                 }}
               >
                 {/* Decorative line */}
-                <div style={{ width: '32px', height: '1.5px', background: '#16a34a', borderRadius: '999px' }} />
+                <div style={{ width: 'clamp(24px, 4vw, 32px)', height: 'clamp(1px, 0.2vw, 1.5px)', background: 'var(--color-text-green)', borderRadius: '999px' }} />
                 <span
+                  className="home-text"
                   style={{
                     fontFamily: "'Poppins', sans-serif",
-                    fontSize: '0.75rem',
+                    fontSize: 'var(--font-eyebrow)',
                     fontWeight: 600,
                     letterSpacing: '0.2em',
                     textTransform: 'uppercase',
-                    color: '#16a34a',
+                    color: 'var(--color-text-green)',
                   }}
                 >
                   Why Choose Us
                 </span>
-                <div style={{ width: '32px', height: '1.5px', background: '#16a34a', borderRadius: '999px' }} />
+                <div style={{ width: 'clamp(24px, 4vw, 32px)', height: 'clamp(1px, 0.2vw, 1.5px)', background: 'var(--color-text-green)', borderRadius: '999px' }} />
               </div>
 
               {/* Main heading */}
               <h2
+                className="home-text"
                 style={{
                   fontFamily: "'Inter', sans-serif",
                   fontWeight: 900,
-                  fontSize: 'clamp(2.25rem, 5vw, 3.75rem)',
+                  fontSize: 'var(--font-h2)',
                   letterSpacing: '-0.03em',
                   lineHeight: 1.08,
-                  color: '#0f172a',
-                  marginBottom: '20px',
-                  maxWidth: '780px',
-                  margin: '0 auto 20px',
+                  color: 'var(--color-text-primary)',
+                  marginBottom: 'var(--margin-section-title)',
+                  maxWidth: 'clamp(280px, 90vw, 780px)',
+                  margin: '0 auto var(--margin-section-title)',
                 }}
               >
                 The Platform Built{' '}
-                <span style={{ color: '#16a34a' }}>Exclusively</span>{' '}
+                <span style={{ color: 'var(--color-text-green)' }}>Exclusively</span>{' '}
                 for Home Health
               </h2>
 
               {/* Sub heading */}
               <p
+                className="home-text"
                 style={{
                   fontFamily: "'Poppins', sans-serif",
-                  fontSize: 'clamp(1.25rem, 2vw, 1.55rem)',
+                  fontSize: 'var(--font-body-lg)',
                   fontWeight: 500,
                   lineHeight: 1.75,
-                  color: '#374151',
-                  maxWidth: '600px',
+                  color: 'var(--color-text-secondary)',
+                  maxWidth: 'clamp(280px, 90vw, 600px)',
                   margin: '0 auto',
                 }}
               >
@@ -1574,18 +1827,14 @@ const HomePage = () => {
 
           {/* Cards grid */}
           <style>{`
-            @media (max-width: 1023px) { .features-grid { grid-template-columns: repeat(2, 1fr) !important; } }
-            @media (max-width: 639px)  { .features-grid { grid-template-columns: 1fr !important; } }
+            .features-grid {
+              display: grid;
+              gap: clamp(20px, 4vw, 24px);
+              justify-items: center;
+              grid-template-columns: var(--grid-features);
+            }
           `}</style>
-          <div
-            className="features-grid"
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(3, 1fr)',
-              gap: '24px',
-              alignItems: 'stretch',
-            }}
-          >
+          <div className="features-grid">
             {FEATURES.map((feature, i) => (
               <FeatureCard
                 key={feature.title}
@@ -1601,42 +1850,45 @@ const HomePage = () => {
               style={{
                 display: 'flex',
                 justifyContent: 'center',
-                marginTop: '72px',
+                marginTop: 'var(--margin-cta)',
               }}
             >
               <Link
                 to="/demo"
+                className="home-cta"
                 style={{
                   fontFamily: "'Inter', sans-serif",
                   fontWeight: 700,
-                  fontSize: '0.875rem',
+                  fontSize: 'var(--font-cta)',
                   letterSpacing: '0.07em',
                   textTransform: 'uppercase',
-                  padding: '16px 40px',
-                  borderRadius: '999px',
-                  background: '#16a34a',
-                  color: '#ffffff',
-                  border: '2px solid #16a34a',
-                  boxShadow: '0 6px 32px rgba(22,163,74,0.35)',
+                  padding: 'var(--padding-hero-cta)',
+                  borderRadius: 'var(--radius-cta)',
+                  background: 'var(--color-bg-cta-solid)',
+                  color: 'var(--color-text-white)',
+                  border: 'var(--border-cta) var(--color-bg-cta-solid)',
+                  boxShadow: 'var(--shadow-cta)',
                   display: 'inline-flex',
                   alignItems: 'center',
-                  gap: '10px',
+                  gap: 'var(--gap-cta-icon)',
                   textDecoration: 'none',
-                  transition: 'all 0.22s ease',
+                  transition: 'var(--transition-cta)',
+                  minWidth: 'clamp(140px, 30vw, 180px)',
+                  justifyContent: 'center',
                 }}
                 onMouseEnter={e => {
                   e.currentTarget.style.background  = 'transparent';
-                  e.currentTarget.style.color       = '#16a34a';
-                  e.currentTarget.style.borderColor = '#16a34a';
+                  e.currentTarget.style.color       = 'var(--color-text-green)';
+                  e.currentTarget.style.borderColor = 'var(--color-text-green)';
                   e.currentTarget.style.transform   = 'translateY(-2px)';
                   e.currentTarget.style.boxShadow   = 'none';
                 }}
                 onMouseLeave={e => {
-                  e.currentTarget.style.background  = '#16a34a';
-                  e.currentTarget.style.color       = '#ffffff';
-                  e.currentTarget.style.borderColor = '#16a34a';
+                  e.currentTarget.style.background  = 'var(--color-bg-cta-solid)';
+                  e.currentTarget.style.color       = 'var(--color-text-white)';
+                  e.currentTarget.style.borderColor = 'var(--color-bg-cta-solid)';
                   e.currentTarget.style.transform   = 'translateY(0)';
-                  e.currentTarget.style.boxShadow   = '0 6px 32px rgba(22,163,74,0.30)';
+                  e.currentTarget.style.boxShadow   = 'var(--shadow-cta)';
                 }}
               >
                 See the Full Platform
@@ -1656,8 +1908,8 @@ const HomePage = () => {
       ══════════════════════════════════════════════════════════════ */}
       <section
         style={{
-          background: '#dff0df',
-          padding: '120px 0 130px',
+          background: 'var(--color-bg-section-light)',
+          padding: 'clamp(60px, 10vw, 120px) 0 clamp(60px, 10vw, 130px)',
           position: 'relative',
           overflow: 'hidden',
         }}
@@ -1679,12 +1931,12 @@ const HomePage = () => {
           aria-hidden="true"
           style={{
             position: 'absolute',
-            top: '-120px',
-            right: '-180px',
-            width: '560px',
-            height: '560px',
+            top: 'clamp(-96px, -15vw, -120px)',
+            right: 'clamp(-144px, -22vw, -180px)',
+            width: 'clamp(448px, 80vw, 560px)',
+            height: 'clamp(448px, 80vw, 560px)',
             borderRadius: '50%',
-            border: '1.5px solid rgba(22,163,74,0.08)',
+            border: 'clamp(1px, 0.2vw, 1.5px) solid rgba(22,163,74,0.08)',
             pointerEvents: 'none',
           }}
         />
@@ -1692,12 +1944,12 @@ const HomePage = () => {
           aria-hidden="true"
           style={{
             position: 'absolute',
-            top: '-60px',
-            right: '-120px',
-            width: '380px',
-            height: '380px',
+            top: 'clamp(-48px, -8vw, -60px)',
+            right: 'clamp(-96px, -15vw, -120px)',
+            width: 'clamp(304px, 55vw, 380px)',
+            height: 'clamp(304px, 55vw, 380px)',
             borderRadius: '50%',
-            border: '1px solid rgba(22,163,74,0.05)',
+            border: 'clamp(1px, 0.2vw, 1px) solid rgba(22,163,74,0.05)',
             pointerEvents: 'none',
           }}
         />
@@ -1707,10 +1959,10 @@ const HomePage = () => {
           aria-hidden="true"
           style={{
             position: 'absolute',
-            bottom: '-80px',
-            left: '-80px',
-            width: '400px',
-            height: '400px',
+            bottom: 'clamp(-64px, -10vw, -80px)',
+            left: 'clamp(-64px, -10vw, -80px)',
+            width: 'clamp(320px, 60vw, 400px)',
+            height: 'clamp(320px, 60vw, 400px)',
             borderRadius: '50%',
             background: 'radial-gradient(circle, rgba(22,163,74,0.06) 0%, transparent 70%)',
             pointerEvents: 'none',
@@ -1719,13 +1971,20 @@ const HomePage = () => {
 
         <div className="container-custom" style={{ position: 'relative', zIndex: 1 }}>
           <style>{`
-              @media (min-width: 768px) { .workflow-grid { grid-template-columns: repeat(2, 1fr); gap: 80px; } }
-              @media (max-width: 767px) { .workflow-grid { grid-template-columns: 1fr; gap: 48px; } }
-            `}</style>
-          <div
-            className="workflow-grid"
-            style={{ display: 'grid', alignItems: 'stretch' }}
-          >
+            .workflow-grid {
+              display: grid;
+              gap: clamp(40px, 7vw, 48px);
+              align-items: stretch;
+              grid-template-columns: 1fr;
+            }
+            @media (min-width: 768px) {
+              .workflow-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: clamp(64px, 10vw, 80px);
+              }
+            }
+          `}</style>
+          <div className="workflow-grid">
 
             {/* ── LEFT — Image ── */}
             <Reveal delay={0} className="order-2 md:order-1">
@@ -1737,12 +1996,12 @@ const HomePage = () => {
                   className="hidden md:block"
                   style={{
                     position: 'absolute',
-                    top: '-24px',
-                    left: '-24px',
-                    right: '24px',
-                    bottom: '24px',
-                    borderRadius: '24px',
-                    border: '1.5px solid rgba(22,163,74,0.15)',
+                    top: 'clamp(-16px, -2.5vw, -24px)',
+                    left: 'clamp(-16px, -2.5vw, -24px)',
+                    right: 'clamp(16px, 2.5vw, 24px)',
+                    bottom: 'clamp(16px, 2.5vw, 24px)',
+                    borderRadius: 'clamp(16px, 2.5vw, 24px)',
+                    border: 'clamp(1px, 0.2vw, 1.5px) solid rgba(22,163,74,0.15)',
                     zIndex: 0,
                   }}
                 />
@@ -1752,9 +2011,9 @@ const HomePage = () => {
                   style={{
                     position: 'relative',
                     zIndex: 1,
-                    borderRadius: '20px',
+                    borderRadius: 'clamp(16px, 2.5vw, 20px)',
                     overflow: 'hidden',
-                    boxShadow: '0 32px 80px rgba(5,46,22,0.14), 0 8px 24px rgba(5,46,22,0.08)',
+                    boxShadow: '0 clamp(24px, 4vw, 32px) clamp(64px, 10vw, 80px) rgba(5,46,22,0.14), 0 clamp(6px, 1vw, 8px) clamp(20px, 3.5vw, 24px) rgba(5,46,22,0.08)',
                     height: '100%',
                     minHeight: 'clamp(280px, 40vw, 520px)',
                   }}
@@ -1769,6 +2028,7 @@ const HomePage = () => {
                       objectPosition: 'center',
                       display: 'block',
                       transition: 'transform 0.7s cubic-bezier(0.22, 1, 0.36, 1)',
+                      maxWidth: '100%',
                     }}
                     onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.04)'; }}
                     onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; }}
@@ -1779,7 +2039,7 @@ const HomePage = () => {
                     style={{
                       position: 'absolute',
                       inset: 0,
-                      background: 'linear-gradient(to right, rgba(255,255,255,0.18) 0%, transparent 30%, transparent 70%, rgba(5,46,22,0.06) 100%)',
+                      background: 'var(--color-edge-fade)',
                       pointerEvents: 'none',
                     }}
                   />
@@ -1791,37 +2051,41 @@ const HomePage = () => {
                       top: 0,
                       left: 0,
                       right: 0,
-                      height: '80px',
-                      background: 'linear-gradient(to bottom, rgba(255,255,255,0.12) 0%, transparent 100%)',
+                      height: 'clamp(60px, 10vw, 80px)',
+                      background: 'var(--color-top-fade)',
                       pointerEvents: 'none',
                     }}
                   />
                 </div>
 
-                {/* Floating stat card — bottom right */}
+                {/* ✅ Floating stat card — FIXED: responsive positioning to prevent overflow */}
                 <div
                   style={{
                     position: 'absolute',
-                    bottom: '-28px',
-                    right: '-28px',
+                    bottom: 'clamp(-12px, -2vw, -28px)',
+                    right: 'clamp(8px, 2vw, -28px)',
+                    left: 'clamp(8px, auto, auto)',
                     zIndex: 10,
-                    background: '#ffffff',
-                    borderRadius: '16px',
-                    padding: '20px 24px',
-                    boxShadow: '0 20px 60px rgba(5,46,22,0.16), 0 4px 16px rgba(5,46,22,0.08)',
-                    border: '1px solid rgba(22,163,74,0.12)',
+                    background: 'var(--color-bg-card-rest)',
+                    borderRadius: 'clamp(12px, 2.5vw, 16px)',
+                    padding: 'clamp(12px, 2.5vw, 16px) clamp(16px, 3vw, 20px)',
+                    boxShadow: '0 clamp(16px, 3vw, 20px) clamp(48px, 9vw, 60px) rgba(5,46,22,0.16), 0 clamp(4px, 0.8vw, 16px) rgba(5,46,22,0.08)',
+                    border: 'clamp(1px, 0.2vw, 1px) solid rgba(22,163,74,0.12)',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '16px',
+                    gap: 'clamp(10px, 2vw, 12px)',
+                    maxWidth: 'clamp(240px, 45vw, 280px)',
+                    width: 'calc(100% - clamp(12px, 2vw, 16px))',
+                    boxSizing: 'border-box',
                   }}
                   className="hidden lg:flex"
                 >
                   {/* Icon */}
                   <div
                     style={{
-                      width: '48px',
-                      height: '48px',
-                      borderRadius: '12px',
+                      width: 'clamp(32px, 6vw, 40px)',
+                      height: 'clamp(32px, 6vw, 40px)',
+                      borderRadius: 'clamp(8px, 1.5vw, 10px)',
                       background: 'linear-gradient(135deg, #0d7a3e 0%, #16a34a 100%)',
                       display: 'flex',
                       alignItems: 'center',
@@ -1829,28 +2093,31 @@ const HomePage = () => {
                       flexShrink: 0,
                     }}
                   >
-                    <BarChart3 style={{ color: '#4ade80', width: '22px', height: '22px' }} />
+                    <BarChart3 style={{ color: 'var(--color-text-green-light)', width: 'var(--size-icon-small)', height: 'var(--size-icon-small)' }} />
                   </div>
                   <div>
                     <p
+                      className="home-text"
                       style={{
                         fontFamily: "'Poppins', sans-serif",
-                        fontSize: '0.68rem',
+                        fontSize: 'clamp(0.55rem, 1.2vw, 0.62rem)',
                         fontWeight: 600,
                         letterSpacing: '0.14em',
                         textTransform: 'uppercase',
-                        color: '#16a34a',
-                        marginBottom: '2px',
+                        color: 'var(--color-text-green)',
+                        marginBottom: 'clamp(1px, 0.3vw, 2px)',
+                        lineHeight: 1.2,
                       }}
                     >
                       Operational Efficiency
                     </p>
                     <p
+                      className="home-text"
                       style={{
                         fontFamily: "'Inter', sans-serif",
-                        fontSize: '2rem',
+                        fontSize: 'clamp(1.25rem, 3vw, 1.5rem)',
                         fontWeight: 900,
-                        color: '#0f172a',
+                        color: 'var(--color-text-primary)',
                         lineHeight: 1,
                         letterSpacing: '-0.03em',
                       }}
@@ -1864,37 +2131,38 @@ const HomePage = () => {
                 <div
                   style={{
                     position: 'absolute',
-                    top: '-20px',
-                    left: '-20px',
+                    top: 'clamp(-16px, -2.5vw, -20px)',
+                    left: 'clamp(-16px, -2.5vw, -20px)',
                     zIndex: 10,
                     background: 'linear-gradient(135deg, #0d7a3e 0%, #16a34a 100%)',
                     borderRadius: '999px',
-                    padding: '10px 18px',
-                    boxShadow: '0 8px 24px rgba(5,46,22,0.30)',
-                    border: '1px solid rgba(74,222,128,0.20)',
+                    padding: 'clamp(8px, 1.5vw, 10px) clamp(14px, 2.5vw, 18px)',
+                    boxShadow: '0 clamp(6px, 1vw, 8px) clamp(20px, 3.5vw, 24px) rgba(5,46,22,0.30)',
+                    border: 'clamp(1px, 0.2vw, 1px) solid rgba(74,222,128,0.20)',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '8px',
+                    gap: 'clamp(6px, 1vw, 8px)',
                   }}
                   className="hidden lg:flex"
                 >
                   <span
                     style={{
-                      width: '7px',
-                      height: '7px',
+                      width: 'clamp(5px, 1vw, 7px)',
+                      height: 'clamp(5px, 1vw, 7px)',
                       borderRadius: '50%',
-                      background: '#4ade80',
+                      background: 'var(--color-text-green-light)',
                       display: 'inline-block',
                       flexShrink: 0,
-                      boxShadow: '0 0 8px rgba(74,222,128,0.60)',
+                      boxShadow: '0 0 clamp(6px, 1vw, 8px) rgba(74,222,128,0.60)',
                     }}
                   />
                   <span
+                    className="home-text"
                     style={{
                       fontFamily: "'Poppins', sans-serif",
-                      fontSize: '0.72rem',
+                      fontSize: 'clamp(0.62rem, 1.3vw, 0.72rem)',
                       fontWeight: 600,
-                      color: '#ffffff',
+                      color: 'var(--color-text-white)',
                       letterSpacing: '0.06em',
                       whiteSpace: 'nowrap',
                     }}
@@ -1915,35 +2183,36 @@ const HomePage = () => {
                   style={{
                     display: 'inline-flex',
                     alignItems: 'center',
-                    gap: '10px',
-                    marginBottom: '20px',
+                    gap: 'clamp(8px, 1.5vw, 10px)',
+                    marginBottom: 'var(--margin-eyebrow)',
                   }}
                 >
                   <div
                     style={{
-                      width: '32px',
-                      height: '1.5px',
-                      background: '#16a34a',
+                      width: 'clamp(24px, 4vw, 32px)',
+                      height: 'clamp(1px, 0.2vw, 1.5px)',
+                      background: 'var(--color-text-green)',
                       borderRadius: '999px',
                     }}
                   />
                   <span
+                    className="home-text"
                     style={{
                       fontFamily: "'Poppins', sans-serif",
-                      fontSize: '0.75rem',
+                      fontSize: 'var(--font-eyebrow)',
                       fontWeight: 600,
                       letterSpacing: '0.2em',
                       textTransform: 'uppercase',
-                      color: '#16a34a',
+                      color: 'var(--color-text-green)',
                     }}
                   >
                     Workflow
                   </span>
                   <div
                     style={{
-                      width: '32px',
-                      height: '1.5px',
-                      background: '#16a34a',
+                      width: 'clamp(24px, 4vw, 32px)',
+                      height: 'clamp(1px, 0.2vw, 1.5px)',
+                      background: 'var(--color-text-green)',
                       borderRadius: '999px',
                     }}
                   />
@@ -1951,45 +2220,50 @@ const HomePage = () => {
 
                 {/* Heading */}
                 <h2
+                  className="home-text"
                   style={{
                     fontFamily: "'Inter', sans-serif",
                     fontWeight: 900,
-                    fontSize: 'clamp(2.25rem, 5vw, 3.75rem)',
+                    fontSize: 'var(--font-h2)',
                     letterSpacing: '-0.03em',
                     lineHeight: 1.08,
-                    color: '#0f172a',
-                    marginBottom: '20px',
+                    color: 'var(--color-text-primary)',
+                    marginBottom: 'var(--margin-section-title)',
                   }}
                 >
                   Simplified Operations{' '}
-                  <span style={{ color: '#16a34a' }}>from Intake</span>{' '}
+                  <span style={{ color: 'var(--color-text-green)' }}>from Intake</span>{' '}
                   to Billing
                 </h2>
 
                 {/* Body */}
                 <p
+                  className="home-text"
                   style={{
                     fontFamily: "'Poppins', sans-serif",
-                    fontSize: 'clamp(1.1rem, 1.6vw, 1.3rem)',
+                    fontSize: 'var(--font-body-lg)',
                     fontWeight: 500,
                     lineHeight: 1.8,
-                    color: '#374151',
-                    marginBottom: '44px',
-                    maxWidth: '520px',
+                    color: 'var(--color-text-secondary)',
+                    marginBottom: 'clamp(36px, 6vw, 44px)',
+                    maxWidth: 'clamp(280px, 90vw, 520px)',
+                    margin: '0 auto clamp(36px, 6vw, 44px)',
+                    textAlign: 'center',
                   }}
+                  className="md:text-left md:ml-0"
                 >
                   One connected platform unifies every workflow from first referral to final payment, cutting administrative overhead so your team can focus entirely on delivering care.
                 </p>
 
                 {/* Steps */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0', maxWidth: 'clamp(280px, 90vw, 520px)', margin: '0 auto' }} className="md:ml-0">
                   {[
                     {
                       number: '01',
                       title: 'Smart Scheduling',
                       text: 'Drag-and-drop visit builder with automatic conflict detection, caregiver skill-matching, and drive-time optimisation.',
                       icon: (
-                        <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
+                        <svg viewBox="0 0 24 24" fill="none" width="var(--size-icon-small)" height="var(--size-icon-small)">
                           <rect x="3" y="4" width="18" height="16" rx="2" stroke="#16a34a" strokeWidth="1.5"/>
                           <path d="M3 9H21" stroke="#16a34a" strokeWidth="1.5"/>
                           <line x1="8" y1="2" x2="8" y2="6" stroke="#16a34a" strokeWidth="1.5" strokeLinecap="round"/>
@@ -2003,7 +2277,7 @@ const HomePage = () => {
                       title: 'Mobile Verification',
                       text: 'Caregivers clock in via GPS-enabled mobile app with offline support, digital signatures, and real-time sync.',
                       icon: (
-                        <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
+                        <svg viewBox="0 0 24 24" fill="none" width="var(--size-icon-small)" height="var(--size-icon-small)">
                           <rect x="7" y="2" width="10" height="20" rx="2" stroke="#16a34a" strokeWidth="1.5"/>
                           <circle cx="12" cy="18" r="1" fill="#16a34a"/>
                           <path d="M10 6H14" stroke="#16a34a" strokeWidth="1.5" strokeLinecap="round"/>
@@ -2015,7 +2289,7 @@ const HomePage = () => {
                       title: 'Instant Billing',
                       text: 'Convert completed, EVV-verified visits to clean claims in one click. Automatic scrubbing catches errors before submission.',
                       icon: (
-                        <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
+                        <svg viewBox="0 0 24 24" fill="none" width="var(--size-icon-small)" height="var(--size-icon-small)">
                           <path d="M6 2H16L20 6V22H4V2H6Z" stroke="#16a34a" strokeWidth="1.5" strokeLinejoin="round"/>
                           <path d="M16 2V6H20" stroke="#16a34a" strokeWidth="1.5"/>
                           <path d="M12 9V10M12 16V17M9 11.5C9 10.67 10.34 10 12 10C13.66 10 15 10.67 15 11.5C15 12.33 13.66 13 12 13C10.34 13 9 13.67 9 14.5C9 15.33 10.34 16 12 16C13.66 16 15 15.33 15 14.5" stroke="#16a34a" strokeWidth="1.5" strokeLinecap="round"/>
@@ -2028,40 +2302,43 @@ const HomePage = () => {
                 </div>
 
                 {/* CTA */}
-                <div style={{ marginTop: '48px' }}>
+                <div style={{ marginTop: 'clamp(40px, 7vw, 48px)', textAlign: 'center' }} className="md:text-left">
                   <Link
                     to="/demo"
+                    className="home-cta"
                     style={{
                       fontFamily: "'Inter', sans-serif",
                       fontWeight: 700,
-                      fontSize: '0.875rem',
+                      fontSize: 'var(--font-cta)',
                       letterSpacing: '0.07em',
                       textTransform: 'uppercase',
-                      padding: '15px 36px',
-                      borderRadius: '999px',
-                      background: '#16a34a',
-                      color: '#ffffff',
-                      border: '2px solid #16a34a',
-                      boxShadow: '0 6px 32px rgba(22,163,74,0.35)',
+                      padding: 'clamp(12px, 2.5vw, 15px) clamp(28px, 5vw, 36px)',
+                      borderRadius: 'var(--radius-cta)',
+                      background: 'var(--color-bg-cta-solid)',
+                      color: 'var(--color-text-white)',
+                      border: 'var(--border-cta) var(--color-bg-cta-solid)',
+                      boxShadow: 'var(--shadow-cta)',
                       display: 'inline-flex',
                       alignItems: 'center',
-                      gap: '10px',
+                      gap: 'var(--gap-cta-icon)',
                       textDecoration: 'none',
-                      transition: 'all 0.25s ease',
+                      transition: 'var(--transition-cta)',
+                      minWidth: 'clamp(140px, 30vw, 180px)',
+                      justifyContent: 'center',
                     }}
                     onMouseEnter={e => {
                       e.currentTarget.style.background  = 'transparent';
-                      e.currentTarget.style.color       = '#16a34a';
-                      e.currentTarget.style.borderColor = '#16a34a';
+                      e.currentTarget.style.color       = 'var(--color-text-green)';
+                      e.currentTarget.style.borderColor = 'var(--color-text-green)';
                       e.currentTarget.style.transform   = 'translateY(-2px)';
                       e.currentTarget.style.boxShadow   = 'none';
                     }}
                     onMouseLeave={e => {
-                      e.currentTarget.style.background  = '#16a34a';
-                      e.currentTarget.style.color       = '#ffffff';
-                      e.currentTarget.style.borderColor = '#16a34a';
+                      e.currentTarget.style.background  = 'var(--color-bg-cta-solid)';
+                      e.currentTarget.style.color       = 'var(--color-text-white)';
+                      e.currentTarget.style.borderColor = 'var(--color-bg-cta-solid)';
                       e.currentTarget.style.transform   = 'translateY(0)';
-                      e.currentTarget.style.boxShadow   = '0 6px 32px rgba(22,163,74,0.35)';
+                      e.currentTarget.style.boxShadow   = 'var(--shadow-cta)';
                     }}
                   >
                     See How It Works
@@ -2085,8 +2362,8 @@ const HomePage = () => {
       ══════════════════════════════════════════════════════════════ */}
       <section
         style={{
-          background: 'linear-gradient(160deg, #0d7a3e 0%, #16a34a 55%, #0d7a3e 100%)',
-          padding: '120px 0 130px',
+          background: 'var(--color-bg-section-dark)',
+          padding: 'clamp(60px, 10vw, 120px) 0 clamp(60px, 10vw, 130px)',
           position: 'relative',
           overflow: 'hidden',
         }}
@@ -2097,7 +2374,7 @@ const HomePage = () => {
           style={{
             position: 'absolute',
             inset: 0,
-            backgroundImage: 'radial-gradient(circle, rgba(74,222,128,0.10) 1px, transparent 1px)',
+            backgroundImage: 'radial-gradient(circle, var(--color-dot-grid-dark) 1px, transparent 1px)',
             backgroundSize: '32px 32px',
             pointerEvents: 'none',
           }}
@@ -2113,8 +2390,8 @@ const HomePage = () => {
             transform: 'translate(-50%, -50%)',
             fontFamily: "'Inter', sans-serif",
             fontWeight: 900,
-            fontSize: 'clamp(80px, 14vw, 180px)',
-            color: 'rgba(255,255,255,0.055)',
+            fontSize: 'clamp(60px, 12vw, 180px)',
+            color: 'var(--color-watermark-dark)',
             letterSpacing: '-0.05em',
             whiteSpace: 'nowrap',
             userSelect: 'none',
@@ -2130,10 +2407,10 @@ const HomePage = () => {
           aria-hidden="true"
           style={{
             position: 'absolute',
-            top: '-80px',
-            right: '-80px',
-            width: '500px',
-            height: '500px',
+            top: 'clamp(-64px, -10vw, -80px)',
+            right: 'clamp(-64px, -10vw, -80px)',
+            width: 'clamp(400px, 70vw, 500px)',
+            height: 'clamp(400px, 70vw, 500px)',
             borderRadius: '50%',
             background: 'radial-gradient(circle, rgba(22,163,74,0.14) 0%, transparent 70%)',
             pointerEvents: 'none',
@@ -2144,10 +2421,10 @@ const HomePage = () => {
           aria-hidden="true"
           style={{
             position: 'absolute',
-            bottom: '-80px',
-            left: '-80px',
-            width: '400px',
-            height: '400px',
+            bottom: 'clamp(-64px, -10vw, -80px)',
+            left: 'clamp(-64px, -10vw, -80px)',
+            width: 'clamp(320px, 60vw, 400px)',
+            height: 'clamp(320px, 60vw, 400px)',
             borderRadius: '50%',
             background: 'radial-gradient(circle, rgba(22,163,74,0.10) 0%, transparent 70%)',
             pointerEvents: 'none',
@@ -2158,60 +2435,63 @@ const HomePage = () => {
 
           {/* ── Section header ── */}
           <Reveal delay={0}>
-            <div style={{ textAlign: 'center', marginBottom: '80px' }}>
+            <div style={{ textAlign: 'center', marginBottom: 'clamp(64px, 11vw, 80px)' }}>
 
               {/* Eyebrow — double dash, matches WCU + Workflow */}
               <div
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
-                  gap: '10px',
-                  marginBottom: '20px',
+                  gap: 'clamp(8px, 1.5vw, 10px)',
+                  marginBottom: 'var(--margin-eyebrow)',
                 }}
               >
-                <div style={{ width: '32px', height: '1.5px', background: '#ffffff', borderRadius: '999px' }} />
+                <div style={{ width: 'clamp(24px, 4vw, 32px)', height: 'clamp(1px, 0.2vw, 1.5px)', background: 'var(--color-text-white)', borderRadius: '999px' }} />
                 <span
+                  className="home-text"
                   style={{
                     fontFamily: "'Poppins', sans-serif",
-                    fontSize: '0.75rem',
+                    fontSize: 'var(--font-eyebrow)',
                     fontWeight: 600,
                     letterSpacing: '0.2em',
                     textTransform: 'uppercase',
-                    color: '#ffffff',
+                    color: 'var(--color-text-white)',
                   }}
                 >
                   Caregiver Tools
                 </span>
-                <div style={{ width: '32px', height: '1.5px', background: '#ffffff', borderRadius: '999px' }} />
+                <div style={{ width: 'clamp(24px, 4vw, 32px)', height: 'clamp(1px, 0.2vw, 1.5px)', background: 'var(--color-text-white)', borderRadius: '999px' }} />
               </div>
 
               {/* Heading — exact WCU size */}
               <h2
+                className="home-text"
                 style={{
                   fontFamily: "'Inter', sans-serif",
                   fontWeight: 900,
-                  fontSize: 'clamp(2.25rem, 5vw, 3.75rem)',
+                  fontSize: 'var(--font-h2)',
                   letterSpacing: '-0.03em',
                   lineHeight: 1.08,
-                  color: '#ffffff',
-                  marginBottom: '20px',
-                  maxWidth: '780px',
-                  margin: '0 auto 20px',
+                  color: 'var(--color-text-white)',
+                  marginBottom: 'var(--margin-section-title)',
+                  maxWidth: 'clamp(280px, 90vw, 780px)',
+                  margin: '0 auto var(--margin-section-title)',
                 }}
               >
                 Empower Your{' '}
-                <span style={{ color: '#ffffff', textDecoration: 'underline', textDecorationColor: 'rgba(255,255,255,0.40)', textUnderlineOffset: '6px' }}>Caregivers</span>
+                <span style={{ color: 'var(--color-text-white)', textDecoration: 'underline', textDecorationColor: 'rgba(255,255,255,0.40)', textUnderlineOffset: 'clamp(4px, 0.8vw, 6px)' }}>Caregivers</span>
               </h2>
 
               {/* Body — exact WCU subheading size/weight/colour on dark bg */}
               <p
+                className="home-text"
                 style={{
                   fontFamily: "'Poppins', sans-serif",
-                  fontSize: 'clamp(1.1rem, 1.6vw, 1.3rem)',
+                  fontSize: 'var(--font-body-lg)',
                   fontWeight: 500,
                   lineHeight: 1.75,
-                  color: '#ffffff',
-                  maxWidth: '600px',
+                  color: 'var(--color-text-white)',
+                  maxWidth: 'clamp(280px, 90vw, 600px)',
                   margin: '0 auto',
                 }}
               >
@@ -2222,14 +2502,15 @@ const HomePage = () => {
           </Reveal>
 
           {/* ── Cards grid ── */}
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-              gap: '24px',
-              alignItems: 'stretch',
-            }}
-          >
+          <style>{`
+            .caregiver-grid {
+              display: grid;
+              gap: clamp(20px, 4vw, 24px);
+              justify-items: center;
+              grid-template-columns: var(--grid-caregiver);
+            }
+          `}</style>
+          <div className="caregiver-grid">
             {[
               {
                 label: 'Connectivity',
@@ -2238,7 +2519,7 @@ const HomePage = () => {
                 metric: '100%',
                 metricLabel: 'Uptime Regardless of Signal',
                 icon: (
-                  <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" width="42" height="42">
+                  <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" width="var(--size-icon)" height="var(--size-icon)">
                     {/* Phone body */}
                     <rect x="12" y="4" width="24" height="40" rx="4" fill="rgba(22,163,74,0.12)" stroke="#16a34a" strokeWidth="1.5"/>
                     {/* Screen */}
@@ -2264,7 +2545,7 @@ const HomePage = () => {
                 metric: '0ms',
                 metricLabel: 'Message Delay',
                 icon: (
-                  <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" width="42" height="42">
+                  <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" width="var(--size-icon)" height="var(--size-icon)">
                     {/* Primary bubble */}
                     <path d="M6 8H34C36.2 8 38 9.8 38 12V28C38 30.2 36.2 32 34 32H18L10 40V32H6C3.8 32 2 30.2 2 28V12C2 9.8 3.8 8 6 8Z"
                       fill="rgba(22,163,74,0.12)" stroke="#16a34a" strokeWidth="1.5" strokeLinejoin="round"/>
@@ -2289,7 +2570,7 @@ const HomePage = () => {
                 metric: '< 10s',
                 metricLabel: 'Signature Capture Time',
                 icon: (
-                  <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" width="42" height="42">
+                  <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" width="var(--size-icon)" height="var(--size-icon)">
                     {/* Document */}
                     <path d="M8 4H30L42 16V44H8V4Z"
                       fill="rgba(22,163,74,0.10)" stroke="#16a34a" strokeWidth="1.5" strokeLinejoin="round"/>
@@ -2334,8 +2615,8 @@ const HomePage = () => {
       ══════════════════════════════════════════════════════════════ */}
       <section
         style={{
-          background: '#dff0df',
-          padding: '120px 0 130px',
+          background: 'var(--color-bg-section-light)',
+          padding: 'clamp(60px, 10vw, 120px) 0 clamp(60px, 10vw, 130px)',
           position: 'relative',
           overflow: 'hidden',
         }}
@@ -2346,7 +2627,7 @@ const HomePage = () => {
           style={{
             position: 'absolute',
             inset: 0,
-            backgroundImage: 'radial-gradient(circle, rgba(5,46,22,0.06) 1px, transparent 1px)',
+            backgroundImage: 'radial-gradient(circle, var(--color-dot-grid) 1px, transparent 1px)',
             backgroundSize: '32px 32px',
             pointerEvents: 'none',
           }}
@@ -2362,8 +2643,8 @@ const HomePage = () => {
             transform: 'translate(-50%, -50%)',
             fontFamily: "'Inter', sans-serif",
             fontWeight: 900,
-            fontSize: 'clamp(80px, 14vw, 180px)',
-            color: 'transparent',
+            fontSize: 'clamp(60px, 12vw, 180px)',
+            color: 'var(--color-watermark)',
             letterSpacing: '-0.05em',
             whiteSpace: 'nowrap',
             userSelect: 'none',
@@ -2379,10 +2660,12 @@ const HomePage = () => {
           aria-hidden="true"
           style={{
             position: 'absolute',
-            top: '-100px', right: '-100px',
-            width: '600px', height: '600px',
+            top: 'clamp(-80px, -12vw, -100px)', 
+            right: 'clamp(-80px, -12vw, -100px)',
+            width: 'clamp(480px, 85vw, 600px)', 
+            height: 'clamp(480px, 85vw, 600px)',
             borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(22,163,74,0.07) 0%, transparent 70%)',
+            background: 'radial-gradient(circle, var(--color-radial-glow) 0%, transparent 70%)',
             pointerEvents: 'none',
           }}
         />
@@ -2391,10 +2674,12 @@ const HomePage = () => {
           aria-hidden="true"
           style={{
             position: 'absolute',
-            bottom: '-100px', left: '-100px',
-            width: '500px', height: '500px',
+            bottom: 'clamp(-80px, -12vw, -100px)', 
+            left: 'clamp(-80px, -12vw, -100px)',
+            width: 'clamp(400px, 70vw, 500px)', 
+            height: 'clamp(400px, 70vw, 500px)',
             borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(22,163,74,0.06) 0%, transparent 70%)',
+            background: 'radial-gradient(circle, var(--color-radial-glow) 0%, transparent 70%)',
             pointerEvents: 'none',
           }}
         />
@@ -2403,41 +2688,43 @@ const HomePage = () => {
 
           {/* Eyebrow */}
           <Reveal delay={0}>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', marginBottom: '28px' }}>
-              <div style={{ width: '32px', height: '1.5px', background: '#16a34a', borderRadius: '999px' }} />
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 'clamp(8px, 1.5vw, 10px)', marginBottom: 'clamp(24px, 4vw, 28px)' }}>
+              <div style={{ width: 'clamp(24px, 4vw, 32px)', height: 'clamp(1px, 0.2vw, 1.5px)', background: 'var(--color-text-green)', borderRadius: '999px' }} />
               <span
+                className="home-text"
                 style={{
                   fontFamily: "'Poppins', sans-serif",
-                  fontSize: '0.75rem',
+                  fontSize: 'var(--font-eyebrow)',
                   fontWeight: 600,
                   letterSpacing: '0.2em',
                   textTransform: 'uppercase',
-                  color: '#16a34a',
+                  color: 'var(--color-text-green)',
                 }}
               >
                 Get Started
               </span>
-              <div style={{ width: '32px', height: '1.5px', background: '#16a34a', borderRadius: '999px' }} />
+              <div style={{ width: 'clamp(24px, 4vw, 32px)', height: 'clamp(1px, 0.2vw, 1.5px)', background: 'var(--color-text-green)', borderRadius: '999px' }} />
             </div>
           </Reveal>
 
           {/* Heading */}
           <Reveal delay={80}>
             <h2
+              className="home-text"
               style={{
                 fontFamily: "'Inter', sans-serif",
                 fontWeight: 900,
-                fontSize: 'clamp(2.25rem, 5vw, 3.75rem)',
+                fontSize: 'var(--font-h2)',
                 letterSpacing: '-0.03em',
                 lineHeight: 1.08,
-                color: '#0f172a',
-                marginBottom: '20px',
-                maxWidth: '820px',
-                margin: '0 auto 20px',
+                color: 'var(--color-text-primary)',
+                marginBottom: 'var(--margin-section-title)',
+                maxWidth: 'clamp(280px, 90vw, 820px)',
+                margin: '0 auto var(--margin-section-title)',
               }}
             >
               Ready to{' '}
-              <span style={{ color: '#16a34a' }}>Transform</span>{' '}
+              <span style={{ color: 'var(--color-text-green)' }}>Transform</span>{' '}
               Your Agency?
             </h2>
           </Reveal>
@@ -2445,14 +2732,15 @@ const HomePage = () => {
           {/* Body */}
           <Reveal delay={150}>
             <p
+              className="home-text"
               style={{
                 fontFamily: "'Poppins', sans-serif",
-                fontSize: 'clamp(1.1rem, 1.6vw, 1.3rem)',
+                fontSize: 'var(--font-body-lg)',
                 fontWeight: 500,
                 lineHeight: 1.75,
-                color: '#374151',
-                maxWidth: '580px',
-                margin: '0 auto 64px',
+                color: 'var(--color-text-secondary)',
+                maxWidth: 'clamp(280px, 90vw, 580px)',
+                margin: '0 auto clamp(48px, 8vw, 64px)',
               }}
             >
               Book a personalised demo today. See exactly how RAAH solves your specific challenges with no commitment required.
@@ -2467,9 +2755,9 @@ const HomePage = () => {
                 justifyContent: 'center',
                 flexWrap: 'wrap',
                 gap: '0',
-                marginBottom: '56px',
-                maxWidth: '680px',
-                margin: '0 auto 56px',
+                marginBottom: 'clamp(48px, 8vw, 56px)',
+                maxWidth: 'clamp(280px, 90vw, 680px)',
+                margin: '0 auto clamp(48px, 8vw, 56px)',
               }}
             >
               {[
@@ -2480,32 +2768,36 @@ const HomePage = () => {
                 <div
                   key={stat.label}
                   style={{
-                    flex: '1',
-                    minWidth: '160px',
-                    padding: '28px 24px',
-                    borderRight: i < 2 ? '1px solid rgba(22,163,74,0.28)' : 'none',
+                    flex: '1 1 100%',
+                    minWidth: 'clamp(140px, 25vw, 160px)',
+                    padding: 'clamp(20px, 4vw, 28px) clamp(20px, 4vw, 24px)',
+                    borderRight: i < 2 ? 'clamp(1px, 0.2vw, 1px) solid rgba(22,163,74,0.28)' : 'none',
                     textAlign: 'center',
+                    boxSizing: 'border-box',
                   }}
+                  className="sm:flex-1 sm:border-r sm:last:border-r-0"
                 >
                   <p
+                    className="home-text"
                     style={{
                       fontFamily: "'Inter', sans-serif",
                       fontWeight: 900,
-                      fontSize: 'clamp(2rem, 3.5vw, 2.75rem)',
+                      fontSize: 'clamp(1.5rem, 4vw, 2.75rem)',
                       letterSpacing: '-0.03em',
-                      color: '#0a6b30',
+                      color: 'var(--color-text-green-dark)',
                       lineHeight: 1,
-                      marginBottom: '8px',
+                      marginBottom: 'clamp(6px, 1vw, 8px)',
                     }}
                   >
                     {stat.value}
                   </p>
                   <p
+                    className="home-text"
                     style={{
                       fontFamily: "'Poppins', sans-serif",
-                      fontSize: '0.78rem',
+                      fontSize: 'clamp(0.68rem, 1.4vw, 0.78rem)',
                       fontWeight: 500,
-                      color: '#64748b',
+                      color: 'var(--color-text-muted)',
                       textTransform: 'uppercase',
                       letterSpacing: '0.12em',
                     }}
@@ -2524,45 +2816,48 @@ const HomePage = () => {
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                gap: '16px',
+                gap: 'var(--margin-cta-buttons)',
               }}
               className="sm:flex-row sm:justify-center"
             >
               {/* Primary — Schedule Demo */}
               <Link
                 to="/demo"
+                className="home-cta"
                 style={{
                   fontFamily: "'Inter', sans-serif",
                   fontWeight: 700,
-                  fontSize: '0.9375rem',
+                  fontSize: 'var(--font-cta)',
                   letterSpacing: '0.07em',
                   textTransform: 'uppercase',
-                  padding: '18px 44px',
-                  borderRadius: '999px',
-                  background: '#16a34a',
-                  color: '#ffffff',
-                  border: '2px solid #16a34a',
-                  boxShadow: '0 8px 32px rgba(22,163,74,0.40)',
+                  padding: 'clamp(14px, 2.5vw, 18px) clamp(36px, 6vw, 44px)',
+                  borderRadius: 'var(--radius-cta)',
+                  background: 'var(--color-bg-cta-solid)',
+                  color: 'var(--color-text-white)',
+                  border: 'var(--border-cta) var(--color-bg-cta-solid)',
+                  boxShadow: 'var(--shadow-cta-lg)',
                   display: 'inline-flex',
                   alignItems: 'center',
-                  gap: '10px',
+                  gap: 'var(--gap-cta-icon)',
                   textDecoration: 'none',
-                  transition: 'all 0.25s ease',
+                  transition: 'var(--transition-cta)',
                   whiteSpace: 'nowrap',
+                  minWidth: 'clamp(140px, 30vw, 200px)',
+                  justifyContent: 'center',
                 }}
                 onMouseEnter={e => {
                   e.currentTarget.style.background  = 'transparent';
-                  e.currentTarget.style.color       = '#16a34a';
-                  e.currentTarget.style.borderColor = '#16a34a';
+                  e.currentTarget.style.color       = 'var(--color-text-green)';
+                  e.currentTarget.style.borderColor = 'var(--color-text-green)';
                   e.currentTarget.style.transform   = 'translateY(-3px)';
                   e.currentTarget.style.boxShadow   = 'none';
                 }}
                 onMouseLeave={e => {
-                  e.currentTarget.style.background  = '#16a34a';
-                  e.currentTarget.style.color       = '#ffffff';
-                  e.currentTarget.style.borderColor = '#16a34a';
+                  e.currentTarget.style.background  = 'var(--color-bg-cta-solid)';
+                  e.currentTarget.style.color       = 'var(--color-text-white)';
+                  e.currentTarget.style.borderColor = 'var(--color-bg-cta-solid)';
                   e.currentTarget.style.transform   = 'translateY(0)';
-                  e.currentTarget.style.boxShadow   = '0 8px 32px rgba(22,163,74,0.35)';
+                  e.currentTarget.style.boxShadow   = 'var(--shadow-cta-lg)';
                 }}
               >
                 Schedule a Demo
@@ -2574,34 +2869,37 @@ const HomePage = () => {
               {/* Secondary — Contact Sales */}
               <Link
                 to="/contact"
+                className="home-cta"
                 style={{
                   fontFamily: "'Inter', sans-serif",
                   fontWeight: 700,
-                  fontSize: '0.9375rem',
+                  fontSize: 'var(--font-cta)',
                   letterSpacing: '0.07em',
                   textTransform: 'uppercase',
-                  padding: '18px 44px',
-                  borderRadius: '999px',
-                  background: 'transparent',
-                  color: '#16a34a',
-                  border: '2px solid #16a34a',
+                  padding: 'clamp(14px, 2.5vw, 18px) clamp(36px, 6vw, 44px)',
+                  borderRadius: 'var(--radius-cta)',
+                  background: 'var(--color-bg-cta-ghost)',
+                  color: 'var(--color-text-green)',
+                  border: 'var(--border-cta) var(--color-text-green)',
                   display: 'inline-flex',
                   alignItems: 'center',
-                  gap: '10px',
+                  gap: 'var(--gap-cta-icon)',
                   textDecoration: 'none',
-                  transition: 'all 0.25s ease',
+                  transition: 'var(--transition-cta)',
                   whiteSpace: 'nowrap',
+                  minWidth: 'clamp(140px, 30vw, 200px)',
+                  justifyContent: 'center',
                 }}
                 onMouseEnter={e => {
-                  e.currentTarget.style.background  = '#16a34a';
-                  e.currentTarget.style.borderColor = '#16a34a';
-                  e.currentTarget.style.color       = '#ffffff';
+                  e.currentTarget.style.background  = 'var(--color-bg-cta-solid)';
+                  e.currentTarget.style.borderColor = 'var(--color-bg-cta-solid)';
+                  e.currentTarget.style.color       = 'var(--color-text-white)';
                   e.currentTarget.style.transform   = 'translateY(-3px)';
                 }}
                 onMouseLeave={e => {
-                  e.currentTarget.style.background  = 'transparent';
-                  e.currentTarget.style.borderColor = '#16a34a';
-                  e.currentTarget.style.color       = '#16a34a';
+                  e.currentTarget.style.background  = 'var(--color-bg-cta-ghost)';
+                  e.currentTarget.style.borderColor = 'var(--color-text-green)';
+                  e.currentTarget.style.color       = 'var(--color-text-green)';
                   e.currentTarget.style.transform   = 'translateY(0)';
                 }}
               >
@@ -2611,12 +2909,13 @@ const HomePage = () => {
 
             {/* No-commitment reassurance */}
             <p
+              className="home-text"
               style={{
                 fontFamily: "'Poppins', sans-serif",
-                fontSize: '0.8rem',
+                fontSize: 'var(--font-cta-small)',
                 fontWeight: 400,
-                color: '#16a34a',
-                marginTop: '24px',
+                color: 'var(--color-text-green)',
+                marginTop: 'var(--margin-cta-reassurance)',
                 letterSpacing: '0.04em',
               }}
             >

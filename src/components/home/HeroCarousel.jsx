@@ -20,7 +20,7 @@ const MotionDiv  = Motion.div;
 const MotionH1   = Motion.h1;
 const MotionSpan = Motion.span;
 
-// ─── Timing ───────────────────────────────────────────────────────────────────
+// ─── Timing ──────────────────────────────────────────────────────────────────
 const SLIDE_DURATION = 7000;
 const PROGRESS_TICK  = 50;
 
@@ -56,12 +56,15 @@ const SLIDES = [
 ];
 
 // ─── Motion variants ──────────────────────────────────────────────────────────
+
+// Background: Ken Burns zoom + cross-fade
 const bgVariants = {
   enter:   { scale: 1.06, opacity: 0 },
   visible: { scale: 1,    opacity: 1, transition: { duration: 1.6, ease: 'easeOut' } },
   exit:    { scale: 0.98, opacity: 0, transition: { duration: 0.6, ease: 'easeIn'  } },
 };
 
+// Headline lines: stagger via custom delay
 const headlineVariants = {
   hidden:  { opacity: 0, y: 40 },
   visible: (d = 0) => ({
@@ -80,69 +83,8 @@ const fadeUp = {
   exit: { opacity: 0, transition: { duration: 0.2 } },
 };
 
-// ─── Global responsive CSS variables ──────────────────────────────────────────
-const HeroStyles = () => (
-  <style>{`
-    :root {
-      /* Typography */
-      --font-hero-eyebrow: clamp(0.65rem, 1.4vw, 0.75rem);
-      --font-hero-headline: clamp(2.25rem, 7vw, 6rem);
-      --font-hero-cta: clamp(0.8rem, 1.6vw, 0.9rem);
-      
-      /* Spacing */
-      --padding-hero-container: clamp(16px, 4vw, 24px);
-      --margin-hero-eyebrow: clamp(1rem, 2vw, 1.75rem);
-      --margin-hero-headline: 0.06em;
-      --margin-hero-cta: clamp(2rem, 4vw, 3rem);
-      --gap-hero-cta: clamp(12px, 2vw, 14px);
-      --gap-hero-cta-icon: clamp(6px, 1vw, 8px);
-      --padding-hero-cta: clamp(14px, 2.5vw, 16px) clamp(28px, 5vw, 36px);
-      --padding-hero-bottom: clamp(1.5rem, 3vw, 2.5rem);
-      
-      /* Dimensions */
-      --width-hero-max: clamp(280px, 90vw, 900px);
-      --width-hero-pip: clamp(14px, 2.5vw, 18px);
-      --width-hero-pip-active: clamp(40px, 8vw, 52px);
-      --height-hero-pip: clamp(2px, 0.4vw, 3px);
-      --size-hero-nav: clamp(28px, 5vw, 32px);
-      --size-hero-nav-icon: clamp(12px, 2vw, 14px);
-      --size-hero-dot: clamp(5px, 1vw, 6px);
-      
-      /* Borders & Shadows */
-      --border-hero-cta: clamp(1.5px, 0.3vw, 2px);
-      --border-hero-nav: clamp(1px, 0.2vw, 1px);
-      --shadow-hero-cta: 0 clamp(4px, 0.8vw, 6px) clamp(24px, 4vw, 28px) rgba(22,163,74,0.40);
-      
-      /* Colors */
-      --color-hero-overlay: rgba(5,46,22,0.38);
-      --color-hero-gradient-top: transparent;
-      --color-hero-gradient-mid: rgba(5,46,22,0.50);
-      --color-hero-gradient-bot: rgba(5,46,22,0.82);
-      --color-hero-eyebrow: rgba(74,222,128,0.80);
-      --color-hero-headline: #ffffff;
-      --color-hero-accent: #4ade80;
-      --color-hero-cta-bg: #16a34a;
-      --color-hero-cta-text: #ffffff;
-      --color-hero-cta-ghost-bg: transparent;
-      --color-hero-cta-ghost-text: rgba(255,255,255,0.90);
-      --color-hero-cta-ghost-border: rgba(255,255,255,0.38);
-      --color-hero-pip-bg: rgba(74,222,128,0.18);
-      --color-hero-pip-fill: #4ade80;
-      --color-hero-nav-border: rgba(74,222,128,0.30);
-      --color-hero-nav-text: rgba(74,222,128,0.65);
-      --color-hero-nav-hover-bg: rgba(74,222,128,0.12);
-      --color-hero-nav-hover-text: #ffffff;
-      --color-hero-nav-hover-border: rgba(74,222,128,0.9);
-      
-      /* Transitions */
-      --transition-hero-cta: all 0.25s ease;
-      --transition-hero-nav: all 0.2s ease;
-      --transition-hero-pip: width 0.3s ease;
-    }
-  `}</style>
-);
-
 // ─── Component ────────────────────────────────────────────────────────────────
+
 const HeroCarousel = ({ navbar }) => {
   const [slideIndex, setSlideIndex] = useState(0);
   const [progress,   setProgress]   = useState(0);
@@ -189,7 +131,6 @@ const HeroCarousel = ({ navbar }) => {
       aria-label="RAAH Technologies Hero"
       aria-roledescription="carousel"
     >
-      <HeroStyles />
       <h1 className="sr-only">RAAH Technologies — Home Health Platform</h1>
 
       {/* ══════════════════════════════════════════════
@@ -209,10 +150,7 @@ const HeroCarousel = ({ navbar }) => {
             src={slide.bgImage}
             alt={slide.bgAlt}
             className="w-full h-full object-cover"
-            style={{ 
-              objectPosition: 'top center',
-              maxWidth: '100%',
-            }}
+            style={{ objectPosition: 'top center' }}
             loading="eager"
             decoding="async"
           />
@@ -221,18 +159,20 @@ const HeroCarousel = ({ navbar }) => {
 
       {/* ══════════════════════════════════════════════
           LAYER 2 — Green brand overlay
+          Light brand tint at 38% — image fully visible.
+          Bottom gradient ensures text legibility.
       ══════════════════════════════════════════════ */}
       <div
         className="absolute inset-0 z-10"
-        style={{ background: 'var(--color-hero-overlay)' }}
+        style={{ background: 'rgba(5,46,22,0.38)' }}
         aria-hidden="true"
       />
 
-      {/* Bottom-up gradient */}
+      {/* Bottom-up gradient — darkens only where text sits */}
       <div
         className="absolute inset-0 z-10 pointer-events-none"
         style={{
-          background: 'linear-gradient(to bottom, var(--color-hero-gradient-top) 25%, var(--color-hero-gradient-mid) 65%, var(--color-hero-gradient-bot) 100%)',
+          background: 'linear-gradient(to bottom, transparent 25%, rgba(5,46,22,0.50) 65%, rgba(5,46,22,0.82) 100%)',
         }}
         aria-hidden="true"
       />
@@ -242,18 +182,14 @@ const HeroCarousel = ({ navbar }) => {
       ══════════════════════════════════════════════ */}
       <div className="relative z-20 flex flex-col" style={{ minHeight: '100dvh' }}>
 
-        {/* Navbar */}
+        {/* Navbar lives on the overlay */}
         {navbar}
 
         {/* ── Centred hero text ── */}
         <div className="flex-1 flex items-center justify-center">
           <div
-            className="w-full mx-auto px-4 sm:px-6 md:px-12"
-            style={{ 
-              textAlign: 'center',
-              maxWidth: 'var(--width-hero-max)',
-              padding: '0 var(--padding-hero-container)',
-            }}
+            className="w-full max-w-5xl mx-auto px-6 md:px-12"
+            style={{ textAlign: 'center' }}
           >
 
             {/* Eyebrow */}
@@ -269,31 +205,28 @@ const HeroCarousel = ({ navbar }) => {
                   display: 'inline-flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  gap: 'clamp(6px, 1vw, 8px)',
-                  marginBottom: 'var(--margin-hero-eyebrow)',
-                  flexWrap: 'wrap',
+                  gap: '8px',
+                  marginBottom: '1.75rem',
                 }}
               >
-                <span className="relative flex" style={{ width: 'var(--size-hero-dot)', height: 'var(--size-hero-dot)' }}>
+                <span className="relative flex" style={{ width: '6px', height: '6px' }}>
                   <span
                     className="animate-ping absolute inline-flex rounded-full bg-green-400 opacity-75"
                     style={{ width: '100%', height: '100%' }}
                   />
                   <span
                     className="relative inline-flex rounded-full bg-green-400"
-                    style={{ width: 'var(--size-hero-dot)', height: 'var(--size-hero-dot)' }}
+                    style={{ width: '6px', height: '6px' }}
                   />
                 </span>
                 <span
                   style={{
                     fontFamily: "'Inter', sans-serif",
-                    fontSize: 'var(--font-hero-eyebrow)',
+                    fontSize: '0.75rem',
                     fontWeight: 700,
                     letterSpacing: '0.2em',
                     textTransform: 'uppercase',
-                    color: 'var(--color-hero-eyebrow)',
-                    wordBreak: 'break-word',
-                    textAlign: 'center',
+                    color: 'rgba(74,222,128,0.80)',
                   }}
                 >
                   {slide.eyebrow}
@@ -315,13 +248,12 @@ const HeroCarousel = ({ navbar }) => {
                   style={{
                     fontFamily: "'Inter', sans-serif",
                     fontWeight: 900,
-                    fontSize: 'var(--font-hero-headline)',
+                    fontSize: 'clamp(3rem, 7vw, 6rem)',
                     lineHeight: 1.04,
                     letterSpacing: '-0.03em',
-                    color: 'var(--color-hero-headline)',
+                    color: '#ffffff',
                     display: 'block',
-                    marginBottom: 'var(--margin-hero-headline)',
-                    wordBreak: 'break-word',
+                    marginBottom: '0.06em',
                   }}
                 >
                   {slide.headlineTop}
@@ -337,13 +269,12 @@ const HeroCarousel = ({ navbar }) => {
                   style={{
                     fontFamily: "'Inter', sans-serif",
                     fontWeight: 900,
-                    fontSize: 'var(--font-hero-headline)',
+                    fontSize: 'clamp(3rem, 7vw, 6rem)',
                     lineHeight: 1.04,
                     letterSpacing: '-0.03em',
-                    color: 'var(--color-hero-accent)',
+                    color: '#4ade80',
                     display: 'block',
-                    marginBottom: 'var(--margin-hero-headline)',
-                    wordBreak: 'break-word',
+                    marginBottom: '0.06em',
                   }}
                 >
                   {slide.accentWord}
@@ -359,12 +290,11 @@ const HeroCarousel = ({ navbar }) => {
                   style={{
                     fontFamily: "'Inter', sans-serif",
                     fontWeight: 900,
-                    fontSize: 'var(--font-hero-headline)',
+                    fontSize: 'clamp(3rem, 7vw, 6rem)',
                     lineHeight: 1.04,
                     letterSpacing: '-0.03em',
-                    color: 'var(--color-hero-headline)',
+                    color: '#ffffff',
                     display: 'block',
-                    wordBreak: 'break-word',
                   }}
                 >
                   {slide.headlineBot}
@@ -381,11 +311,10 @@ const HeroCarousel = ({ navbar }) => {
               custom={0.32}
               style={{
                 display: 'flex',
-                gap: 'var(--gap-hero-cta)',
-                marginTop: 'var(--margin-hero-cta)',
+                gap: '14px',
+                marginTop: '3rem',
                 justifyContent: 'center',
                 flexWrap: 'wrap',
-                width: '100%',
               }}
             >
               {/* Solid — Request Demo */}
@@ -394,23 +323,20 @@ const HeroCarousel = ({ navbar }) => {
                 style={{
                   fontFamily: "'Inter', sans-serif",
                   fontWeight: 700,
-                  fontSize: 'var(--font-hero-cta)',
+                  fontSize: '0.9rem',
                   letterSpacing: '0.07em',
                   textTransform: 'uppercase',
-                  padding: 'var(--padding-hero-cta)',
+                  padding: '16px 36px',
                   borderRadius: '999px',
-                  background: 'var(--color-hero-cta-bg)',
-                  color: 'var(--color-hero-cta-text)',
-                  border: 'var(--border-hero-cta) solid var(--color-hero-cta-bg)',
-                  boxShadow: 'var(--shadow-hero-cta)',
+                  background: '#16a34a',
+                  color: '#ffffff',
+                  border: '2px solid #16a34a',
+                  boxShadow: '0 6px 28px rgba(22,163,74,0.40)',
                   display: 'inline-flex',
                   alignItems: 'center',
-                  gap: 'var(--gap-hero-cta-icon)',
-                  transition: 'var(--transition-hero-cta)',
+                  gap: '8px',
+                  transition: 'all 0.25s ease',
                   textDecoration: 'none',
-                  minWidth: 'clamp(160px, 30vw, 200px)',
-                  justifyContent: 'center',
-                  wordBreak: 'break-word',
                 }}
                 onMouseEnter={e => {
                   e.currentTarget.style.background  = 'transparent';
@@ -420,10 +346,10 @@ const HeroCarousel = ({ navbar }) => {
                   e.currentTarget.style.transform   = 'translateY(-2px)';
                 }}
                 onMouseLeave={e => {
-                  e.currentTarget.style.background  = 'var(--color-hero-cta-bg)';
-                  e.currentTarget.style.color       = 'var(--color-hero-cta-text)';
-                  e.currentTarget.style.borderColor = 'var(--color-hero-cta-bg)';
-                  e.currentTarget.style.boxShadow   = 'var(--shadow-hero-cta)';
+                  e.currentTarget.style.background  = '#16a34a';
+                  e.currentTarget.style.color       = '#ffffff';
+                  e.currentTarget.style.borderColor = '#16a34a';
+                  e.currentTarget.style.boxShadow   = '0 6px 28px rgba(22,163,74,0.40)';
                   e.currentTarget.style.transform   = 'translateY(0)';
                 }}
               >
@@ -437,33 +363,30 @@ const HeroCarousel = ({ navbar }) => {
                 style={{
                   fontFamily: "'Inter', sans-serif",
                   fontWeight: 700,
-                  fontSize: 'var(--font-hero-cta)',
+                  fontSize: '0.9rem',
                   letterSpacing: '0.07em',
                   textTransform: 'uppercase',
-                  padding: 'var(--padding-hero-cta)',
+                  padding: '16px 36px',
                   borderRadius: '999px',
-                  background: 'var(--color-hero-cta-ghost-bg)',
-                  color: 'var(--color-hero-cta-ghost-text)',
-                  border: 'var(--border-hero-cta) solid var(--color-hero-cta-ghost-border)',
+                  background: 'transparent',
+                  color: 'rgba(255,255,255,0.90)',
+                  border: '2px solid rgba(255,255,255,0.38)',
                   display: 'inline-flex',
                   alignItems: 'center',
-                  transition: 'var(--transition-hero-cta)',
+                  transition: 'all 0.25s ease',
                   textDecoration: 'none',
-                  minWidth: 'clamp(160px, 30vw, 200px)',
-                  justifyContent: 'center',
-                  wordBreak: 'break-word',
                 }}
                 onMouseEnter={e => {
-                  e.currentTarget.style.background  = 'var(--color-hero-cta-bg)';
-                  e.currentTarget.style.color       = 'var(--color-hero-cta-text)';
-                  e.currentTarget.style.borderColor = 'var(--color-hero-cta-bg)';
-                  e.currentTarget.style.boxShadow   = 'var(--shadow-hero-cta)';
+                  e.currentTarget.style.background  = '#16a34a';
+                  e.currentTarget.style.color       = '#ffffff';
+                  e.currentTarget.style.borderColor = '#16a34a';
+                  e.currentTarget.style.boxShadow   = '0 6px 28px rgba(22,163,74,0.40)';
                   e.currentTarget.style.transform   = 'translateY(-2px)';
                 }}
                 onMouseLeave={e => {
-                  e.currentTarget.style.background  = 'var(--color-hero-cta-ghost-bg)';
-                  e.currentTarget.style.color       = 'var(--color-hero-cta-ghost-text)';
-                  e.currentTarget.style.borderColor = 'var(--color-hero-cta-ghost-border)';
+                  e.currentTarget.style.background  = 'transparent';
+                  e.currentTarget.style.color       = 'rgba(255,255,255,0.90)';
+                  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.38)';
                   e.currentTarget.style.boxShadow   = 'none';
                   e.currentTarget.style.transform   = 'translateY(0)';
                 }}
@@ -478,20 +401,12 @@ const HeroCarousel = ({ navbar }) => {
         {/* ── BOTTOM BAR — progress pips + prev/next, centred ── */}
         <div
           style={{
-            paddingBottom: 'var(--padding-hero-bottom)',
+            paddingBottom: '2.5rem',
             display: 'flex',
             justifyContent: 'center',
-            width: '100%',
-            padding: '0 var(--padding-hero-container)',
           }}
         >
-          <div style={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            gap: 'clamp(8px, 1.5vw, 10px)',
-            flexWrap: 'wrap',
-            justifyContent: 'center',
-          }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
 
             {/* Progress pips */}
             {SLIDES.map((s, i) => (
@@ -502,18 +417,16 @@ const HeroCarousel = ({ navbar }) => {
                 aria-current={i === slideIndex ? 'true' : 'false'}
                 style={{
                   position: 'relative',
-                  height: 'var(--height-hero-pip)',
-                  width: i === slideIndex ? 'var(--width-hero-pip-active)' : 'var(--width-hero-pip)',
+                  height: '3px',
+                  width: i === slideIndex ? '52px' : '18px',
                   borderRadius: '999px',
                   overflow: 'hidden',
-                  background: 'var(--color-hero-pip-bg)',
+                  background: 'rgba(74,222,128,0.18)',
                   border: 'none',
                   cursor: 'pointer',
                   padding: 0,
-                  transition: 'var(--transition-hero-pip)',
+                  transition: 'width 0.3s ease',
                   outline: 'none',
-                  minWidth: 'var(--width-hero-pip)',
-                  flexShrink: 0,
                 }}
               >
                 {i === slideIndex && (
@@ -522,7 +435,7 @@ const HeroCarousel = ({ navbar }) => {
                       position: 'absolute',
                       top: 0, bottom: 0, left: 0,
                       borderRadius: '999px',
-                      background: 'var(--color-hero-pip-fill)',
+                      background: '#4ade80',
                     }}
                     animate={{ width: `${progress}%` }}
                     transition={{ duration: 0.05, ease: 'linear' }}
@@ -532,77 +445,58 @@ const HeroCarousel = ({ navbar }) => {
             ))}
 
             {/* Prev / Next */}
-            <div style={{ 
-              display: 'flex', 
-              gap: 'clamp(6px, 1vw, 8px)', 
-              marginLeft: 'clamp(6px, 1vw, 8px)',
-              flexShrink: 0,
-            }}>
+            <div style={{ display: 'flex', gap: '8px', marginLeft: '8px' }}>
 
               <button
                 onClick={prevSlide}
                 aria-label="Previous slide"
                 style={{
-                  width: 'var(--size-hero-nav)', 
-                  height: 'var(--size-hero-nav)',
+                  width: '32px', height: '32px',
                   borderRadius: '50%',
-                  border: 'var(--border-hero-nav) solid var(--color-hero-nav-border)',
+                  border: '1px solid rgba(74,222,128,0.30)',
                   background: 'transparent',
-                  color: 'var(--color-hero-nav-text)',
-                  display: 'flex', 
-                  alignItems: 'center', 
-                  justifyContent: 'center',
-                  cursor: 'pointer', 
-                  transition: 'var(--transition-hero-nav)', 
-                  outline: 'none',
-                  flexShrink: 0,
-                  touchAction: 'manipulation',
+                  color: 'rgba(74,222,128,0.65)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  cursor: 'pointer', transition: 'all 0.2s ease', outline: 'none',
                 }}
                 onMouseEnter={e => {
-                  e.currentTarget.style.borderColor = 'var(--color-hero-nav-hover-border)';
-                  e.currentTarget.style.color       = 'var(--color-hero-nav-hover-text)';
-                  e.currentTarget.style.background  = 'var(--color-hero-nav-hover-bg)';
+                  e.currentTarget.style.borderColor = 'rgba(74,222,128,0.9)';
+                  e.currentTarget.style.color       = '#ffffff';
+                  e.currentTarget.style.background  = 'rgba(74,222,128,0.12)';
                 }}
                 onMouseLeave={e => {
-                  e.currentTarget.style.borderColor = 'var(--color-hero-nav-border)';
-                  e.currentTarget.style.color       = 'var(--color-hero-nav-text)';
+                  e.currentTarget.style.borderColor = 'rgba(74,222,128,0.30)';
+                  e.currentTarget.style.color       = 'rgba(74,222,128,0.65)';
                   e.currentTarget.style.background  = 'transparent';
                 }}
               >
-                <ChevronLeft size={14} strokeWidth={2.5} style={{ width: 'var(--size-hero-nav-icon)', height: 'var(--size-hero-nav-icon)' }} />
+                <ChevronLeft size={14} strokeWidth={2.5} />
               </button>
 
               <button
                 onClick={nextSlide}
                 aria-label="Next slide"
                 style={{
-                  width: 'var(--size-hero-nav)', 
-                  height: 'var(--size-hero-nav)',
+                  width: '32px', height: '32px',
                   borderRadius: '50%',
-                  border: 'var(--border-hero-nav) solid var(--color-hero-nav-border)',
+                  border: '1px solid rgba(74,222,128,0.30)',
                   background: 'transparent',
-                  color: 'var(--color-hero-nav-text)',
-                  display: 'flex', 
-                  alignItems: 'center', 
-                  justifyContent: 'center',
-                  cursor: 'pointer', 
-                  transition: 'var(--transition-hero-nav)', 
-                  outline: 'none',
-                  flexShrink: 0,
-                  touchAction: 'manipulation',
+                  color: 'rgba(74,222,128,0.65)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  cursor: 'pointer', transition: 'all 0.2s ease', outline: 'none',
                 }}
                 onMouseEnter={e => {
-                  e.currentTarget.style.borderColor = 'var(--color-hero-nav-hover-border)';
-                  e.currentTarget.style.color       = 'var(--color-hero-nav-hover-text)';
-                  e.currentTarget.style.background  = 'var(--color-hero-nav-hover-bg)';
+                  e.currentTarget.style.borderColor = 'rgba(74,222,128,0.9)';
+                  e.currentTarget.style.color       = '#ffffff';
+                  e.currentTarget.style.background  = 'rgba(74,222,128,0.12)';
                 }}
                 onMouseLeave={e => {
-                  e.currentTarget.style.borderColor = 'var(--color-hero-nav-border)';
-                  e.currentTarget.style.color       = 'var(--color-hero-nav-text)';
+                  e.currentTarget.style.borderColor = 'rgba(74,222,128,0.30)';
+                  e.currentTarget.style.color       = 'rgba(74,222,128,0.65)';
                   e.currentTarget.style.background  = 'transparent';
                 }}
               >
-                <ChevronRight size={14} strokeWidth={2.5} style={{ width: 'var(--size-hero-nav-icon)', height: 'var(--size-hero-nav-icon)' }} />
+                <ChevronRight size={14} strokeWidth={2.5} />
               </button>
 
             </div>

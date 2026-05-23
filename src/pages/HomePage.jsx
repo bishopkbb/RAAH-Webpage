@@ -102,7 +102,7 @@ const HomeStyles = () => (
       /* Dimensions */
       --width-container: clamp(280px, 95vw, 1200px);
       --width-card-max: clamp(280px, 90vw, 420px);
-      --width-testimonial-max: clamp(280px, 90vw, 520px);
+      --width-testimonial-max: clamp(280px, 95vw, 520px);
       --width-step-number: clamp(44px, 8vw, 52px);
       --width-step-icon: clamp(28px, 5vw, 32px);
       --width-icon-container: clamp(56px, 10vw, 72px);
@@ -192,6 +192,14 @@ const HomeStyles = () => (
       /* Grid */
       --grid-features: repeat(3, 1fr);
       --grid-caregiver: repeat(auto-fit, minmax(280px, 1fr));
+      --grid-testimonials: 1fr;
+    }
+    
+    /* Tablet - 2 column testimonials */
+    @media (min-width: 768px) {
+      :root {
+        --grid-testimonials: repeat(2, 1fr);
+      }
     }
     
     /* Mobile-specific adjustments */
@@ -234,6 +242,44 @@ const HomeStyles = () => (
     .home-text {
       word-break: break-word;
       hyphens: auto;
+    }
+    
+    /* Grid utilities */
+    .features-grid {
+      display: grid;
+      gap: clamp(20px, 4vw, 24px);
+      justify-items: center;
+      grid-template-columns: var(--grid-features);
+    }
+    
+    .caregiver-grid {
+      display: grid;
+      gap: clamp(20px, 4vw, 24px);
+      justify-items: center;
+      grid-template-columns: var(--grid-caregiver);
+    }
+    
+    .testimonials-grid {
+      display: grid;
+      gap: clamp(20px, 4vw, 24px);
+      align-items: stretch;
+      grid-template-columns: var(--grid-testimonials);
+      width: 100%;
+      max-width: 100%;
+    }
+    
+    .workflow-grid {
+      display: grid;
+      gap: clamp(40px, 7vw, 48px);
+      align-items: stretch;
+      grid-template-columns: 1fr;
+    }
+    
+    @media (min-width: 768px) {
+      .workflow-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: clamp(64px, 10vw, 80px);
+      }
     }
   `}</style>
 );
@@ -1131,6 +1177,7 @@ const TestimonialCard = ({ t, visible }) => {
         width: '100%',
         maxWidth: 'var(--width-testimonial-max)',
         margin: '0 auto',
+        boxSizing: 'border-box',
       }}
     >
       {/* Top green accent bar — slides in on hover */}
@@ -1467,15 +1514,7 @@ const TestimonialsSection = () => {
           <div style={{ position: 'relative' }}>
 
             {/* Cards viewport */}
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(2, 1fr)',
-                gap: 'clamp(20px, 4vw, 24px)',
-                alignItems: 'stretch',
-              }}
-              className="grid-cols-1 md:grid-cols-2"
-            >
+            <div className="testimonials-grid">
               {/* Card A */}
               <div
                 style={{
@@ -1826,14 +1865,6 @@ const HomePage = () => {
           </Reveal>
 
           {/* Cards grid */}
-          <style>{`
-            .features-grid {
-              display: grid;
-              gap: clamp(20px, 4vw, 24px);
-              justify-items: center;
-              grid-template-columns: var(--grid-features);
-            }
-          `}</style>
           <div className="features-grid">
             {FEATURES.map((feature, i) => (
               <FeatureCard
@@ -1970,20 +2001,6 @@ const HomePage = () => {
         />
 
         <div className="container-custom" style={{ position: 'relative', zIndex: 1 }}>
-          <style>{`
-            .workflow-grid {
-              display: grid;
-              gap: clamp(40px, 7vw, 48px);
-              align-items: stretch;
-              grid-template-columns: 1fr;
-            }
-            @media (min-width: 768px) {
-              .workflow-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: clamp(64px, 10vw, 80px);
-              }
-            }
-          `}</style>
           <div className="workflow-grid">
 
             {/* ── LEFT — Image ── */}
@@ -2502,14 +2519,6 @@ const HomePage = () => {
           </Reveal>
 
           {/* ── Cards grid ── */}
-          <style>{`
-            .caregiver-grid {
-              display: grid;
-              gap: clamp(20px, 4vw, 24px);
-              justify-items: center;
-              grid-template-columns: var(--grid-caregiver);
-            }
-          `}</style>
           <div className="caregiver-grid">
             {[
               {
@@ -2748,180 +2757,188 @@ const HomePage = () => {
           </Reveal>
 
           {/* Stat callouts — social proof at the decision moment */}
-          <Reveal delay={220}>
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'center',
-                flexWrap: 'wrap',
-                gap: '0',
-                marginBottom: 'clamp(48px, 8vw, 56px)',
-                maxWidth: 'clamp(280px, 90vw, 680px)',
-                margin: '0 auto clamp(48px, 8vw, 56px)',
-              }}
-            >
-              {[
-                { value: '99.2%', label: 'Billing Accuracy' },
-                { value: '90%',   label: 'Fewer Claim Rejections' },
-                { value: '< 5min', label: 'Visit Documentation' },
-              ].map((stat, i) => (
-                <div
-                  key={stat.label}
-                  style={{
-                    flex: '1 1 100%',
-                    minWidth: 'clamp(140px, 25vw, 160px)',
-                    padding: 'clamp(20px, 4vw, 28px) clamp(20px, 4vw, 24px)',
-                    borderRight: i < 2 ? 'clamp(1px, 0.2vw, 1px) solid rgba(22,163,74,0.28)' : 'none',
-                    textAlign: 'center',
-                    boxSizing: 'border-box',
-                  }}
-                  className="sm:flex-1 sm:border-r sm:last:border-r-0"
-                >
-                  <p
-                    className="home-text"
-                    style={{
-                      fontFamily: "'Inter', sans-serif",
-                      fontWeight: 900,
-                      fontSize: 'clamp(1.5rem, 4vw, 2.75rem)',
-                      letterSpacing: '-0.03em',
-                      color: 'var(--color-text-green-dark)',
-                      lineHeight: 1,
-                      marginBottom: 'clamp(6px, 1vw, 8px)',
-                    }}
-                  >
-                    {stat.value}
-                  </p>
-                  <p
-                    className="home-text"
-                    style={{
-                      fontFamily: "'Poppins', sans-serif",
-                      fontSize: 'clamp(0.68rem, 1.4vw, 0.78rem)',
-                      fontWeight: 500,
-                      color: 'var(--color-text-muted)',
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.12em',
-                    }}
-                  >
-                    {stat.label}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </Reveal>
+<Reveal delay={220}>
+  <div
+    style={{
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'stretch',
+      gap: '0',
+      marginBottom: 'clamp(48px, 8vw, 56px)',
+      maxWidth: 'clamp(280px, 90vw, 800px)',
+      margin: '0 auto clamp(48px, 8vw, 56px)',
+    }}
+  >
+    {[
+      { value: '99.2%', label: 'Billing Accuracy' },
+      { value: '90%',   label: 'Fewer Claim Rejections' },
+      { value: '< 5min', label: 'Visit Documentation' },
+    ].map((stat, i) => (
+      <div
+        key={stat.label}
+        style={{
+          flex: '1',
+          padding: 'clamp(20px, 4vw, 28px) clamp(20px, 4vw, 24px)',
+          borderRight: i < 2 ? '1px solid rgba(22,163,74,0.28)' : 'none',
+          textAlign: 'center',
+          boxSizing: 'border-box',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+        }}
+      >
+        <p
+          className="home-text"
+          style={{
+            fontFamily: "'Inter', sans-serif",
+            fontWeight: 900,
+            fontSize: 'clamp(1.5rem, 4vw, 2.75rem)',
+            letterSpacing: '-0.03em',
+            color: 'var(--color-text-green-dark)',
+            lineHeight: 1,
+            marginBottom: 'clamp(6px, 1vw, 8px)',
+          }}
+        >
+          {stat.value}
+        </p>
+        <p
+          className="home-text"
+          style={{
+            fontFamily: "'Poppins', sans-serif",
+            fontSize: 'clamp(0.68rem, 1.4vw, 0.78rem)',
+            fontWeight: 500,
+            color: 'var(--color-text-muted)',
+            textTransform: 'uppercase',
+            letterSpacing: '0.12em',
+          }}
+        >
+          {stat.label}
+        </p>
+      </div>
+    ))}
+  </div>
+</Reveal>
 
-          {/* CTAs */}
-          <Reveal delay={300}>
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                gap: 'var(--margin-cta-buttons)',
-              }}
-              className="sm:flex-row sm:justify-center"
-            >
-              {/* Primary — Schedule Demo */}
-              <Link
-                to="/demo"
-                className="home-cta"
-                style={{
-                  fontFamily: "'Inter', sans-serif",
-                  fontWeight: 700,
-                  fontSize: 'var(--font-cta)',
-                  letterSpacing: '0.07em',
-                  textTransform: 'uppercase',
-                  padding: 'clamp(14px, 2.5vw, 18px) clamp(36px, 6vw, 44px)',
-                  borderRadius: 'var(--radius-cta)',
-                  background: 'var(--color-bg-cta-solid)',
-                  color: 'var(--color-text-white)',
-                  border: 'var(--border-cta) var(--color-bg-cta-solid)',
-                  boxShadow: 'var(--shadow-cta-lg)',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: 'var(--gap-cta-icon)',
-                  textDecoration: 'none',
-                  transition: 'var(--transition-cta)',
-                  whiteSpace: 'nowrap',
-                  minWidth: 'clamp(140px, 30vw, 200px)',
-                  justifyContent: 'center',
-                }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.background  = 'transparent';
-                  e.currentTarget.style.color       = 'var(--color-text-green)';
-                  e.currentTarget.style.borderColor = 'var(--color-text-green)';
-                  e.currentTarget.style.transform   = 'translateY(-3px)';
-                  e.currentTarget.style.boxShadow   = 'none';
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.background  = 'var(--color-bg-cta-solid)';
-                  e.currentTarget.style.color       = 'var(--color-text-white)';
-                  e.currentTarget.style.borderColor = 'var(--color-bg-cta-solid)';
-                  e.currentTarget.style.transform   = 'translateY(0)';
-                  e.currentTarget.style.boxShadow   = 'var(--shadow-cta-lg)';
-                }}
-              >
-                Schedule a Demo
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </Link>
+{/* CTAs */}
+<Reveal delay={300}>
+  <div
+    style={{
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      gap: 'var(--margin-cta-buttons)',
+      width: '100%',
+      maxWidth: '500px',
+      margin: '0 auto',
+    }}
+    className="sm:flex-row sm:justify-center"
+  >
+    {/* Primary — Schedule Demo */}
+    <Link
+      to="/demo"
+      className="home-cta"
+      style={{
+        fontFamily: "'Inter', sans-serif",
+        fontWeight: 700,
+        fontSize: 'var(--font-cta)',
+        letterSpacing: '0.07em',
+        textTransform: 'uppercase',
+        padding: 'clamp(14px, 2.5vw, 18px) clamp(36px, 6vw, 44px)',
+        borderRadius: 'var(--radius-cta)',
+        background: 'var(--color-bg-cta-solid)',
+        color: 'var(--color-text-white)',
+        border: 'var(--border-cta) var(--color-bg-cta-solid)',
+        boxShadow: 'none',
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 'var(--gap-cta-icon)',
+        textDecoration: 'none',
+        transition: 'var(--transition-cta)',
+        width: '100%',
+        maxWidth: '280px',
+        whiteSpace: 'nowrap',
+      }}
+      onMouseEnter={e => {
+        e.currentTarget.style.background  = 'transparent';
+        e.currentTarget.style.color       = 'var(--color-text-green)';
+        e.currentTarget.style.borderColor = 'var(--color-text-green)';
+        e.currentTarget.style.transform   = 'translateY(-3px)';
+        e.currentTarget.style.boxShadow   = 'none';
+      }}
+      onMouseLeave={e => {
+        e.currentTarget.style.background  = 'var(--color-bg-cta-solid)';
+        e.currentTarget.style.color       = 'var(--color-text-white)';
+        e.currentTarget.style.borderColor = 'var(--color-bg-cta-solid)';
+        e.currentTarget.style.transform   = 'translateY(0)';
+        e.currentTarget.style.boxShadow   = 'none';
+      }}
+    >
+      Schedule a Demo
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+    </Link>
 
-              {/* Secondary — Contact Sales */}
-              <Link
-                to="/contact"
-                className="home-cta"
-                style={{
-                  fontFamily: "'Inter', sans-serif",
-                  fontWeight: 700,
-                  fontSize: 'var(--font-cta)',
-                  letterSpacing: '0.07em',
-                  textTransform: 'uppercase',
-                  padding: 'clamp(14px, 2.5vw, 18px) clamp(36px, 6vw, 44px)',
-                  borderRadius: 'var(--radius-cta)',
-                  background: 'var(--color-bg-cta-ghost)',
-                  color: 'var(--color-text-green)',
-                  border: 'var(--border-cta) var(--color-text-green)',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: 'var(--gap-cta-icon)',
-                  textDecoration: 'none',
-                  transition: 'var(--transition-cta)',
-                  whiteSpace: 'nowrap',
-                  minWidth: 'clamp(140px, 30vw, 200px)',
-                  justifyContent: 'center',
-                }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.background  = 'var(--color-bg-cta-solid)';
-                  e.currentTarget.style.borderColor = 'var(--color-bg-cta-solid)';
-                  e.currentTarget.style.color       = 'var(--color-text-white)';
-                  e.currentTarget.style.transform   = 'translateY(-3px)';
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.background  = 'var(--color-bg-cta-ghost)';
-                  e.currentTarget.style.borderColor = 'var(--color-text-green)';
-                  e.currentTarget.style.color       = 'var(--color-text-green)';
-                  e.currentTarget.style.transform   = 'translateY(0)';
-                }}
-              >
-                Talk to Sales
-              </Link>
-            </div>
+    {/* Secondary — Contact Sales */}
+    <Link
+      to="/contact"
+      className="home-cta"
+      style={{
+        fontFamily: "'Inter', sans-serif",
+        fontWeight: 700,
+        fontSize: 'var(--font-cta)',
+        letterSpacing: '0.07em',
+        textTransform: 'uppercase',
+        padding: 'clamp(14px, 2.5vw, 18px) clamp(36px, 6vw, 44px)',
+        borderRadius: 'var(--radius-cta)',
+        background: 'var(--color-bg-cta-ghost)',
+        color: 'var(--color-text-green)',
+        border: 'var(--border-cta) var(--color-text-green)',
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 'var(--gap-cta-icon)',
+        textDecoration: 'none',
+        transition: 'var(--transition-cta)',
+        width: '100%',
+        maxWidth: '280px',
+        whiteSpace: 'nowrap',
+      }}
+      onMouseEnter={e => {
+        e.currentTarget.style.background  = 'var(--color-bg-cta-solid)';
+        e.currentTarget.style.borderColor = 'var(--color-bg-cta-solid)';
+        e.currentTarget.style.color       = 'var(--color-text-white)';
+        e.currentTarget.style.transform   = 'translateY(-3px)';
+      }}
+      onMouseLeave={e => {
+        e.currentTarget.style.background  = 'var(--color-bg-cta-ghost)';
+        e.currentTarget.style.borderColor = 'var(--color-text-green)';
+        e.currentTarget.style.color       = 'var(--color-text-green)';
+        e.currentTarget.style.transform   = 'translateY(0)';
+      }}
+    >
+      Talk to Sales
+    </Link>
+  </div>
 
-            {/* No-commitment reassurance */}
-            <p
-              className="home-text"
-              style={{
-                fontFamily: "'Poppins', sans-serif",
-                fontSize: 'var(--font-cta-small)',
-                fontWeight: 400,
-                color: 'var(--color-text-green)',
-                marginTop: 'var(--margin-cta-reassurance)',
-                letterSpacing: '0.04em',
-              }}
-            >
-              No credit card required. Setup in under 24 hours.
-            </p>
-          </Reveal>
+  {/* No-commitment reassurance */}
+  <p
+    className="home-text"
+    style={{
+      fontFamily: "'Poppins', sans-serif",
+      fontSize: 'var(--font-cta-small)',
+      fontWeight: 400,
+      color: 'var(--color-text-green)',
+      marginTop: 'var(--margin-cta-reassurance)',
+      letterSpacing: '0.04em',
+      textAlign: 'center',
+    }}
+  >
+    No credit card required. Setup in under 24 hours.
+  </p>
+</Reveal>
 
         </div>
       </section>

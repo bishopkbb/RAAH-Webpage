@@ -17,11 +17,13 @@
  *   ✦ No Icon alias in .map() — React.createElement with lowercase key
  *   ✦ No setState in effect body — mobile menu via onClick only
  *   ✦ ESLint-clean, zero unused imports
+ *   ✦ Single toggle button: Menu ↔ X morph based on isOpen state
+ *   ✦ Responsive improvements: fluid spacing, safe-area padding, proper breakpoints
  */
 
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Phone, MapPin, Clock, Facebook, Twitter, Linkedin, Instagram, ChevronRight, X } from 'lucide-react';
+import { Phone, MapPin, Clock, Facebook, Twitter, Linkedin, Instagram, ChevronRight, X, Menu } from 'lucide-react';
 
 // ─── Constants ─────────────────────────────────────────────────────────────────
 const TOPBAR_H  = 56;   // px — topbar at rest
@@ -87,7 +89,7 @@ const Navbar = ({ heroMode = false }) => {
         }}
       >
 
-        {/* ── TOPBAR ── */}
+        {/* ── TOPBAR ── (hidden on mobile) */}
         <div
           className="hidden md:block"
           style={{
@@ -117,10 +119,11 @@ const Navbar = ({ heroMode = false }) => {
               justifyContent: 'space-between',
               position: 'relative',
               zIndex: 1,
+              padding: '0 clamp(16px, 4vw, 24px)',
             }}
           >
             {/* Contact strip */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0', overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
               {CONTACT_ITEMS.map(({ icon, text, href, external }, idx) => {
                 const pill = (
                   <div
@@ -128,11 +131,12 @@ const Navbar = ({ heroMode = false }) => {
                       display: 'flex',
                       alignItems: 'center',
                       gap: '8px',
-                      padding: '0 20px',
+                      padding: '0 clamp(12px, 3vw, 20px)',
                       borderRight: idx < CONTACT_ITEMS.length - 1
                         ? '1px solid rgba(255,255,255,0.20)'
                         : 'none',
                       height: `${TOPBAR_H}px`,
+                      flexShrink: 0,
                     }}
                   >
                     {/* Icon badge */}
@@ -150,7 +154,7 @@ const Navbar = ({ heroMode = false }) => {
                     </div>
                     <span style={{
                       fontFamily: FONT_P,
-                      fontSize: '0.875rem',
+                      fontSize: 'clamp(0.75rem, 1.5vw, 0.875rem)',
                       fontWeight: 600,
                       color: '#ffffff',
                       letterSpacing: '0.015em',
@@ -185,7 +189,7 @@ const Navbar = ({ heroMode = false }) => {
             </div>
 
             {/* Social icons */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 'clamp(4px, 1vw, 6px)', flexShrink: 0 }}>
               {SOCIALS.map(({ icon, href, label }) => (
                 <a
                   key={label}
@@ -194,8 +198,8 @@ const Navbar = ({ heroMode = false }) => {
                   rel="noreferrer"
                   aria-label={label}
                   style={{
-                    width: '36px',
-                    height: '36px',
+                    width: 'clamp(32px, 6vw, 36px)',
+                    height: 'clamp(32px, 6vw, 36px)',
                     borderRadius: '9px',
                     border: '1px solid rgba(255,255,255,0.30)',
                     background: 'rgba(255,255,255,0.12)',
@@ -205,6 +209,7 @@ const Navbar = ({ heroMode = false }) => {
                     color: '#ffffff',
                     transition: 'all 0.25s cubic-bezier(0.22,1,0.36,1)',
                     textDecoration: 'none',
+                    flexShrink: 0,
                   }}
                   onMouseEnter={e => {
                     e.currentTarget.style.background   = 'rgba(255,255,255,0.30)';
@@ -237,8 +242,8 @@ const Navbar = ({ heroMode = false }) => {
             alignItems: 'center',
           }}
         >
-          <div className="container-custom" style={{ width: '100%' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '24px' }}>
+          <div className="container-custom" style={{ width: '100%', padding: '0 clamp(16px, 4vw, 24px)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 'clamp(16px, 3vw, 24px)' }}>
 
               {/* Logo */}
               <Link
@@ -257,7 +262,7 @@ const Navbar = ({ heroMode = false }) => {
                   src={logoUrl}
                   alt="RAAH Technologies"
                   style={{
-                    height: scrolled ? '44px' : '56px',
+                    height: scrolled ? 'clamp(36px, 6vw, 44px)' : 'clamp(44px, 8vw, 56px)',
                     width: 'auto',
                     display: 'block',
                     objectFit: 'contain',
@@ -271,10 +276,53 @@ const Navbar = ({ heroMode = false }) => {
                 />
               </Link>
 
-              {/* Desktop nav links */}
+              {/* ✅✅✅ SINGLE TOGGLE BUTTON: Menu ↔ X morph (mobile only) */}
+              <button
+                className="lg:hidden flex items-center justify-center"
+                onClick={() => setIsOpen(prev => !prev)}
+                type="button"
+                aria-label={isOpen ? 'Close menu' : 'Open menu'}
+                aria-expanded={isOpen}
+                aria-controls="mobile-menu"
+                style={{
+                  width: 'clamp(44px, 8vw, 48px)',
+                  height: 'clamp(44px, 8vw, 48px)',
+                  borderRadius: '12px',
+                  border: '2px solid #16a34a',
+                  background: isOpen ? '#16a34a' : 'transparent',
+                  color: '#16a34a',
+                  cursor: 'pointer',
+                  transition: 'all 0.25s cubic-bezier(0.22, 1, 0.36, 1)',
+                  padding: 0,
+                  margin: 0,
+                  outline: 'none',
+                  flexShrink: 0,
+                  boxShadow: isOpen ? '0 4px 12px rgba(22,163,74,0.30)' : 'none',
+                }}
+                onMouseEnter={e => {
+                  if (!isOpen) {
+                    e.currentTarget.style.background = 'rgba(22,163,74,0.08)';
+                    e.currentTarget.style.borderColor = 'rgba(22,163,74,0.40)';
+                  }
+                }}
+                onMouseLeave={e => {
+                  if (!isOpen) {
+                    e.currentTarget.style.background = 'transparent';
+                    e.currentTarget.style.borderColor = 'rgba(22,163,74,0.20)';
+                  }
+                }}
+              >
+                {isOpen ? (
+                  <X size={22} strokeWidth={2.5} color="#ffffff" />
+                ) : (
+                  <Menu size={22} strokeWidth={2} color="#16a34a" />
+                )}
+              </button>
+
+              {/* Desktop nav links (hidden on mobile) */}
               <nav
                 className="hidden lg:flex items-center flex-1 justify-center"
-                style={{ gap: '2.25rem' }}
+                style={{ gap: 'clamp(1.5rem, 3vw, 2.25rem)' }}
                 aria-label="Main navigation"
               >
                 {NAV_LINKS.map((link) => {
@@ -286,7 +334,7 @@ const Navbar = ({ heroMode = false }) => {
                       style={{
                         fontFamily: FONT_I,
                         fontWeight: 700,
-                        fontSize: '1rem',
+                        fontSize: 'clamp(0.9rem, 1.5vw, 1rem)',
                         letterSpacing: '0.01em',
                         color: active ? '#16a34a' : '#0f172a',
                         padding: '6px 0',
@@ -294,6 +342,7 @@ const Navbar = ({ heroMode = false }) => {
                         position: 'relative',
                         textDecoration: 'none',
                         transition: 'color 0.2s ease, transform 0.2s ease',
+                        whiteSpace: 'nowrap',
                       }}
                       onMouseEnter={e => {
                         e.currentTarget.style.color     = '#16a34a';
@@ -334,7 +383,7 @@ const Navbar = ({ heroMode = false }) => {
                 })}
               </nav>
 
-              {/* Desktop CTAs */}
+              {/* Desktop CTAs (hidden on mobile) */}
               <div
                 className="hidden lg:flex items-center gap-3"
                 style={{ flexShrink: 0 }}
@@ -345,6 +394,7 @@ const Navbar = ({ heroMode = false }) => {
                   height: '32px',
                   background: 'rgba(22,163,74,0.20)',
                   marginRight: '4px',
+                  flexShrink: 0,
                 }} />
 
                 {/* Ghost — Get Pricing */}
@@ -352,11 +402,11 @@ const Navbar = ({ heroMode = false }) => {
                   to="/pricing"
                   style={{
                     fontFamily: FONT_I,
-                    fontSize: '0.8125rem',
+                    fontSize: 'clamp(0.75rem, 1.2vw, 0.8125rem)',
                     fontWeight: 700,
                     letterSpacing: '0.07em',
                     textTransform: 'uppercase',
-                    padding: '11px 24px',
+                    padding: 'clamp(10px, 2vw, 11px) clamp(18px, 3vw, 24px)',
                     borderRadius: '999px',
                     border: '2px solid #16a34a',
                     color: '#16a34a',
@@ -389,11 +439,11 @@ const Navbar = ({ heroMode = false }) => {
                   to="/demo"
                   style={{
                     fontFamily: FONT_I,
-                    fontSize: '0.8125rem',
+                    fontSize: 'clamp(0.75rem, 1.2vw, 0.8125rem)',
                     fontWeight: 700,
                     letterSpacing: '0.07em',
                     textTransform: 'uppercase',
-                    padding: '11px 24px',
+                    padding: 'clamp(10px, 2vw, 11px) clamp(18px, 3vw, 24px)',
                     borderRadius: '999px',
                     background: '#16a34a',
                     border: '2px solid #16a34a',
@@ -423,8 +473,6 @@ const Navbar = ({ heroMode = false }) => {
                   <ChevronRight size={14} strokeWidth={2.5} />
                 </Link>
               </div>
-
-
 
             </div>
           </div>
@@ -456,48 +504,49 @@ const Navbar = ({ heroMode = false }) => {
       )}
 
       {/* ══════════════════════════════════════════════════════
-          MOBILE MENU — full-screen slide-in from right
+          ✅ MOBILE MENU — full-screen slide-in from right
+          NO separate close button — uses the morphing toggle above
       ══════════════════════════════════════════════════════ */}
       <div
-        className="lg:hidden fixed inset-0 z-[55]"
+        id="mobile-menu"
+        className="lg:hidden fixed inset-0 z-55"
         style={{
           background: '#ffffff',
           transform: isOpen ? 'translateX(0)' : 'translateX(100%)',
           transition: 'transform 0.32s cubic-bezier(0.22, 1, 0.36, 1)',
-          height: '100dvh',
+          height: '100vh',
+          overflow: 'hidden',
+          paddingTop: 'env(safe-area-inset-top, 0px)',
         }}
         aria-hidden={!isOpen}
+        role="dialog"
+        aria-modal="true"
       >
-        {/* Mobile header */}
+        {/* ✅ Mobile header — NO close button, just logo */}
         <div style={{
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'space-between',
-          padding: '0 24px',
+          justifyContent: 'flex-start',
+          padding: '0 clamp(16px, 4vw, 20px)',
           height: `${NAV_H}px`,
           borderBottom: '1px solid rgba(22,163,74,0.10)',
+          position: 'relative',
+          zIndex: 10,
+          background: '#ffffff',
         }}>
           <Link to="/" onClick={() => setIsOpen(false)}>
             <img src={logoUrl} alt="RAAH Technologies" style={{ height: '42px', width: 'auto', border: 'none', background: 'transparent', padding: 0 }} />
           </Link>
-          <button
-            onClick={() => setIsOpen(false)}
-            style={{
-              width: '40px', height: '40px', borderRadius: '10px',
-              border: '1.5px solid rgba(22,163,74,0.20)',
-              background: 'transparent', color: '#6b7280',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              cursor: 'pointer', transition: 'all 0.2s ease',
-            }}
-            aria-label="Close menu"
-          >
-            <X size={22} strokeWidth={2} />
-          </button>
         </div>
 
         {/* Scrollable body */}
-        <div style={{ overflowY: 'auto', height: `calc(100dvh - ${NAV_H}px)` }}>
-          <div style={{ padding: '8px 24px 40px', display: 'flex', flexDirection: 'column' }}>
+        <div style={{ 
+          overflowY: 'auto', 
+          height: `calc(100dvh - ${NAV_H}px)`, 
+          paddingBottom: 'env(safe-area-inset-bottom, 0px)',
+          WebkitOverflowScrolling: 'touch',
+        }}>
+          <div style={{ padding: 'clamp(8px, 2vw, 8px) clamp(20px, 5vw, 24px) clamp(24px, 6vw, 40px)', display: 'flex', flexDirection: 'column' }}>
 
             {/* Nav links */}
             <nav style={{ display: 'flex', flexDirection: 'column' }}>
@@ -510,13 +559,13 @@ const Navbar = ({ heroMode = false }) => {
                     onClick={() => setIsOpen(false)}
                     style={{
                       fontFamily: FONT_I,
-                      fontSize: '1.25rem',
+                      fontSize: 'clamp(1.125rem, 4vw, 1.25rem)',
                       fontWeight: 700,
                       color: active ? '#16a34a' : '#0f172a',
-                      padding: '16px 0',
+                      padding: 'clamp(14px, 3vw, 16px) 0',
                       borderBottom: '1px solid rgba(22,163,74,0.08)',
                       borderLeft: `3px solid ${active ? '#16a34a' : 'transparent'}`,
-                      paddingLeft: active ? '14px' : '0',
+                      paddingLeft: active ? 'clamp(10px, 2vw, 14px)' : '0',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'space-between',
@@ -528,11 +577,11 @@ const Navbar = ({ heroMode = false }) => {
                     {active && (
                       <span style={{
                         fontFamily: FONT_P,
-                        fontSize: '0.65rem',
+                        fontSize: 'clamp(0.6rem, 2vw, 0.65rem)',
                         fontWeight: 600,
                         textTransform: 'uppercase',
                         letterSpacing: '0.1em',
-                        padding: '3px 10px',
+                        padding: 'clamp(2px, 1vw, 3px) clamp(8px, 2vw, 10px)',
                         borderRadius: '999px',
                         background: '#f0fdf4',
                         color: '#16a34a',
@@ -544,14 +593,14 @@ const Navbar = ({ heroMode = false }) => {
             </nav>
 
             {/* CTAs */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '32px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(10px, 2vw, 12px)', marginTop: 'clamp(24px, 5vw, 32px)' }}>
               <Link
                 to="/pricing"
                 onClick={() => setIsOpen(false)}
                 style={{
-                  fontFamily: FONT_I, fontSize: '0.9375rem', fontWeight: 700,
+                  fontFamily: FONT_I, fontSize: 'clamp(0.875rem, 2.5vw, 0.9375rem)', fontWeight: 700,
                   letterSpacing: '0.06em', textTransform: 'uppercase',
-                  padding: '15px 24px', border: '2px solid #16a34a',
+                  padding: 'clamp(12px, 3vw, 15px) clamp(20px, 4vw, 24px)', border: '2px solid #16a34a',
                   color: '#16a34a', background: 'transparent',
                   borderRadius: '14px', textAlign: 'center',
                   display: 'block', textDecoration: 'none',
@@ -561,9 +610,9 @@ const Navbar = ({ heroMode = false }) => {
                 to="/demo"
                 onClick={() => setIsOpen(false)}
                 style={{
-                  fontFamily: FONT_I, fontSize: '0.9375rem', fontWeight: 700,
+                  fontFamily: FONT_I, fontSize: 'clamp(0.875rem, 2.5vw, 0.9375rem)', fontWeight: 700,
                   letterSpacing: '0.06em', textTransform: 'uppercase',
-                  padding: '15px 24px', background: '#16a34a',
+                  padding: 'clamp(12px, 3vw, 15px) clamp(20px, 4vw, 24px)', background: '#16a34a',
                   border: '2px solid #16a34a', color: '#ffffff',
                   boxShadow: '0 6px 20px rgba(22,163,74,0.28)',
                   borderRadius: '14px', textAlign: 'center',
@@ -574,25 +623,25 @@ const Navbar = ({ heroMode = false }) => {
 
             {/* Contact block */}
             <div style={{
-              marginTop: '36px',
-              paddingTop: '28px',
+              marginTop: 'clamp(28px, 6vw, 36px)',
+              paddingTop: 'clamp(20px, 4vw, 28px)',
               borderTop: '1px solid rgba(22,163,74,0.10)',
               display: 'flex',
               flexDirection: 'column',
-              gap: '18px',
+              gap: 'clamp(14px, 3vw, 18px)',
             }}>
               <p style={{
                 fontFamily: FONT_I,
-                fontSize: '0.68rem',
+                fontSize: 'clamp(0.62rem, 2vw, 0.68rem)',
                 fontWeight: 700,
                 textTransform: 'uppercase',
                 letterSpacing: '0.12em',
                 color: '#94a3b8',
               }}>Contact</p>
               {CONTACT_ITEMS.map(({ icon, text, href, external }) => (
-                <div key={text} style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                <div key={text} style={{ display: 'flex', alignItems: 'center', gap: 'clamp(10px, 2vw, 14px)' }}>
                   <div style={{
-                    width: '36px', height: '36px', borderRadius: '10px',
+                    width: 'clamp(32px, 6vw, 36px)', height: 'clamp(32px, 6vw, 36px)', borderRadius: '10px',
                     background: 'rgba(22,163,74,0.08)',
                     border: '1px solid rgba(22,163,74,0.16)',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -602,11 +651,11 @@ const Navbar = ({ heroMode = false }) => {
                   </div>
                   {href ? (
                     <a href={href} target={external ? '_blank' : undefined} rel={external ? 'noreferrer' : undefined}
-                      style={{ fontFamily: FONT_P, fontSize: '0.9375rem', fontWeight: 500, color: '#374151', textDecoration: 'none' }}>
+                      style={{ fontFamily: FONT_P, fontSize: 'clamp(0.875rem, 2.5vw, 0.9375rem)', fontWeight: 500, color: '#374151', textDecoration: 'none', wordBreak: 'break-word' }}>
                       {text}
                     </a>
                   ) : (
-                    <span style={{ fontFamily: FONT_P, fontSize: '0.9375rem', fontWeight: 500, color: '#94a3b8' }}>
+                    <span style={{ fontFamily: FONT_P, fontSize: 'clamp(0.875rem, 2.5vw, 0.9375rem)', fontWeight: 500, color: '#94a3b8' }}>
                       {text}
                     </span>
                   )}
@@ -615,15 +664,16 @@ const Navbar = ({ heroMode = false }) => {
             </div>
 
             {/* Social icons */}
-            <div style={{ display: 'flex', gap: '10px', marginTop: '28px' }}>
+            <div style={{ display: 'flex', gap: 'clamp(8px, 2vw, 10px)', marginTop: 'clamp(20px, 4vw, 28px)', flexWrap: 'wrap' }}>
               {SOCIALS.map(({ icon, href, label }) => (
                 <a key={label} href={href} target="_blank" rel="noreferrer" aria-label={label}
                   style={{
-                    width: '40px', height: '40px', borderRadius: '10px',
+                    width: 'clamp(36px, 7vw, 40px)', height: 'clamp(36px, 7vw, 40px)', borderRadius: '10px',
                     border: '1.5px solid rgba(22,163,74,0.20)',
                     background: 'rgba(22,163,74,0.05)',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     color: '#16a34a', textDecoration: 'none',
+                    flexShrink: 0,
                   }}>
                   {React.createElement(icon, { size: 16, strokeWidth: 1.75 })}
                 </a>
@@ -637,8 +687,12 @@ const Navbar = ({ heroMode = false }) => {
       {/* Mobile menu backdrop */}
       {isOpen && (
         <div
-          className="lg:hidden fixed inset-0 z-[54]"
-          style={{ background: 'rgba(5,46,22,0.40)', backdropFilter: 'blur(2px)' }}
+          className="lg:hidden fixed inset-0 z-54"
+          style={{ 
+            background: 'rgba(5,46,22,0.40)', 
+            backdropFilter: 'blur(2px)',
+            touchAction: 'none',
+          }}
           onClick={() => setIsOpen(false)}
           aria-hidden="true"
         />

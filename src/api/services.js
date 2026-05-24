@@ -3,39 +3,24 @@
  *
  * Single authoritative API client for ALL public website calls.
  *
- * ─── What changed and why ────────────────────────────────────────────────────
+ * ─── Field name mapping (snake_case → camelCase) ─────────────────────────────
+ * The frontend forms use snake_case field names internally (React convention).
+ * The backend expects camelCase. This file is the translation layer —
+ * components never need to know the backend's naming convention.
  *
- * BEFORE: Two Axios instances existed:
- *   • api/client.js  — hardcoded 'http://localhost/...' URL. No env var.
- *                      No timeout. No interceptors. Used by publicApi.
- *   • services/api.js — reads from VITE_API_BASE_URL. Has interceptors.
- *                       Used by admin pages only.
+ *   Frontend form field     →  Backend field name
+ *   ─────────────────────────────────────────────
+ *   agency_name             →  agencyName
+ *   contact_name            →  contactName
+ *   contact_email           →  email
+ *   contact_phone           →  phone
+ *   estimated_patients      →  patientRange
+ *   recaptcha_token         →  recaptchaToken
+ *   notes                   →  notes          (same)
+ *   state                   →  state          (new — not collected yet)
  *
- * PROBLEM: publicApi was calling the broken client (localhost), so ALL
- *   form submissions (DemoRequest, PricingRequest, QuotePage) silently
- *   failed in any non-local environment.
- *
- * ALSO: Endpoint paths were wrong:
- *   /demo-requests      → should be /website/demo-request
- *   /pricing-requests   → should be /website/pricing-request
- *   /quote/:token       → should be /website/quote?token=:token  (GET)
- *   /quote/:token/checkout → should be /website/quote/pay        (POST)
- *   Contact form had NO endpoint at all (setTimeout stub only).
- *
- * FIX:
- *   1. Kill api/client.js — replace this file with the consolidated client.
- *   2. Build one Axios instance from VITE_API_BASE_URL with timeout,
- *      content-type headers, and a response interceptor that normalises
- *      all error shapes before they reach any component.
- *   3. Wire every public endpoint with the correct paths from the handover doc.
- *   4. Export publicApi as a named export so all pages import identically.
- *
- * ─── Environment variable required ──────────────────────────────────────────
- *   VITE_API_BASE_URL=https://api.raahtech.com/api/v1   (production)
- *   VITE_API_BASE_URL=http://localhost:8000/api/v1       (local dev)
- *
- *   This file will throw a clear startup error if the var is missing
- *   so it surfaces immediately in dev rather than silently failing at runtime.
+ * ─── Environment variable required ───────────────────────────────────────────
+ *   VITE_API_BASE_URL=https://traceworka.ng/raahtech/api/v1
  */
 
 import axios from 'axios';
@@ -46,8 +31,8 @@ const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 if (!BASE_URL) {
   throw new Error(
     '[RAAH] VITE_API_BASE_URL is not set.\n' +
-    'Create a .env file at the project root with:\n' +
-    '  VITE_API_BASE_URL=http://localhost:8000/api/v1\n' +
+    'Add to your .env file:\n' +
+    '  VITE_API_BASE_URL=https://traceworka.ng/raahtech/api/v1\n' +
     'Never hardcode this value in source files.'
   );
 }
@@ -55,7 +40,7 @@ if (!BASE_URL) {
 // ─── Axios instance ───────────────────────────────────────────────────────────
 const apiClient = axios.create({
   baseURL: BASE_URL,
-  timeout: 15000, // 15 s — generous for mobile networks
+  timeout: 15000,
   headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
@@ -63,8 +48,6 @@ const apiClient = axios.create({
 });
 
 // ─── Request interceptor ──────────────────────────────────────────────────────
-// Attaches the admin Bearer token when present.
-// Public endpoints are unauthenticated — the token is simply absent.
 apiClient.interceptors.request.use(
   config => {
     const token = localStorage.getItem('admin_token');
@@ -77,15 +60,8 @@ apiClient.interceptors.request.use(
 );
 
 // ─── Response interceptor ─────────────────────────────────────────────────────
-// Normalises every error into a consistent shape so components
-// never need to write defensive chains like:
-//   error.response?.data?.message || error.message || 'Unknown error'
-//
-// After this interceptor every caught error has:
-//   error.message        — human-readable summary string
-//   error.fieldErrors    — { fieldName: ['msg', ...] } | null
-//   error.statusCode     — HTTP status | 0 for network failures
-//
+// Normalises every error into { message, fieldErrors, statusCode }
+// so components never need to write defensive error.response?.data chains.
 apiClient.interceptors.response.use(
   response => response,
   error => {
@@ -100,7 +76,7 @@ apiClient.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    // Normalise field errors (Laravel 422 validation shape)
+    // Normalise Laravel 422 validation errors
     const fieldErrors = data.errors
       ? Object.fromEntries(
           Object.entries(data.errors).map(([k, v]) => [
@@ -110,8 +86,7 @@ apiClient.interceptors.response.use(
         )
       : null;
 
-    // Attach normalised props to the error object
-    error.message    = data.message || error.message || 'An unexpected error occurred.';
+    error.message     = data.message || error.message || 'An unexpected error occurred.';
     error.fieldErrors = fieldErrors;
     error.statusCode  = status;
 
@@ -119,44 +94,81 @@ apiClient.interceptors.response.use(
   }
 );
 
+// ─── Field name mapper ────────────────────────────────────────────────────────
+// Converts the frontend's snake_case form fields to the backend's camelCase.
+// Called inside every public submit function — never in components.
+const mapDemoFields = (data) => ({
+  agencyName:     data.agency_name,
+  contactName:    data.contact_name,
+  email:          data.contact_email,
+  phone:          data.contact_phone   || undefined,
+  patientRange:   data.estimated_patients
+                    ? String(data.estimated_patients)
+                    : undefined,
+  notes:          data.notes           || undefined,
+  // Extra fields the backend may ignore but are useful for analytics
+  demoFormat:     data.demo_format     || undefined,
+  primaryChallenge: data.primary_challenge || undefined,
+  preferredDemoDate: data.preferred_demo_date || undefined,
+  recaptchaToken: data.recaptcha_token,
+});
+
+const mapPricingFields = (data) => ({
+  agencyName:     data.agency_name,
+  contactName:    data.contact_name,
+  email:          data.contact_email,
+  phone:          data.contact_phone   || undefined,
+  patientRange:   data.estimated_patients
+                    ? String(data.estimated_patients)
+                    : undefined,
+  notes:          data.notes           || undefined,
+  recaptchaToken: data.recaptcha_token,
+});
+
 // ─── Public API surface ───────────────────────────────────────────────────────
-// All paths match /website/* from the engineering handover doc exactly.
-// No path should ever be guessed — if the backend changes a path, change it here.
 
 export const publicApi = {
 
-  // ── Lead generation ──────────────────────────────────────────────────────────
+  // ── Lead generation ───────────────────────────────────────────────────────
 
   /**
    * POST /website/demo-request
-   * Payload: { agency_name, contact_name, contact_email, contact_phone?,
-   *            estimated_patients, preferred_demo_date?, demo_format,
-   *            primary_challenge?, recaptcha_token }
+   * Backend fields: agencyName, contactName, email, phone,
+   *                 state, patientRange, notes, recaptchaToken
    */
   submitDemoRequest: (data) =>
-    apiClient.post('/website/demo-request', data),
+    apiClient.post('/website/demo-request', mapDemoFields(data)),
 
   /**
    * POST /website/pricing-request
-   * Payload: { agency_name, contact_name, contact_email, contact_phone?,
-   *            estimated_patients?, notes?, recaptcha_token }
+   * Backend fields: agencyName, contactName, email, phone,
+   *                 patientRange, notes, recaptchaToken
    */
   submitPricingRequest: (data) =>
-    apiClient.post('/website/pricing-request', data),
+    apiClient.post('/website/pricing-request', mapPricingFields(data)),
 
   /**
    * POST /website/contact
-   * Payload: { name, agency, email, phone?, subject, message }
+   * Backend fields: name, email, phone, subject, message, source
+   * Note: 'agency' field from the form is sent as extra — backend may ignore.
    */
   submitContact: (data) =>
-    apiClient.post('/website/contact', data),
+    apiClient.post('/website/contact', {
+      name:    data.name,
+      email:   data.email,
+      phone:   data.phone    || undefined,
+      subject: data.subject,
+      message: data.message,
+      source:  'website',
+      // agency is not in the backend spec but sent for Super Admin context
+      agency:  data.agency   || undefined,
+    }),
 
-  // ── Subscription flow ────────────────────────────────────────────────────────
+  // ── Subscription flow ──────────────────────────────────────────────────────
 
   /**
    * GET /website/quote?token=:token
    * Returns: { data: { agency_name, plans: [...], default_plan_id } }
-   * Token-gated — no auth header needed, token is in the query string.
    */
   getQuoteDetails: (token) =>
     apiClient.get('/website/quote', { params: { token } }),
@@ -169,22 +181,18 @@ export const publicApi = {
   createCheckoutSession: (token, data) =>
     apiClient.post('/website/quote/pay', { token, ...data }),
 
-  // ── Dynamic content (for future wiring) ─────────────────────────────────────
+  // ── Content endpoints ──────────────────────────────────────────────────────
 
   /**
    * GET /website/testimonials
    * Returns approved testimonials for the HomePage carousel.
-   * Currently the HomePage uses static TESTIMONIALS data.
-   * Swap to this call when the backend is ready.
    */
   getTestimonials: () =>
     apiClient.get('/website/testimonials'),
 
   /**
    * GET /website/stats
-   * Returns live platform stats: agencies_served, visits_managed, etc.
-   * Currently the HomePage uses hardcoded stat values.
-   * Swap to this call when the backend is ready.
+   * Returns live platform stats for the HomePage.
    */
   getStats: () =>
     apiClient.get('/website/stats'),
@@ -192,10 +200,23 @@ export const publicApi = {
   /**
    * POST /website/newsletter-subscribe
    * Payload: { email }
-   * Used by the Footer newsletter opt-in.
    */
   subscribeNewsletter: (email) =>
     apiClient.post('/website/newsletter-subscribe', { email }),
+
+  /**
+   * POST /website/newsletter-unsubscribe
+   * Payload: { email }
+   */
+  unsubscribeNewsletter: (email) =>
+    apiClient.post('/website/newsletter-unsubscribe', { email }),
+
+  /**
+   * POST /website/book-call
+   * Payload: { name, email, phone?, preferredTime? }
+   */
+  bookCall: (data) =>
+    apiClient.post('/website/book-call', data),
 };
 
 export default apiClient;

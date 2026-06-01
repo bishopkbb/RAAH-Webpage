@@ -9,7 +9,7 @@
  *   No em dashes in content
  *
  * Sections:
- *   1. Page Hero        — dark green overlay, centred headline
+ *   1. Page Hero        — dark green overlay, centred headline (NO WAVE DIVIDER)
  *   2. By the Numbers   — brand green gradient, 4 stats
  *   3. What Drives Us   — white, 3 SVG-icon value columns
  *   4. How We Work      — dark green, 3-step process
@@ -154,7 +154,6 @@ const GlobalStyles = () => (
       --width-cta-button: clamp(160px, 30vw, 200px);
       --width-eyebrow-line: clamp(24px, 4vw, 32px);
       --height-eyebrow-line: clamp(1px, 0.2vw, 1.5px);
-      --height-wave: clamp(40px, 6vw, 80px);
       --height-top-fade: clamp(60px, 10vw, 80px);
       --min-height-hero: clamp(50vh, 70vw, 70vh);
       --min-height-story-image: clamp(320px, 50vw, 520px);
@@ -232,33 +231,40 @@ const GlobalStyles = () => (
       --transition-pulse: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
       --transition-pulse-outer: all 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.04s;
     }
+    
+    /* Mobile image fix */
+    .story-image-wrapper img {
+      width: 100% !important;
+      height: auto !important;
+      min-height: 200px;
+      object-fit: cover !important;
+    }
+    
+    /* Prevent horizontal scroll */
+    .about-page, .about-page * {
+      max-width: 100vw;
+      overflow-x: hidden;
+    }
+    
+    /* Touch targets */
+    @media (hover: none) and (pointer: coarse) {
+      .about-cta, .about-nav-btn, .about-pip {
+        min-height: 44px;
+        min-width: 44px;
+        touch-action: manipulation;
+      }
+    }
+    
+    /* Headline text balancing */
+    .hero-headline-line {
+      text-wrap: balance;
+      hyphens: auto;
+      word-break: normal;
+    }
   `}</style>
 );
 
-// ─── Section wave divider ─────────────────────────────────────────────────────
-const WaveDivider = ({ topColor, bottomColor, flip = false }) => (
-  <div style={{ 
-    position: 'relative', 
-    height: 'var(--height-wave)', 
-    overflow: 'hidden', 
-    background: topColor, 
-    marginBottom: '-1px' 
-  }}>
-    <svg
-      viewBox="0 0 1440 80" preserveAspectRatio="none"
-      style={{
-        position: 'absolute', bottom: 0, left: 0,
-        width: '100%', height: '100%',
-        transform: flip ? 'scaleX(-1)' : 'none',
-      }}
-    >
-      <path
-        d="M0,40 C240,80 480,0 720,40 C960,80 1200,0 1440,40 L1440,80 L0,80 Z"
-        fill={bottomColor}
-      />
-    </svg>
-  </div>
-);
+// ─── Removed WaveDivider component entirely ─────────────────────────────────────
 
 const DotGrid = ({ color = 'var(--color-dot-grid)' }) => (
   <div
@@ -371,7 +377,7 @@ const IconInnovation = () => (
     <rect x="6" y="6" width="36" height="36" rx="6" fill="var(--color-accent-green-dim)" stroke="var(--color-accent-green)" strokeWidth="1.5"/>
     <path d="M14 24H20M28 24H34" stroke="var(--color-accent-green)" strokeWidth="1.5" strokeLinecap="round"/>
     <path d="M24 14V20M24 28V34" stroke="var(--color-accent-green)" strokeWidth="1.5" strokeLinecap="round"/>
-    <path d="M20 24C20 21.8 21.8 20 24 20C26.2 20 28 21.8 28 24C28 26.2 26.2 28 24 28C21.8 28 20 26.2 20 24Z" fill="var(--color-accent-green-dimmer)" stroke="var(--color-accent-green)" strokeWidth="1.5"/>
+    <path d="M20 24C20 21.8 21.8 20 24 20C26.2 20 28 21.8 28 24C28 26.2 26.2 28 24 28C21.8 28 20 26.2 20 24C20 21.8 21.8 20 24 20Z" fill="var(--color-accent-green-dimmer)" stroke="var(--color-accent-green)" strokeWidth="1.5"/>
     <circle cx="24" cy="24" r="2.5" fill="var(--color-accent-green)"/>
     <circle cx="12" cy="12" r="2" fill="var(--color-accent-green)" opacity="0.5"/>
     <circle cx="36" cy="12" r="2" fill="var(--color-accent-green)" opacity="0.5"/>
@@ -756,14 +762,15 @@ const AboutPage = () => (
     <GlobalStyles />
 
     {/* ══════════════════════════════════════════════════════════════
-        1. PAGE HERO
+        1. PAGE HERO — NO WAVE DIVIDER, MATCHES HOMEPAGE HERO STYLE
     ══════════════════════════════════════════════════════════════ */}
     <section style={{ 
       position: 'relative', 
       minHeight: 'var(--min-height-hero)', 
       display: 'flex', 
       alignItems: 'center', 
-      overflow: 'hidden' 
+      overflow: 'hidden',
+      paddingBottom: 'clamp(40px, 8vw, 60px)' // Added bottom padding to replace wave
     }}>
       <img
         src="https://images.unsplash.com/photo-1551076805-e1869033e561?auto=format&fit=crop&q=80&w=2000&h=900&crop=top"
@@ -809,24 +816,72 @@ const AboutPage = () => (
         <Reveal delay={0}>
           <Eyebrow label="Our Story" light />
         </Reveal>
+        
+        {/* ✅ Updated hero heading with isolated green accent line */}
         <Reveal delay={80}>
-          <h1 style={{
-            fontFamily: FI, 
-            fontWeight: 900,
-            fontSize: 'var(--font-hero)',
-            letterSpacing: '-0.03em', 
-            lineHeight: 1.05,
-            color: '#ffffff', 
-            marginBottom: 'var(--margin-eyebrow-light)',
-            maxWidth: 'var(--max-width-hero-text)', 
-            margin: `0 auto var(--margin-eyebrow-light)`,
-            wordBreak: 'break-word',
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            textAlign: 'center',
+            width: '100%',
+            maxWidth: 'var(--max-width-hero-text)',
+            margin: '0 auto',
+            gap: 'clamp(0.15em, 1.5vw, 0.3em)'
           }}>
-            Built for the People{' '}
-            <span style={{ color: 'var(--color-accent-green-light)' }}>Who Keep</span>{' '}
-            Care Moving
-          </h1>
+            {/* Line 1 */}
+            <h1 style={{
+              fontFamily: FI, 
+              fontWeight: 900,
+              fontSize: 'var(--font-hero)',
+              letterSpacing: '-0.03em', 
+              lineHeight: 1.05,
+              color: '#ffffff', 
+              display: 'block', 
+              width: '100%',
+              textShadow: '0 2px 8px rgba(0,0,0,0.15)',
+              wordBreak: 'break-word',
+              textWrap: 'balance'
+            }}>
+              Built for the People
+            </h1>
+
+            {/* Line 2 — Green Accent (isolated on its own line) */}
+            <h1 style={{
+              fontFamily: FI, 
+              fontWeight: 900,
+              fontSize: 'var(--font-hero)',
+              letterSpacing: '-0.03em', 
+              lineHeight: 1.05,
+              color: 'var(--color-accent-green-light)', 
+              display: 'block', 
+              width: '100%',
+              textShadow: '0 2px 12px rgba(74,222,128,0.35)',
+              wordBreak: 'break-word',
+              textWrap: 'balance'
+            }}>
+              Who Keep
+            </h1>
+
+            {/* Line 3 */}
+            <h1 style={{
+              fontFamily: FI, 
+              fontWeight: 900,
+              fontSize: 'var(--font-hero)',
+              letterSpacing: '-0.03em', 
+              lineHeight: 1.05,
+              color: '#ffffff', 
+              display: 'block', 
+              width: '100%',
+              textShadow: '0 2px 8px rgba(0,0,0,0.15)',
+              wordBreak: 'break-word',
+              textWrap: 'balance'
+            }}>
+              Care Moving
+            </h1>
+          </div>
         </Reveal>
+        
         <Reveal delay={160}>
           <p style={{
             fontFamily: FP, 
@@ -844,10 +899,10 @@ const AboutPage = () => (
       </div>
     </section>
 
-    <WaveDivider topColor="var(--color-overlay)" bottomColor="var(--color-bg-section-light)" />
+    {/* REMOVED WAVE DIVIDER HERE */}
 
     {/* ══════════════════════════════════════════════════════════════
-        2. OUR STORY
+        2. OUR STORY — FIXED MOBILE IMAGE DISPLAY
     ══════════════════════════════════════════════════════════════ */}
     <section style={{ 
       background: 'var(--color-bg-section-light)', 
@@ -874,7 +929,7 @@ const AboutPage = () => (
         `}</style>
         <div className="story-grid">
 
-          {/* Image */}
+          {/* Image — FIXED FOR MOBILE */}
           <Reveal delay={0}>
             <div style={{ 
               position: 'relative', 
@@ -900,9 +955,11 @@ const AboutPage = () => (
                 height: '100%',
                 boxShadow: '0 clamp(24px, 4vw, 32px) clamp(64px, 10vw, 80px) rgba(5,46,22,0.14), 0 clamp(6px, 1vw, 8px) clamp(20px, 3.5vw, 24px) rgba(5,46,22,0.08)',
               }}>
+                {/* FIXED IMAGE PATH AND STYLING */}
                 <img
-                  src="public\assets\about page.jpeg"
+                  src="/assets/about page.jpeg" // Fixed path - no backslashes
                   alt="RAAH Technologies team collaborating in their office"
+                  className="story-image-wrapper" // Added class for mobile fix
                   style={{ 
                     width: '100%', 
                     height: '100%', 
@@ -911,6 +968,10 @@ const AboutPage = () => (
                     display: 'block',
                     transition: 'transform 0.7s cubic-bezier(0.22, 1, 0.36, 1)',
                     maxWidth: '100%',
+                  }}
+                  onError={(e) => {
+                    // Fallback image if local asset fails
+                    e.target.src = "https://images.unsplash.com/photo-1551076805-e1869033e561?auto=format&fit=crop&q=80&w=1200&h=600";
                   }}
                   onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.04)'; }}
                   onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; }}
@@ -1068,7 +1129,7 @@ const AboutPage = () => (
       </div>
     </section>
 
-    <WaveDivider topColor="var(--color-bg-section-light)" bottomColor="#0d7a3e" flip={true} />
+    {/* REMOVED WAVE DIVIDER BEFORE NUMBERS SECTION */}
 
     {/* ══════════════════════════════════════════════════════════════
         3. BY THE NUMBERS
@@ -1169,7 +1230,7 @@ const AboutPage = () => (
       </div>
     </section>
 
-    <WaveDivider topColor="#0d7a3e" bottomColor="var(--color-bg-section-light)" />
+    {/* REMOVED WAVE DIVIDER AFTER NUMBERS SECTION */}
 
     {/* ══════════════════════════════════════════════════════════════
         4. WHAT DRIVES US
@@ -1255,7 +1316,7 @@ const AboutPage = () => (
       </div>
     </section>
 
-    <WaveDivider topColor="var(--color-bg-section-light)" bottomColor="#0d7a3e" flip={true} />
+    {/* REMOVED WAVE DIVIDER */}
 
     {/* ══════════════════════════════════════════════════════════════
         5. HOW WE WORK
@@ -1370,7 +1431,7 @@ const AboutPage = () => (
       </div>
     </section>
 
-    <WaveDivider topColor="#0d7a3e" bottomColor="var(--color-bg-section-light)" />
+    {/* REMOVED WAVE DIVIDER */}
 
     {/* ══════════════════════════════════════════════════════════════
         6. COMPLIANCE CREDENTIALS
@@ -1480,6 +1541,8 @@ const AboutPage = () => (
         </div>
       </div>
     </section>
+
+    {/* REMOVED WAVE DIVIDER */}
 
     {/* ══════════════════════════════════════════════════════════════
         7. CTA

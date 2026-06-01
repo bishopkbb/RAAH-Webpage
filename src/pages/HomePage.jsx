@@ -1712,8 +1712,11 @@ const HomePage = () => {
     <Layout hideNav>
       <HomeStyles />
 
-      {/* Hero */}
-      <HeroCarousel navbar={<Navbar heroMode />} />
+      {/* ✅ Navbar rendered separately — fixed at top, z-index: 9999 */}
+      <Navbar />
+
+      {/* ✅ HeroCarousel — no navbar prop, background fills full viewport */}
+      <HeroCarousel />
 
       {/* ══════════════════════════════════════════════════════════════
           WHY CHOOSE US

@@ -1,22 +1,25 @@
 /**
  * main.jsx — RAAH Technologies
  *
- * Single entry point. BrowserRouter lives here — the one and only router context.
- *
- * Fix applied: the original main.jsx had a duplicate BrowserRouter import that
- * was never used (App.jsx provided its own Router). Cleaned to a single provider.
+ * Single entry point.
+ * BrowserRouter — single router context, never duplicated in App.jsx.
+ * GoogleReCaptchaProvider — wraps the entire app so any page can call
+ *   useGoogleReCaptcha() to generate v3 tokens invisibly on form submit.
  */
 
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
+import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3';
 import App from './App.jsx';
 import './index.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <GoogleReCaptchaProvider reCaptchaKey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </GoogleReCaptchaProvider>
   </React.StrictMode>
 );

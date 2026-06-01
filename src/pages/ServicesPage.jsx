@@ -434,7 +434,7 @@ const ServicesPage = () => (
     {/* ══ 1. HERO ══ */}
     <section style={{ position: 'relative', minHeight: '65vh', display: 'flex', alignItems: 'center', overflow: 'hidden' }}>
       <img
-        src="https://images.unsplash.com/photo-1504813184591-01572f98c85f?auto=format&fit=crop&q=80&w=2000&h=900&crop=top"
+        src="public\assets\service or any page.jpeg"
         alt="RAAH platform services"
         style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 30%' }}
       />

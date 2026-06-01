@@ -2,25 +2,28 @@
  * src/api/services.js — RAAH Technologies
  *
  * Single authoritative API client for ALL public website calls.
+ * All endpoints, field names, and response shapes verified against the
+ * live Swagger documentation at http://3.86.179.13:3000/api/docs
  *
- * ─── Field name mapping (snake_case → camelCase) ─────────────────────────────
- * The frontend forms use snake_case field names internally (React convention).
- * The backend expects camelCase. This file is the translation layer —
- * components never need to know the backend's naming convention.
+ * ─── Base URL ─────────────────────────────────────────────────────────────────
+ *   VITE_API_BASE_URL=http://3.86.179.13:3000
+ *   No /v1 suffix — the backend does not version at the URL level.
  *
- *   Frontend form field     →  Backend field name
- *   ─────────────────────────────────────────────
- *   agency_name             →  agencyName
- *   contact_name            →  contactName
- *   contact_email           →  email
- *   contact_phone           →  phone
- *   estimated_patients      →  patientRange
- *   recaptcha_token         →  recaptchaToken
- *   notes                   →  notes          (same)
- *   state                   →  state          (new — not collected yet)
+ * ─── Field mapping (frontend snake_case → backend camelCase) ─────────────────
+ *   agency_name        →  agencyName
+ *   contact_name       →  contactName
+ *   contact_email      →  email
+ *   contact_phone      →  phone
+ *   estimated_patients →  patientRange  (range string: '1-25'|'26-100'|'101-250'|'251-500'|'501+')
+ *   recaptcha_token    →  recaptchaToken
  *
- * ─── Environment variable required ───────────────────────────────────────────
- *   VITE_API_BASE_URL=https://traceworka.ng/raahtech/api/v1
+ * ─── GET /website/quote response shape ───────────────────────────────────────
+ *   { agencyName, contactName, patientRange, quotedPrice, expiresAt, alreadyPaid }
+ *   — flat object, no nested data or plans array
+ *
+ * ─── POST /website/quote/pay response shape ──────────────────────────────────
+ *   { checkoutUrl, quotedPrice, message }
+ *   — note: checkoutUrl is camelCase, not checkout_url
  */
 
 import axios from 'axios';
@@ -32,7 +35,7 @@ if (!BASE_URL) {
   throw new Error(
     '[RAAH] VITE_API_BASE_URL is not set.\n' +
     'Add to your .env file:\n' +
-    '  VITE_API_BASE_URL=https://traceworka.ng/raahtech/api/v1\n' +
+    '  VITE_API_BASE_URL=http://3.86.179.13:3000\n' +
     'Never hardcode this value in source files.'
   );
 }
@@ -60,15 +63,14 @@ apiClient.interceptors.request.use(
 );
 
 // ─── Response interceptor ─────────────────────────────────────────────────────
-// Normalises every error into { message, fieldErrors, statusCode }
-// so components never need to write defensive error.response?.data chains.
+// Normalises all errors to { message, fieldErrors, statusCode }
+// so components never write defensive error.response?.data?.message chains.
 apiClient.interceptors.response.use(
   response => response,
   error => {
     const status = error.response?.status ?? 0;
-    const data   = error.response?.data ?? {};
+    const data   = error.response?.data   ?? {};
 
-    // 401 — admin session expired; kick to login
     if (status === 401) {
       localStorage.removeItem('admin_token');
       localStorage.removeItem('admin_user');
@@ -76,17 +78,38 @@ apiClient.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    // Normalise Laravel 422 validation errors
-    const fieldErrors = data.errors
-      ? Object.fromEntries(
-          Object.entries(data.errors).map(([k, v]) => [
-            k,
-            Array.isArray(v) ? v : [v],
-          ])
-        )
-      : null;
+    // Normalise errors from both NestJS and Laravel shapes:
+    //
+    // NestJS 400 shape: { statusCode, message: string[], error: string }
+    //   message is an array of validation strings — not field-keyed
+    //
+    // Laravel 422 shape: { message: string, errors: { field: ['msg'] } }
+    //   errors is a field-keyed object
+    //
+    // We normalise both into: { message (string), fieldErrors (object|null), statusCode }
 
-    error.message     = data.message || error.message || 'An unexpected error occurred.';
+    let normalisedMessage = 'An unexpected error occurred.';
+    let fieldErrors = null;
+
+    if (Array.isArray(data.message)) {
+      // NestJS array of validation messages — join into readable string
+      normalisedMessage = data.message.join(' ');
+      // Also expose as fieldErrors keyed by 'general' for components that check it
+      fieldErrors = { general: data.message };
+    } else if (typeof data.message === 'string') {
+      normalisedMessage = data.message;
+    } else if (error.message) {
+      normalisedMessage = error.message;
+    }
+
+    // Laravel field-keyed errors
+    if (data.errors && typeof data.errors === 'object') {
+      fieldErrors = Object.fromEntries(
+        Object.entries(data.errors).map(([k, v]) => [k, Array.isArray(v) ? v : [v]])
+      );
+    }
+
+    error.message     = normalisedMessage;
     error.fieldErrors = fieldErrors;
     error.statusCode  = status;
 
@@ -94,34 +117,32 @@ apiClient.interceptors.response.use(
   }
 );
 
-// ─── Field name mapper ────────────────────────────────────────────────────────
-// Converts the frontend's snake_case form fields to the backend's camelCase.
-// Called inside every public submit function — never in components.
+// ─── Field mappers ────────────────────────────────────────────────────────────
+// Translate the form's internal snake_case keys to what the backend expects.
+// patientRange must be a range string — never a bare integer.
+
 const mapDemoFields = (data) => ({
-  agencyName:     data.agency_name,
-  contactName:    data.contact_name,
-  email:          data.contact_email,
-  phone:          data.contact_phone   || undefined,
-  patientRange:   data.estimated_patients
-                    ? String(data.estimated_patients)
-                    : undefined,
-  notes:          data.notes           || undefined,
-  // Extra fields the backend may ignore but are useful for analytics
-  demoFormat:     data.demo_format     || undefined,
-  primaryChallenge: data.primary_challenge || undefined,
-  preferredDemoDate: data.preferred_demo_date || undefined,
-  recaptchaToken: data.recaptcha_token,
+  agencyName:        data.agency_name,
+  contactName:       data.contact_name,
+  email:             data.contact_email,
+  phone:             data.contact_phone        || undefined,
+  state:             data.state                || undefined,
+  patientRange:      data.estimated_patients   || undefined,
+  notes:             data.notes                || undefined,
+  demoFormat:        data.demo_format          || undefined,
+  primaryChallenge:  data.primary_challenge    || undefined,
+  preferredDemoDate: data.preferred_demo_date  || undefined,
+  recaptchaToken:    data.recaptcha_token,
 });
 
 const mapPricingFields = (data) => ({
-  agencyName:     data.agency_name,
-  contactName:    data.contact_name,
-  email:          data.contact_email,
-  phone:          data.contact_phone   || undefined,
-  patientRange:   data.estimated_patients
-                    ? String(data.estimated_patients)
-                    : undefined,
-  notes:          data.notes           || undefined,
+  agencyName:    data.agency_name,
+  contactName:   data.contact_name,
+  email:         data.contact_email,
+  phone:         data.contact_phone   || undefined,
+  state:         data.state           || undefined,
+  patientRange:  data.estimated_patients || undefined,
+  notes:         data.notes           || undefined,
   recaptchaToken: data.recaptcha_token,
 });
 
@@ -133,90 +154,133 @@ export const publicApi = {
 
   /**
    * POST /website/demo-request
-   * Backend fields: agencyName, contactName, email, phone,
-   *                 state, patientRange, notes, recaptchaToken
+   * 201 — Lead created, admin notified
+   * Swagger: agencyName, contactName, email, phone, state, notes,
+   *          patientRange, demoFormat, primaryChallenge, preferredDemoDate, recaptchaToken
    */
   submitDemoRequest: (data) =>
     apiClient.post('/website/demo-request', mapDemoFields(data)),
 
   /**
    * POST /website/pricing-request
-   * Backend fields: agencyName, contactName, email, phone,
-   *                 patientRange, notes, recaptchaToken
+   * 201 — Lead created, admin notified
+   * Swagger: agencyName, contactName, email, phone, state, notes,
+   *          patientRange, recaptchaToken
    */
   submitPricingRequest: (data) =>
     apiClient.post('/website/pricing-request', mapPricingFields(data)),
 
   /**
    * POST /website/contact
-   * Backend fields: name, email, phone, subject, message, source
-   * Note: 'agency' field from the form is sent as extra — backend may ignore.
+   * 201 — { id, message }
+   * 403 — reCAPTCHA failed
+   * 429 — rate limit (5 per hour per IP)
+   * Swagger: name, email, phone, subject, message, source, agency, recaptchaToken
+   * source must be exactly 'contact-page'
    */
   submitContact: (data) =>
     apiClient.post('/website/contact', {
-      name:    data.name,
-      email:   data.email,
-      phone:   data.phone    || undefined,
-      subject: data.subject,
-      message: data.message,
-      source:  'website',
-      // agency is not in the backend spec but sent for Super Admin context
-      agency:  data.agency   || undefined,
+      name:           data.name,
+      email:          data.email,
+      phone:          data.phone             || undefined,
+      subject:        data.subject,
+      message:        data.message,
+      source:         'contact-page',
+      agency:         data.agency            || undefined,
+      recaptchaToken: data.recaptchaToken    || undefined,
     }),
 
   // ── Subscription flow ──────────────────────────────────────────────────────
 
   /**
-   * GET /website/quote?token=:token
-   * Returns: { data: { agency_name, plans: [...], default_plan_id } }
+   * GET /website/quote?token=
+   * 200 — { agencyName, contactName, patientRange, quotedPrice, expiresAt, alreadyPaid }
+   *        FLAT object — no nested data, no plans array
+   * 404 — invalid or unknown token
+   * 410 — expired or already paid
    */
   getQuoteDetails: (token) =>
     apiClient.get('/website/quote', { params: { token } }),
 
   /**
    * POST /website/quote/pay
-   * Payload: { token, plan_id }
-   * Returns: { checkout_url }
+   * 200 — { checkoutUrl, quotedPrice, message }
+   *        Note: checkoutUrl is camelCase
+   * 404 — invalid token
+   * 409 — already paid
+   * 410 — expired
+   * Swagger: token, plan_id, stripePaymentMethodId?
    */
   createCheckoutSession: (token, data) =>
     apiClient.post('/website/quote/pay', { token, ...data }),
 
-  // ── Content endpoints ──────────────────────────────────────────────────────
+  // ── Content ────────────────────────────────────────────────────────────────
 
   /**
    * GET /website/testimonials
-   * Returns approved testimonials for the HomePage carousel.
+   * 10-minute server cache
    */
   getTestimonials: () =>
     apiClient.get('/website/testimonials'),
 
   /**
    * GET /website/stats
-   * Returns live platform stats for the HomePage.
+   * 1-hour server cache — aggregate counts only, never per-agency data
    */
   getStats: () =>
     apiClient.get('/website/stats'),
 
+  // ── Newsletter ─────────────────────────────────────────────────────────────
+
   /**
    * POST /website/newsletter-subscribe
-   * Payload: { email }
+   * 200 — { success, message }
+   * 403 — reCAPTCHA failed
+   * Swagger: email, source, recaptchaToken
    */
-  subscribeNewsletter: (email) =>
-    apiClient.post('/website/newsletter-subscribe', { email }),
+  subscribeNewsletter: ({ email, source = 'website', recaptchaToken }) =>
+    apiClient.post('/website/newsletter-subscribe', {
+      email,
+      source,
+      recaptchaToken: recaptchaToken || undefined,
+    }),
 
   /**
    * POST /website/newsletter-unsubscribe
-   * Payload: { email }
+   * 200 — { success, message }
+   * 404 — token not found or already used
+   * Swagger: token  ← this is the unsubscribe token from the email footer link
+   *                   NOT an email address
    */
-  unsubscribeNewsletter: (email) =>
-    apiClient.post('/website/newsletter-unsubscribe', { email }),
+  unsubscribeNewsletter: (token) =>
+    apiClient.post('/website/newsletter-unsubscribe', { token }),
+
+  // ── Book a call ────────────────────────────────────────────────────────────
 
   /**
    * POST /website/book-call
-   * Payload: { name, email, phone?, preferredTime? }
+   * 201 — Call booked, confirmation email sent
+   * Swagger: agencyName, contactName, email, phone, state, preferredTime
    */
   bookCall: (data) =>
-    apiClient.post('/website/book-call', data),
+    apiClient.post('/website/book-call', {
+      agencyName:    data.agencyName    || data.agency_name,
+      contactName:   data.contactName   || data.contact_name,
+      email:         data.email         || data.contact_email,
+      phone:         data.phone         || data.contact_phone  || undefined,
+      state:         data.state                                || undefined,
+      preferredTime: data.preferredTime                        || undefined,
+    }),
+
+  // ── Infrastructure ─────────────────────────────────────────────────────────
+
+  /**
+   * GET /website/health
+   * 200 — { status: 'ok', timestamp }
+   * No auth, no DB query — safe to poll from uptime monitors
+   */
+  healthCheck: () =>
+    apiClient.get('/website/health'),
 };
 
 export default apiClient;

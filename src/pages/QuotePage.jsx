@@ -2,22 +2,33 @@
  * QuotePage.jsx — RAAH Technologies
  *
  * Token-gated quote acceptance page. Accessed via private link sent by RAAH staff.
- * Follows the full RAAH design system: #dff0df light sections, brand green,
- * Inter 900 headings, Poppins body, dot-grid, radial glows, Reveal animations,
- * wave dividers. All API wiring preserved exactly.
  *
- * Sections:
- *   Loading / Error states — full-screen, on-brand
- *   Header     — dark green hero strip, agency name badge, heading
- *   Body       — 2-col: plan details + features LEFT / order summary + CTA RIGHT
- *   Guarantee  — dark green strip
+ * ─── API shapes (verified against Swagger at http://3.86.179.13:3000/api/docs) ─
+ *
+ * GET /website/quote?token=
+ *   200 → { agencyName, contactName, patientRange, quotedPrice, expiresAt, alreadyPaid }
+ *   Flat object — no nested data property, no plans array, no billing_interval toggle.
+ *   quotedPrice is a single number. There is no monthly/yearly toggle concept.
+ *   404 → invalid or unknown token
+ *   410 → expired or already paid
+ *
+ * POST /website/quote/pay
+ *   Body → { token, plan_id, stripePaymentMethodId? }
+ *   200  → { checkoutUrl, quotedPrice, message }
+ *   Note: checkoutUrl is camelCase — not checkout_url
+ *   404 → invalid token
+ *   409 → already paid
+ *   410 → expired
+ *
+ * Design: RAAH design system — #dff0df light, dark green gradient, Inter 900,
+ * Poppins body, dot-grid, radial glows, WaveDividers, Reveal animations.
  */
 
 import React, { useEffect, useRef, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Layout from '../components/layout/Layout';
 import { publicApi } from '../api/services';
-import { CheckCircle, Loader2, AlertTriangle, ShieldCheck, CreditCard, Lock } from 'lucide-react';
+import { CheckCircle, AlertTriangle, ShieldCheck, CreditCard, Lock, Clock } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 const FI = "'Inter', sans-serif";
@@ -70,49 +81,12 @@ const WaveDivider = ({ topColor, bottomColor, flip = false }) => (
     </svg>
   </div>
 );
-
-// ─── Check SVG ────────────────────────────────────────────────────────────────
-const CheckSvg = ({ white = false }) => (
+const CheckSvg = () => (
   <svg viewBox="0 0 20 20" fill="none" width="18" height="18" style={{ flexShrink: 0, marginTop: '2px' }}>
-    <circle cx="10" cy="10" r="9" fill={white ? 'rgba(255,255,255,0.15)' : 'rgba(22,163,74,0.10)'} />
-    <path d="M6 10L8.5 12.5L14 7" stroke={white ? '#ffffff' : '#16a34a'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <circle cx="10" cy="10" r="9" fill="rgba(22,163,74,0.10)" />
+    <path d="M6 10L8.5 12.5L14 7" stroke="#16a34a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
   </svg>
 );
-
-// ─── Billing toggle ───────────────────────────────────────────────────────────
-const BillingToggle = ({ selectedPlan, yearlyPlan, onToggle }) => {
-  if (!yearlyPlan) return null;
-  return (
-    <div style={{
-      display: 'inline-flex', alignItems: 'center',
-      background: '#ffffff', borderRadius: '10px',
-      border: '1.5px solid rgba(22,163,74,0.20)',
-      padding: '4px', gap: '2px',
-      boxShadow: '0 2px 8px rgba(5,46,22,0.08)',
-    }}>
-      {['monthly', 'yearly'].map(interval => {
-        const active = selectedPlan.billing_interval === interval;
-        return (
-          <button
-            key={interval}
-            onClick={() => selectedPlan.billing_interval !== interval && onToggle()}
-            style={{
-              fontFamily: FI, fontWeight: 700, fontSize: '0.8rem',
-              letterSpacing: '0.04em', textTransform: 'capitalize',
-              padding: '8px 18px', borderRadius: '7px', border: 'none',
-              background: active ? '#16a34a' : 'transparent',
-              color: active ? '#ffffff' : '#64748b',
-              cursor: active ? 'default' : 'pointer',
-              transition: 'all 0.22s ease',
-            }}
-          >
-            {interval}
-          </button>
-        );
-      })}
-    </div>
-  );
-};
 
 // ─── Loading state ────────────────────────────────────────────────────────────
 const LoadingState = () => (
@@ -142,71 +116,98 @@ const LoadingState = () => (
 );
 
 // ─── Error state ──────────────────────────────────────────────────────────────
-const ErrorState = ({ error }) => (
-  <Layout>
-    <div style={{
-      minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center',
-      background: '#dff0df', padding: '24px', position: 'relative', overflow: 'hidden',
-    }}>
-      <DotGrid />
-      <RadialGlow top="-60px" right="-60px" size={400} opacity={0.07} />
-      <div style={{ position: 'relative', zIndex: 1, textAlign: 'center', maxWidth: '480px', width: '100%' }}>
-        <div style={{
-          background: '#ffffff', borderRadius: '20px', padding: '48px 40px',
-          border: '1px solid rgba(220,38,38,0.12)',
-          boxShadow: '0 8px 48px rgba(5,46,22,0.10)',
-        }}>
+const ErrorState = ({ error, statusCode }) => {
+  const isExpired  = statusCode === 410;
+  const isNotFound = statusCode === 404;
+
+  const title = isExpired
+    ? 'Quote Has Expired'
+    : isNotFound
+      ? 'Quote Not Found'
+      : 'Unable to Load Quote';
+
+  const body = isExpired
+    ? 'This quote link has either expired or payment has already been completed. Please contact the RAAH team for a new quote.'
+    : isNotFound
+      ? 'This quote link is invalid. Please check the link in your email or contact the RAAH team.'
+      : error || 'Something went wrong loading your quote. Please try again or contact support.';
+
+  return (
+    <Layout>
+      <div style={{
+        minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center',
+        background: '#dff0df', padding: '24px', position: 'relative', overflow: 'hidden',
+      }}>
+        <DotGrid />
+        <RadialGlow top="-60px" right="-60px" size={400} opacity={0.07} />
+        <div style={{ position: 'relative', zIndex: 1, textAlign: 'center', maxWidth: '480px', width: '100%' }}>
           <div style={{
-            width: '72px', height: '72px', borderRadius: '50%', margin: '0 auto 24px',
-            background: 'rgba(220,38,38,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center',
+            background: '#ffffff', borderRadius: '20px', padding: '48px 40px',
+            border: isExpired ? '1px solid rgba(245,158,11,0.20)' : '1px solid rgba(220,38,38,0.12)',
+            boxShadow: '0 8px 48px rgba(5,46,22,0.10)',
           }}>
-            <AlertTriangle size={32} color="#dc2626" />
+            <div style={{
+              width: '72px', height: '72px', borderRadius: '50%', margin: '0 auto 24px',
+              background: isExpired ? 'rgba(245,158,11,0.08)' : 'rgba(220,38,38,0.08)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}>
+              {isExpired
+                ? <Clock size={32} color="#d97706" />
+                : <AlertTriangle size={32} color="#dc2626" />
+              }
+            </div>
+            <h2 style={{ fontFamily: FI, fontWeight: 900, fontSize: '1.5rem', color: '#0a0a0a', marginBottom: '10px', letterSpacing: '-0.02em' }}>
+              {title}
+            </h2>
+            <p style={{ fontFamily: FP, fontSize: '0.9375rem', color: '#475569', lineHeight: 1.7, marginBottom: '32px' }}>
+              {body}
+            </p>
+            <Link to="/contact" style={{
+              fontFamily: FI, fontWeight: 700, fontSize: '0.85rem', letterSpacing: '0.06em', textTransform: 'uppercase',
+              padding: '13px 28px', borderRadius: '999px', background: '#16a34a',
+              color: '#ffffff', border: '2px solid #16a34a', textDecoration: 'none',
+              display: 'inline-flex', alignItems: 'center', gap: '8px', transition: 'all 0.22s ease',
+            }}
+              onMouseEnter={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#16a34a'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = '#16a34a'; e.currentTarget.style.color = '#ffffff'; }}
+            >
+              Contact Support
+            </Link>
           </div>
-          <h2 style={{ fontFamily: FI, fontWeight: 900, fontSize: '1.5rem', color: '#0a0a0a', marginBottom: '10px', letterSpacing: '-0.02em' }}>
-            Unable to Load Quote
-          </h2>
-          <p style={{ fontFamily: FP, fontSize: '0.9375rem', color: '#475569', lineHeight: 1.7, marginBottom: '32px' }}>
-            {error || 'This quote link is invalid or has expired. Please contact the RAAH team for a new link.'}
-          </p>
-          <Link to="/contact" style={{
-            fontFamily: FI, fontWeight: 700, fontSize: '0.85rem', letterSpacing: '0.06em', textTransform: 'uppercase',
-            padding: '13px 28px', borderRadius: '999px', background: '#16a34a',
-            color: '#ffffff', border: '2px solid #16a34a', textDecoration: 'none',
-            display: 'inline-flex', alignItems: 'center', gap: '8px', transition: 'all 0.22s ease',
-          }}
-            onMouseEnter={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#16a34a'; }}
-            onMouseLeave={e => { e.currentTarget.style.background = '#16a34a'; e.currentTarget.style.color = '#ffffff'; }}
-          >
-            Contact Support
-          </Link>
         </div>
       </div>
-    </div>
-  </Layout>
-);
+    </Layout>
+  );
+};
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 const QuotePage = () => {
   const { token } = useParams();
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [loading, setLoading]       = useState(true);
+  const [error, setError]           = useState(null);
+  const [statusCode, setStatusCode] = useState(null);
   const [processing, setProcessing] = useState(false);
-  const [agencyName, setAgencyName] = useState('');
-  const [availablePlans, setAvailablePlans] = useState([]);
-  const [selectedPlan, setSelectedPlan] = useState(null);
+
+  // Flat quote data — matches GET /website/quote response exactly
+  const [quote, setQuote] = useState(null);
+  // quote shape: { agencyName, contactName, patientRange, quotedPrice, expiresAt, alreadyPaid }
 
   useEffect(() => {
     const fetchQuote = async () => {
       try {
         const response = await publicApi.getQuoteDetails(token);
-        const data = response.data.data;
-        setAgencyName(data.agency_name);
-        setAvailablePlans(data.plans);
-        const defaultPlan = data.plans.find(p => p.id === data.default_plan_id);
-        setSelectedPlan(defaultPlan || data.plans[0]);
+        // Response is a flat object — not nested under .data.data
+        const data = response.data;
+        if (data.alreadyPaid) {
+          setStatusCode(410);
+          setError('Payment has already been completed for this quote.');
+          return;
+        }
+        setQuote(data);
       } catch (err) {
-        console.error(err);
-        setError(err.response?.data?.message || 'Invalid or expired quote link.');
+        const code = err.statusCode || err.response?.status || 0;
+        setStatusCode(code);
+        setError(err.message || 'Invalid or expired quote link.');
       } finally {
         setLoading(false);
       }
@@ -214,37 +215,44 @@ const QuotePage = () => {
     fetchQuote();
   }, [token]);
 
-  const toggleInterval = () => {
-    const targetInterval = selectedPlan.billing_interval === 'monthly' ? 'yearly' : 'monthly';
-    const targetPlan = availablePlans.find(p => p.billing_interval === targetInterval);
-    if (targetPlan) {
-      setSelectedPlan(targetPlan);
-    } else {
-      toast.error(`Sorry, a ${targetInterval} option is not available for this plan.`);
-    }
-  };
-
   const handlePayment = async () => {
     setProcessing(true);
     try {
-      const response = await publicApi.createCheckoutSession(token, { plan_id: selectedPlan.id });
-      window.location.href = response.data.checkout_url;
+      const response = await publicApi.createCheckoutSession(token, { plan_id: 1 });
+      // Backend returns checkoutUrl (camelCase) — not checkout_url
+      const { checkoutUrl } = response.data;
+      if (!checkoutUrl) {
+        throw new Error('No checkout URL returned from server.');
+      }
+      window.location.href = checkoutUrl;
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Payment initialization failed.');
+      if (err.statusCode === 409) {
+        toast.error('Payment has already been completed for this quote.');
+      } else if (err.statusCode === 410) {
+        toast.error('This quote has expired. Please contact support for a new one.');
+      } else {
+        toast.error(err.message || 'Payment initialization failed. Please try again.');
+      }
       setProcessing(false);
     }
   };
 
-  if (loading) return <LoadingState />;
-  if (error || !selectedPlan) return <ErrorState error={error} />;
+  // Format expiry date
+  const formatExpiry = (iso) => {
+    if (!iso) return null;
+    try {
+      return new Date(iso).toLocaleDateString('en-US', {
+        year: 'numeric', month: 'long', day: 'numeric',
+      });
+    } catch {
+      return null;
+    }
+  };
 
-  const monthlyPlan = availablePlans.find(p => p.billing_interval === 'monthly');
-  const yearlyPlan  = availablePlans.find(p => p.billing_interval === 'yearly');
-  let savingsText = null;
-  if (monthlyPlan && yearlyPlan && selectedPlan.billing_interval === 'yearly') {
-    const savings = (monthlyPlan.price * 12) - yearlyPlan.price;
-    if (savings > 0) savingsText = `Save $${savings.toFixed(0)} per year`;
-  }
+  if (loading) return <LoadingState />;
+  if (error || !quote) return <ErrorState error={error} statusCode={statusCode} />;
+
+  const expiryDate = formatExpiry(quote.expiresAt);
 
   const FEATURES = [
     'Unlimited Agency Users',
@@ -259,10 +267,17 @@ const QuotePage = () => {
   return (
     <Layout>
       <style>{`
-        .quote-grid { display: grid; gap: 24px; }
-        @media (min-width: 768px) { .quote-grid { grid-template-columns: 1fr 360px; gap: 32px; align-items: start; } }
-        @media (min-width: 1024px) { .quote-grid { grid-template-columns: 1fr 400px; gap: 40px; } }
-        .plan-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+        .quote-grid {
+          display: grid;
+          gap: 24px;
+        }
+        @media (min-width: 768px) {
+          .quote-grid { grid-template-columns: 1fr 360px; gap: 32px; align-items: start; }
+        }
+        @media (min-width: 1024px) {
+          .quote-grid { grid-template-columns: 1fr 400px; gap: 40px; }
+        }
+        @keyframes quote-spin { to { transform: rotate(360deg); } }
       `}</style>
 
       {/* ══ HERO STRIP ══ */}
@@ -276,18 +291,16 @@ const QuotePage = () => {
         <RadialGlow bottom="-60px" left="-60px" size={400} opacity={0.10} />
 
         <div className="container-custom" style={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
-          {/* Agency badge */}
           <Reveal delay={0}>
             <div style={{
               display: 'inline-flex', alignItems: 'center', gap: '8px',
               background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(8px)',
               border: '1px solid rgba(255,255,255,0.20)',
-              borderRadius: '999px', padding: '8px 20px',
-              marginBottom: '24px',
+              borderRadius: '999px', padding: '8px 20px', marginBottom: '24px',
             }}>
               <CheckCircle size={15} color="#4ade80" />
               <span style={{ fontFamily: FP, fontWeight: 600, fontSize: '0.8125rem', color: '#ffffff', letterSpacing: '0.02em' }}>
-                Quote ready for {agencyName}
+                Quote ready for {quote.agencyName}
               </span>
             </div>
           </Reveal>
@@ -311,7 +324,7 @@ const QuotePage = () => {
               color: 'rgba(220,252,231,0.85)',
               maxWidth: '540px', margin: '0 auto',
             }}>
-              Review your plan details and proceed to secure payment to activate your agency account.
+              Review your personalised quote and proceed to secure payment to activate your agency account.
             </p>
           </Reveal>
         </div>
@@ -320,7 +333,11 @@ const QuotePage = () => {
       <WaveDivider topColor="#0d7a3e" bottomColor="#dff0df" />
 
       {/* ══ BODY ══ */}
-      <section style={{ background: '#dff0df', padding: 'clamp(60px, 10vw, 100px) 0 clamp(80px, 14vw, 130px)', position: 'relative', overflow: 'hidden' }}>
+      <section style={{
+        background: '#dff0df',
+        padding: 'clamp(60px, 10vw, 100px) 0 clamp(80px, 14vw, 130px)',
+        position: 'relative', overflow: 'hidden',
+      }}>
         <DotGrid />
         <RadialGlow top="-60px" right="-60px" size={500} opacity={0.07} />
         <RadialGlow bottom="-60px" left="-60px" size={380} opacity={0.05} />
@@ -328,7 +345,7 @@ const QuotePage = () => {
         <div className="container-custom" style={{ position: 'relative', zIndex: 1 }}>
           <div className="quote-grid">
 
-            {/* ── LEFT — Plan details card ── */}
+            {/* ── LEFT — Quote details ── */}
             <Reveal delay={0}>
               <div style={{
                 background: '#ffffff', borderRadius: '20px',
@@ -336,54 +353,63 @@ const QuotePage = () => {
                 boxShadow: '0 8px 48px rgba(5,46,22,0.10), 0 2px 12px rgba(5,46,22,0.06)',
                 overflow: 'hidden',
               }}>
-                {/* Card accent */}
                 <div style={{ height: '3px', background: 'linear-gradient(to right, #16a34a, #4ade80, #16a34a)' }} />
 
-                {/* Plan header */}
+                {/* Quote header */}
                 <div style={{
-                  background: 'rgba(22,163,74,0.04)', borderBottom: '1px solid rgba(22,163,74,0.10)',
+                  background: 'rgba(22,163,74,0.04)',
+                  borderBottom: '1px solid rgba(22,163,74,0.10)',
                   padding: 'clamp(24px, 4vw, 36px) clamp(24px, 4vw, 40px)',
                 }}>
-                  <div className="plan-header">
-                    <div>
-                      <p style={{ fontFamily: FP, fontWeight: 600, fontSize: '0.75rem', color: '#16a34a', letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: '8px' }}>
-                        Selected Plan
-                      </p>
-                      <h2 style={{ fontFamily: FI, fontWeight: 900, fontSize: 'clamp(1.5rem, 3vw, 2rem)', color: '#0a0a0a', letterSpacing: '-0.02em', lineHeight: 1 }}>
-                        {selectedPlan.name}
-                      </h2>
-                    </div>
-                    <BillingToggle selectedPlan={selectedPlan} yearlyPlan={yearlyPlan} onToggle={toggleInterval} />
-                  </div>
+                  <p style={{ fontFamily: FP, fontWeight: 600, fontSize: '0.75rem', color: '#16a34a', letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: '8px' }}>
+                    Your Custom Quote
+                  </p>
+                  <h2 style={{ fontFamily: FI, fontWeight: 900, fontSize: 'clamp(1.5rem, 3vw, 2rem)', color: '#0a0a0a', letterSpacing: '-0.02em', lineHeight: 1, marginBottom: '6px' }}>
+                    {quote.agencyName}
+                  </h2>
+                  <p style={{ fontFamily: FP, fontWeight: 500, fontSize: '0.9375rem', color: '#64748b' }}>
+                    Prepared for {quote.contactName}
+                  </p>
                 </div>
 
-                {/* Price + features */}
+                {/* Quote body */}
                 <div style={{ padding: 'clamp(28px, 5vw, 40px) clamp(24px, 4vw, 40px)' }}>
-                  {/* Price */}
-                  <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginBottom: '8px' }}>
-                    <span style={{ fontFamily: FI, fontWeight: 900, fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', color: '#0a0a0a', letterSpacing: '-0.03em', lineHeight: 1 }}>
-                      ${Number(selectedPlan.price).toFixed(2)}
-                    </span>
-                    <span style={{ fontFamily: FP, fontWeight: 500, fontSize: '1.0625rem', color: '#64748b', textTransform: 'capitalize' }}>
-                      / {selectedPlan.billing_interval}
-                    </span>
+
+                  {/* Quoted price */}
+                  <div style={{ marginBottom: '8px' }}>
+                    <p style={{ fontFamily: FP, fontWeight: 600, fontSize: '0.8rem', color: '#64748b', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '8px' }}>
+                      Quoted Price
+                    </p>
+                    <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
+                      <span style={{ fontFamily: FI, fontWeight: 900, fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', color: '#0a0a0a', letterSpacing: '-0.03em', lineHeight: 1 }}>
+                        ${Number(quote.quotedPrice).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                      </span>
+                    </div>
                   </div>
 
-                  {/* Savings badge */}
-                  {savingsText ? (
-                    <div style={{
-                      display: 'inline-flex', alignItems: 'center', gap: '6px',
-                      background: 'rgba(22,163,74,0.08)', border: '1px solid rgba(22,163,74,0.18)',
-                      borderRadius: '999px', padding: '5px 14px', marginBottom: '36px',
-                    }}>
-                      <span style={{ fontSize: '14px' }}>🎉</span>
-                      <span style={{ fontFamily: FI, fontWeight: 700, fontSize: '0.8125rem', color: '#16a34a' }}>{savingsText}</span>
+                  {/* Quote meta */}
+                  <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap', marginBottom: '36px', paddingBottom: '28px', borderBottom: '1px solid rgba(22,163,74,0.10)' }}>
+                    <div>
+                      <p style={{ fontFamily: FI, fontWeight: 700, fontSize: '0.72rem', color: '#94a3b8', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '4px' }}>
+                        Patient Volume
+                      </p>
+                      <p style={{ fontFamily: FP, fontWeight: 600, fontSize: '0.9375rem', color: '#0a0a0a' }}>
+                        {quote.patientRange} patients
+                      </p>
                     </div>
-                  ) : (
-                    <div style={{ marginBottom: '36px' }} />
-                  )}
+                    {expiryDate && (
+                      <div>
+                        <p style={{ fontFamily: FI, fontWeight: 700, fontSize: '0.72rem', color: '#94a3b8', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '4px' }}>
+                          Quote Valid Until
+                        </p>
+                        <p style={{ fontFamily: FP, fontWeight: 600, fontSize: '0.9375rem', color: '#0a0a0a' }}>
+                          {expiryDate}
+                        </p>
+                      </div>
+                    )}
+                  </div>
 
-                  {/* Features list */}
+                  {/* Features */}
                   <p style={{ fontFamily: FI, fontWeight: 700, fontSize: '0.8125rem', color: '#0a0a0a', letterSpacing: '0.05em', textTransform: 'uppercase', marginBottom: '18px' }}>
                     Plan Includes
                   </p>
@@ -396,7 +422,7 @@ const QuotePage = () => {
                     ))}
                   </div>
 
-                  {/* Satisfaction guarantee */}
+                  {/* Guarantee */}
                   <div style={{
                     background: 'rgba(22,163,74,0.04)', borderRadius: '14px', padding: '18px 20px',
                     border: '1px solid rgba(22,163,74,0.12)',
@@ -418,6 +444,7 @@ const QuotePage = () => {
                       </p>
                     </div>
                   </div>
+
                 </div>
               </div>
             </Reveal>
@@ -441,28 +468,37 @@ const QuotePage = () => {
                     {/* Summary rows */}
                     <div style={{ borderTop: '1px solid rgba(22,163,74,0.10)', marginBottom: '4px' }}>
                       {[
-                        { label: 'Plan', value: selectedPlan.name },
-                        { label: 'Billing', value: selectedPlan.billing_interval.charAt(0).toUpperCase() + selectedPlan.billing_interval.slice(1) },
+                        { label: 'Agency',         value: quote.agencyName },
+                        { label: 'Contact',         value: quote.contactName },
+                        { label: 'Patient Range',   value: `${quote.patientRange} patients` },
                       ].map(({ label, value }) => (
-                        <div key={label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 0', borderBottom: '1px solid rgba(22,163,74,0.08)' }}>
-                          <span style={{ fontFamily: FP, fontWeight: 500, fontSize: '0.9rem', color: '#64748b' }}>{label}</span>
-                          <span style={{ fontFamily: FI, fontWeight: 600, fontSize: '0.9rem', color: '#0a0a0a' }}>{value}</span>
+                        <div key={label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 0', borderBottom: '1px solid rgba(22,163,74,0.08)' }}>
+                          <span style={{ fontFamily: FP, fontWeight: 500, fontSize: '0.875rem', color: '#64748b' }}>{label}</span>
+                          <span style={{ fontFamily: FI, fontWeight: 600, fontSize: '0.875rem', color: '#0a0a0a', textAlign: 'right', maxWidth: '60%' }}>{value}</span>
                         </div>
                       ))}
+
                       {/* Total */}
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '18px 0 20px' }}>
                         <span style={{ fontFamily: FI, fontWeight: 800, fontSize: '1.0625rem', color: '#0a0a0a' }}>Total Due</span>
                         <span style={{ fontFamily: FI, fontWeight: 900, fontSize: '1.5rem', color: '#0a6b30', letterSpacing: '-0.02em' }}>
-                          ${Number(selectedPlan.price).toFixed(2)}
+                          ${Number(quote.quotedPrice).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                         </span>
                       </div>
                     </div>
 
-                    {/* Savings callout inside summary */}
-                    {savingsText && (
-                      <div style={{ background: 'rgba(22,163,74,0.06)', borderRadius: '10px', padding: '11px 14px', marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <span style={{ fontSize: '13px' }}>🎉</span>
-                        <span style={{ fontFamily: FP, fontWeight: 600, fontSize: '0.8125rem', color: '#16a34a' }}>{savingsText} with annual billing</span>
+                    {/* Expiry notice */}
+                    {expiryDate && (
+                      <div style={{
+                        background: 'rgba(245,158,11,0.06)', borderRadius: '10px',
+                        padding: '10px 14px', marginBottom: '20px',
+                        border: '1px solid rgba(245,158,11,0.18)',
+                        display: 'flex', alignItems: 'center', gap: '8px',
+                      }}>
+                        <Clock size={14} color="#d97706" />
+                        <span style={{ fontFamily: FP, fontWeight: 500, fontSize: '0.8125rem', color: '#92400e' }}>
+                          Quote expires {expiryDate}
+                        </span>
                       </div>
                     )}
 
@@ -512,7 +548,7 @@ const QuotePage = () => {
                   </div>
                 </div>
 
-                {/* Support note below sticky card */}
+                {/* Support note */}
                 <div style={{ marginTop: '16px', textAlign: 'center' }}>
                   <p style={{ fontFamily: FP, fontSize: '0.8125rem', color: '#64748b', lineHeight: 1.6 }}>
                     Questions about this quote?{' '}
@@ -544,16 +580,22 @@ const QuotePage = () => {
 
         <div className="container-custom" style={{ position: 'relative', zIndex: 1 }}>
           <style>{`
-            .trust-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: rgba(255,255,255,0.12); border-radius: 16px; overflow: hidden; }
+            .trust-grid {
+              display: grid;
+              grid-template-columns: repeat(2, 1fr);
+              gap: 1px;
+              background: rgba(255,255,255,0.12);
+              border-radius: 16px;
+              overflow: hidden;
+            }
             @media (min-width: 768px) { .trust-grid { grid-template-columns: repeat(4, 1fr); } }
-            @keyframes quote-spin { to { transform: rotate(360deg); } }
           `}</style>
           <div className="trust-grid">
             {[
               { value: '30 days', label: 'Money-Back Guarantee', sub: 'No questions asked' },
-              { value: '< 24hr', label: 'Setup Time', sub: 'From payment to live' },
-              { value: 'Zero', label: 'Hidden Fees', sub: 'All modules included' },
-              { value: '1-on-1', label: 'Onboarding Session', sub: 'Dedicated specialist' },
+              { value: '< 24hr',  label: 'Setup Time',           sub: 'From payment to live' },
+              { value: 'Zero',    label: 'Hidden Fees',           sub: 'All modules included' },
+              { value: '1-on-1',  label: 'Onboarding Session',   sub: 'Dedicated specialist' },
             ].map((stat, i) => (
               <Reveal key={stat.label} delay={i * 60}>
                 <div style={{ background: 'rgba(5,46,22,0.45)', padding: 'clamp(24px, 4vw, 36px) clamp(16px, 3vw, 24px)', textAlign: 'center', boxSizing: 'border-box' }}>

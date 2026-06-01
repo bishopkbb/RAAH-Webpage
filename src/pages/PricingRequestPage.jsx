@@ -18,7 +18,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import Layout from '../components/layout/Layout';
 import { Link } from 'react-router-dom';
 import { publicApi } from '../api/services';
-import ReCAPTCHA from 'react-google-recaptcha';
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 import toast from 'react-hot-toast';
 
 const FI = "'Inter', sans-serif";
@@ -254,8 +254,7 @@ const PricingForm = () => {
   const [touched, setTouched] = useState({});
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [recaptchaToken, setRecaptchaToken] = useState(null);
-  const recaptchaRef = useRef();
+  const { executeRecaptcha } = useGoogleReCaptcha();
 
   const handleChange = e => {
     const { name, value } = e.target;
@@ -284,11 +283,19 @@ const PricingForm = () => {
       toast.error('Please fix the highlighted fields before submitting.');
       return;
     }
-    if (!recaptchaToken) { toast.error('Please verify you are human.'); return; }
+    if (!executeRecaptcha) { toast.error('reCAPTCHA not ready. Please try again.'); return; }
     setSubmitting(true);
+    let recaptchaToken = '';
+    try {
+      recaptchaToken = await executeRecaptcha('pricing_request');
+    } catch {
+      toast.error('reCAPTCHA failed. Please refresh and try again.');
+      setSubmitting(false);
+      return;
+    }
     const payload = {
       ...fields,
-      estimated_patients: fields.estimated_patients ? parseInt(fields.estimated_patients) : null,
+      // estimated_patients is already a range string e.g. '1-25' — never parse to int
       recaptcha_token: recaptchaToken,
     };
     try {
@@ -305,7 +312,7 @@ const PricingForm = () => {
       }
     } finally {
       setSubmitting(false);
-      if (recaptchaRef.current) { recaptchaRef.current.reset(); setRecaptchaToken(null); }
+      // v3 tokens are single-use — no widget to reset
     }
   };
 
@@ -352,8 +359,18 @@ const PricingForm = () => {
 
       {/* Patient count */}
       <div style={{ marginBottom: '22px' }}>
-        <label style={labelStyle} htmlFor="p_estimated_patients">Active Patient Count</label>
-        <input id="p_estimated_patients" name="estimated_patients" type="number" min="1" placeholder="e.g. 75" value={fields.estimated_patients} onChange={handleChange} style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
+        <label style={labelStyle} htmlFor="p_estimated_patients">Active Patient Volume</label>
+        <select id="p_estimated_patients" name="estimated_patients"
+          value={fields.estimated_patients} onChange={handleChange}
+          style={{ ...inputStyle, cursor: 'pointer', color: fields.estimated_patients ? '#0a0a0a' : '#94a3b8' }}
+          onFocus={onFocus} onBlur={onBlur}
+        >
+          <option value="" disabled>Select patient range</option>
+          <option value="1-25">1 to 25 patients</option>
+          <option value="26-100">26 to 100 patients</option>
+          <option value="101-250">101 to 250 patients</option>
+          <option value="250+">250 or more patients</option>
+        </select>
         <p style={{ fontFamily: FP, fontSize: '0.8125rem', color: '#16a34a', fontWeight: 600, marginTop: '7px' }}>
           We use this to recommend the most cost-effective tier for your volume.
         </p>
@@ -397,14 +414,7 @@ const PricingForm = () => {
         </div>
       </div>
 
-      {/* reCAPTCHA */}
-      <div style={{ display: 'flex', justifyContent: 'center', padding: '8px 0 20px' }}>
-        <ReCAPTCHA
-          ref={recaptchaRef}
-          sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
-          onChange={setRecaptchaToken}
-        />
-      </div>
+      {/* reCAPTCHA v3 — invisible, token generated on submit */}
 
       {/* Submit */}
       <button

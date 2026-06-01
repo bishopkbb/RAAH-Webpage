@@ -901,8 +901,8 @@ const AboutPage = () => (
                 boxShadow: '0 clamp(24px, 4vw, 32px) clamp(64px, 10vw, 80px) rgba(5,46,22,0.14), 0 clamp(6px, 1vw, 8px) clamp(20px, 3.5vw, 24px) rgba(5,46,22,0.08)',
               }}>
                 <img
-                  src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=1200"
-                  alt="RAAH team collaborating"
+                  src="public\assets\about page.jpeg"
+                  alt="RAAH Technologies team collaborating in their office"
                   style={{ 
                     width: '100%', 
                     height: '100%', 

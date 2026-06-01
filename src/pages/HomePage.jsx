@@ -437,7 +437,7 @@ const FEATURES = [
     label: 'Visit Verification',
     title: 'Real-Time EVV',
     desc: 'GPS-verified clock-in syncs directly with your state aggregator in under 3 seconds, eliminating manual entry and claim rejections at the source.',
-    metric: '< 3s',
+    metric: ' Under 3s',
     metricLabel: 'EVV Sync Time',
     accent: '#4ade80',
   },
@@ -2579,7 +2579,7 @@ const HomePage = () => {
                 label: 'Documentation',
                 title: 'Digital Signatures',
                 desc: 'Capture patient verification signatures directly on the device at point of care. Legally binding, EVV-compliant, instantly filed.',
-                metric: '< 10s',
+                metric: ' Under 10s',
                 metricLabel: 'Signature Capture Time',
                 icon: (
                   <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" width="var(--size-icon)" height="var(--size-icon)">
@@ -2776,7 +2776,7 @@ const HomePage = () => {
     {[
       { value: '99.2%', label: 'Billing Accuracy' },
       { value: '90%',   label: 'Fewer Claim Rejections' },
-      { value: '< 5min', label: 'Visit Documentation' },
+      { value: ' Under 5min', label: 'Visit Documentation' },
     ].map((stat, i) => (
       <div
         key={stat.label}

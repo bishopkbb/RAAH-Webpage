@@ -1647,7 +1647,7 @@ const AboutPage = () => (
                 e.currentTarget.style.boxShadow   = 'var(--shadow-cta-rest)';
               }}
             >
-              Request a Demo
+              Book a Demo
               <ArrowRight size={16} strokeWidth={2.5} />
             </Link>
             <Link

@@ -46,10 +46,11 @@ const SOLUTIONS = [
   'Scheduling & Dispatch',
 ];
 
+// ✅ UPDATED CONTACT INFO
 const CONTACT = [
-  { icon: MapPin, text: '13891 Oswego Street, Aurora CO', href: 'https://maps.google.com' },
-  { icon: Phone,  text: '+1 (000) 222-2890',              href: 'tel:+10002222890'         },
-  { icon: Mail,   text: 'info@raahhealth.org',            href: 'mailto:info@raahhealth.org'},
+  { icon: MapPin, text: '22960 E Roxbury Dr., Unit D, Aurora, CO, 80016', href: 'https://maps.google.com/?q=22960+E+Roxbury+Dr+Unit+D+Aurora+CO' },
+  { icon: Phone,  text: '720-666-4797',                                     href: 'tel:+17206664797' },
+  { icon: Mail,   text: 'info@raahhealth.org',                              href: 'mailto:info@raahhealth.org' },
 ];
 
 const SOCIALS = [
@@ -62,6 +63,35 @@ const SOCIALS = [
 // ─── Style tokens ──────────────────────────────────────────────────────────────
 const INTER   = "'Inter', sans-serif";
 const POPPINS = "'Poppins', sans-serif";
+
+const linkBaseStyle = {
+  fontFamily:     POPPINS,
+  fontSize:       'clamp(0.875rem, 1.8vw, 0.9375rem)',
+  fontWeight:     400,
+  color:          'rgba(255,255,255,0.78)',
+  textDecoration: 'none',
+  display:        'inline-block',
+  transition:     'color 0.2s ease, transform 0.2s ease',
+  lineHeight:     1,
+};
+
+// ─── FooterLink — internal router link with nudge hover ──────────────────────
+const FooterLink = ({ to, children }) => (
+  <Link
+    to={to}
+    style={linkBaseStyle}
+    onMouseEnter={e => {
+      e.currentTarget.style.color     = '#4ade80';
+      e.currentTarget.style.transform = 'translateX(4px)';
+    }}
+    onMouseLeave={e => {
+      e.currentTarget.style.color     = 'rgba(255,255,255,0.78)';
+      e.currentTarget.style.transform = 'translateX(0)';
+    }}
+  >
+    {children}
+  </Link>
+);
 
 // ─── Footer ───────────────────────────────────────────────────────────────────
 const Footer = () => {
@@ -82,6 +112,28 @@ const Footer = () => {
           display: flex;
           flex-direction: column;
           align-items: center;
+        }
+        
+        /* ✅ NEW: Contact column shifted slightly left on mobile */
+        .footer-contact-col {
+          text-align: left;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          padding-left: clamp(8px, 2vw, 12px);
+        }
+        @media (min-width: 768px) {
+          .footer-contact-col {
+            padding-left: 0;
+            align-items: flex-start;
+          }
+        }
+        @media (max-width: 479px) {
+          .footer-contact-col {
+            padding-left: clamp(4px, 1.5vw, 8px);
+            align-items: center;
+            text-align: center;
+          }
         }
         
         /* Column heading: left border on desktop, bottom accent on mobile */
@@ -388,7 +440,7 @@ const Footer = () => {
                 The end-to-end platform built exclusively for home health agencies. Clinical, operational, and financial workflows in one connected system.
               </p>
 
-              {/* Social icons */}
+              {/* Social icons — using React.createElement to avoid ESLint alias warnings */}
               <div className="footer-socials">
                 {SOCIALS.map(({ icon, href, label }) => (
                   <a
@@ -411,13 +463,13 @@ const Footer = () => {
               <ul className="footer-list">
                 {NAV_LINKS.map(({ label, path }) => (
                   <li key={label}>
-                    <Link to={path} className="footer-link">{label}</Link>
+                    <FooterLink to={path}>{label}</FooterLink>
                   </li>
                 ))}
               </ul>
             </div>
 
-            {/* ── COLUMN 3 — Solutions ── */}
+            {/* ── COLUMN 3 — Solutions ─ */}
             <div className="footer-col footer-mobile-center">
               <span className="footer-col-heading">Solutions</span>
               <ul className="footer-list">
@@ -429,18 +481,19 @@ const Footer = () => {
               </ul>
             </div>
 
-            {/* ── COLUMN 4 — Contact ── */}
-            <div className="footer-col footer-mobile-center">
+            {/* ─ COLUMN 4 — Contact (shifted slightly left) ── */}
+            <div className="footer-col footer-contact-col">
               <span className="footer-col-heading">Contact Us</span>
 
-              <ul className="footer-list" style={{ gap: 'clamp(16px, 3vw, 20px)' }}>
+              <ul className="footer-list" style={{ gap: 'clamp(16px, 3vw, 20px)', width: '100%' }}>
                 {CONTACT.map(({ icon, text, href }) => (
-                  <li key={text}>
+                  <li key={text} style={{ width: '100%' }}>
                     <a
                       href={href}
                       target={href.startsWith('http') ? '_blank' : undefined}
                       rel="noreferrer"
                       className="footer-contact-item"
+                      style={{ width: '100%' }}
                       onMouseEnter={e => { e.currentTarget.style.opacity = '0.80'; }}
                       onMouseLeave={e => { e.currentTarget.style.opacity = '1'; }}
                     >

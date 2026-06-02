@@ -3,7 +3,7 @@
  *
  * World-class Pricing Request page. Follows the RAAH design system exactly:
  *   Inter 900 headings, Poppins body, #dff0df light sections,
- *   #16a34a brand green, dot-grid, Reveal animations, wave dividers.
+ *   #16a34a brand green, dot-grid, Reveal animations.
  *
  * Sections:
  *   1. Hero         — dark green overlay, eyebrow, confident heading
@@ -71,13 +71,8 @@ const Eyebrow = ({ label, light = false }) => (
     <div style={{ width: '32px', height: '1.5px', background: light ? '#ffffff' : '#16a34a', borderRadius: '999px' }} />
   </div>
 );
-const WaveDivider = ({ topColor, bottomColor, flip = false }) => (
-  <div style={{ position: 'relative', height: '80px', overflow: 'hidden', background: topColor, marginBottom: '-1px' }}>
-    <svg viewBox="0 0 1440 80" preserveAspectRatio="none" style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '100%', transform: flip ? 'scaleX(-1)' : 'none' }}>
-      <path d="M0,40 C240,80 480,0 720,40 C960,80 1200,0 1440,40 L1440,80 L0,80 Z" fill={bottomColor} />
-    </svg>
-  </div>
-);
+
+// REMOVED WaveDivider component entirely
 
 // ─── SVG Icons ────────────────────────────────────────────────────────────────
 const IconAllIn = ({ color = '#16a34a' }) => (
@@ -483,18 +478,55 @@ const PricingRequestPage = () => (
         <Reveal delay={0}>
           <Eyebrow label="Transparent Pricing" light />
         </Reveal>
+        
+        {/* ✅ Updated hero heading with isolated green accent line */}
         <Reveal delay={80}>
-          <h1 style={{
-            fontFamily: FI, fontWeight: 900,
-            fontSize: 'clamp(2.5rem, 6vw, 5rem)',
-            letterSpacing: '-0.03em', lineHeight: 1.05,
-            color: '#ffffff', marginBottom: '24px',
-            maxWidth: '900px', margin: '0 auto 24px',
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            textAlign: 'center',
+            width: '100%',
+            maxWidth: '900px',
+            margin: '0 auto',
+            gap: 'clamp(0.15em, 1.5vw, 0.3em)'
           }}>
-            Pricing Built Around{' '}
-            <span style={{ color: '#4ade80' }}>Your Agency</span>
-          </h1>
+            {/* Line 1 */}
+            <h1 style={{
+              fontFamily: FI, 
+              fontWeight: 900,
+              fontSize: 'clamp(2.5rem, 6vw, 5rem)',
+              letterSpacing: '-0.03em', 
+              lineHeight: 1.05,
+              color: '#ffffff', 
+              display: 'block', 
+              width: '100%',
+              textShadow: '0 2px 8px rgba(0,0,0,0.15)',
+              wordBreak: 'break-word',
+              textWrap: 'balance'
+            }}>
+              Pricing Built Around
+            </h1>
+
+            {/* Line 2 — Green Accent (isolated on its own line) */}
+            <h1 style={{
+              fontFamily: FI, 
+              fontWeight: 900,
+              fontSize: 'clamp(2.5rem, 6vw, 5rem)',
+              letterSpacing: '-0.03em', 
+              lineHeight: 1.05,
+              color: '#4ade80', 
+              display: 'block', 
+              width: '100%',
+              textShadow: '0 2px 12px rgba(74,222,128,0.35)',
+              wordBreak: 'break-word',
+              textWrap: 'balance'
+            }}>
+              Your Agency
+            </h1>
+          </div>
         </Reveal>
+        
         <Reveal delay={160}>
           <p style={{
             fontFamily: FP, fontSize: 'clamp(1.05rem, 1.6vw, 1.25rem)',
@@ -508,7 +540,7 @@ const PricingRequestPage = () => (
       </div>
     </section>
 
-    <WaveDivider topColor="rgba(5,46,22,0.68)" bottomColor="#dff0df" />
+    {/* REMOVED WaveDivider */}
 
     {/* ══ BODY ══ */}
     <section style={{ background: '#dff0df', padding: '80px 0 120px', position: 'relative', overflow: 'hidden' }}>
@@ -634,7 +666,7 @@ const PricingRequestPage = () => (
       </div>
     </section>
 
-    <WaveDivider topColor="#dff0df" bottomColor="#0d7a3e" flip={true} />
+    {/* REMOVED WaveDivider */}
 
     {/* ══ PROMISE STRIP ══ */}
     <section style={{

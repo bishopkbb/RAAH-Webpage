@@ -4,7 +4,7 @@
  * Fully rebuilt. Consistent with HomePage, AboutPage, ServicesPage:
  *   Inter 900 headings, Poppins body, double-dash eyebrows
  *   Dot-grid textures, ghost watermark, radial corner glows
- *   Reveal scroll animations, wave dividers, no em dashes
+ *   Reveal scroll animations, no em dashes
  *
  * Sections:
  *   1. Hero           — dark green overlay on image
@@ -92,16 +92,7 @@ const Eyebrow = ({ label, light = false }) => (
   </div>
 );
 
-const WaveDivider = ({ topColor, bottomColor, flip = false }) => (
-  <div style={{ position: 'relative', height: '80px', overflow: 'hidden', background: topColor, marginBottom: '-1px' }}>
-    <svg viewBox="0 0 1440 80" preserveAspectRatio="none" style={{
-      position: 'absolute', bottom: 0, left: 0, width: '100%', height: '100%',
-      transform: flip ? 'scaleX(-1)' : 'none',
-    }}>
-      <path d="M0,40 C240,80 480,0 720,40 C960,80 1200,0 1440,40 L1440,80 L0,80 Z" fill={bottomColor} />
-    </svg>
-  </div>
-);
+// REMOVED WaveDivider component entirely
 
 // ─── Contact info card ────────────────────────────────────────────────────────
 const InfoCard = ({ icon, title, lines, link, linkLabel, delay }) => {
@@ -206,7 +197,7 @@ const ChatIcon = (props) => (
   </svg>
 );
 
-// ─── Validation ──────────────────────────────────────────────────────────────
+// ─── Validation ─────────────────────────────────────────────────────────────
 const validateContact = (fields) => {
   const errs = {};
   if (!fields.name.trim())    errs.name    = 'Full name is required.';
@@ -472,8 +463,8 @@ const SUPPORT_CHANNELS = [
     icon: PhoneIcon,
     title: 'Phone Support',
     body: 'Speak directly with a home health specialist during business hours. For urgent platform issues, our average response is under two hours.',
-    action: 'Call +1 (000) 222-2890',
-    href: 'tel:+10002222890',
+    action: 'Call +1 (720) 666-4797',
+    href: 'tel:+17206664797',
     isInternal: false,
     delay: 80,
   },
@@ -606,7 +597,7 @@ const ContactPage = () => (
       </div>
     </section>
 
-    <WaveDivider topColor="rgba(5,46,22,0.65)" bottomColor="#dff0df" />
+    {/* REMOVED WaveDivider */}
 
     {/* ══ 2. CONTACT BODY ══ */}
     <section style={{ background: '#dff0df', padding: '100px 0 120px', position: 'relative', overflow: 'hidden' }}>
@@ -649,16 +640,16 @@ const ContactPage = () => (
               <InfoCard
                 icon={MapPinIcon}
                 title="Office Location"
-                lines={['13891 Oswego Street', 'Aurora, Colorado 80011']}
-                link="https://maps.google.com/?q=13891+Oswego+Street+Aurora+CO"
+                lines={['22960 E Roxbury Dr., Unit D', 'Aurora, Colorado 80016']}
+                link="https://maps.google.com/?q=22960+E+Roxbury+Dr+Unit+D+Aurora+CO"
                 linkLabel="Get directions"
                 delay={80}
               />
               <InfoCard
                 icon={PhoneIcon}
                 title="Phone"
-                lines={['+1 (000) 222-2890', 'Mon to Fri, 8:00 AM to 6:00 PM MT']}
-                link="tel:+10002222890"
+                lines={['+1 (720) 666-4797', 'Mon to Fri, 8:00 AM to 6:00 PM MT']}
+                link="tel:+17206664797"
                 linkLabel="Call now"
                 delay={150}
               />
@@ -702,23 +693,23 @@ const ContactPage = () => (
 
 
     {/* ══ 3. MAP ══ */}
-    <section style={{ background: '#1a1a1a', position: 'relative', overflow: 'hidden' }}>
+    <section style={{ background: '#dff0df', position: 'relative', overflow: 'hidden' }}>
       <div style={{ position: 'relative', zIndex: 1 }}>
         {/* Map label bar */}
         <div className="container-custom" style={{ paddingTop: '48px', paddingBottom: '24px' }}>
           <Reveal delay={0}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
               <div>
-                <p style={{ fontFamily: FP, fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.60)', marginBottom: '6px' }}>Our Location</p>
-                <p style={{ fontFamily: FI, fontWeight: 700, fontSize: '1.125rem', color: '#ffffff' }}>13891 Oswego Street, Aurora, Colorado</p>
+                <p style={{ fontFamily: FP, fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#16a34a', marginBottom: '6px' }}>Our Location</p>
+                <p style={{ fontFamily: FI, fontWeight: 700, fontSize: '1.125rem', color: '#0f172a' }}>22960 E Roxbury Dr., Unit D, Aurora, Colorado</p>
               </div>
               <a
-                href="https://maps.google.com/?q=13891+Oswego+Street+Aurora+CO"
+                href="https://maps.google.com/?q=22960+E+Roxbury+Dr+Unit+D+Aurora+CO"
                 target="_blank"
                 rel="noreferrer"
-                style={{ fontFamily: FI, fontWeight: 700, fontSize: '0.8125rem', letterSpacing: '0.06em', textTransform: 'uppercase', padding: '11px 22px', borderRadius: '999px', background: 'transparent', color: '#4ade80', border: '1.5px solid rgba(74,222,128,0.35)', textDecoration: 'none', transition: 'all 0.22s ease', display: 'inline-flex', alignItems: 'center', gap: '8px' }}
-                onMouseEnter={e => { e.currentTarget.style.background = 'rgba(74,222,128,0.12)'; e.currentTarget.style.borderColor = '#4ade80'; }}
-                onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = 'rgba(74,222,128,0.40)'; }}
+                style={{ fontFamily: FI, fontWeight: 700, fontSize: '0.8125rem', letterSpacing: '0.06em', textTransform: 'uppercase', padding: '11px 22px', borderRadius: '999px', background: 'transparent', color: '#16a34a', border: '1.5px solid rgba(22,163,74,0.35)', textDecoration: 'none', transition: 'all 0.22s ease', display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+                onMouseEnter={e => { e.currentTarget.style.background = 'rgba(22,163,74,0.12)'; e.currentTarget.style.borderColor = '#16a34a'; }}
+                onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = 'rgba(22,163,74,0.40)'; }}
               >
                 Open in Google Maps
                 <svg viewBox="0 0 12 12" fill="none" width="11" height="11">
@@ -729,21 +720,19 @@ const ContactPage = () => (
           </Reveal>
         </div>
 
-        {/* Google Maps iframe — zoom animation, edge fades, proper alignment */}
+        {/* Google Maps iframe — seamless integration, no borders */}
         <Reveal delay={80}>
           <div style={{
             position: 'relative', width: '100%', height: 'clamp(320px, 50vw, 480px)',
-            borderTop: '1px solid rgba(255,255,255,0.15)',
-            borderBottom: '1px solid rgba(255,255,255,0.15)',
             overflow: 'hidden',
           }}>
             <iframe
               title="RAAH Technologies Office Location"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3068.0!2d-104.8319!3d39.7294!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x876c63d0c9e3e06b%3A0x0!2s13891+Oswego+St%2C+Aurora%2C+CO+80011!5e0!3m2!1sen!2sus!4v1700000000000!5m2!1sen!2sus"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3068.0!2d-104.7319!3d39.6294!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x876c7f8e8e8e8e8e%3A0x0!2s22960+E+Roxbury+Dr+Unit+D+Aurora+CO+80016!5e0!3m2!1sen!2sus!4v1700000000000!5m2!1sen!2sus"
               width="100%"
               height="100%"
               style={{
-                border: 0, display: 'block',
+                border: 'none', display: 'block',
                 filter: 'saturate(0.9) contrast(1.05)',
                 transition: 'transform 0.7s cubic-bezier(0.22, 1, 0.36, 1)',
               }}
@@ -753,7 +742,6 @@ const ContactPage = () => (
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
             />
-
           </div>
         </Reveal>
 

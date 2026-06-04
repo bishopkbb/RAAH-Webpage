@@ -424,10 +424,29 @@ const ServicesPage = () => (
 
     {/* ══ 1. HERO ══ */}
     <section style={{ position: 'relative', minHeight: '65vh', display: 'flex', alignItems: 'center', overflow: 'hidden' }}>
+      {/* ─── Hero image — mobile fix applied here only ─────────────────────── */}
+      <style>{`
+        .hero-img {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          object-position: center 30%;
+        }
+        @media (max-width: 639px) {
+          .hero-img {
+            object-position: center center;
+            /* Anchor the image to the top on very small screens so the
+               subject isn't cropped out when the viewport is narrow/tall */
+            object-position: center top;
+          }
+        }
+      `}</style>
       <img
-        src="public\assets\service or any page.jpeg"
+        src="public/assets/service or any page.jpeg"
         alt="RAAH platform services"
-        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 30%' }}
+        className="hero-img"
       />
       <div style={{ position: 'absolute', inset: 0, background: 'rgba(5,46,22,0.65)' }} aria-hidden="true" />
       <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent 40%, rgba(5,46,22,0.60) 100%)' }} aria-hidden="true" />

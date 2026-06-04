@@ -232,7 +232,7 @@ const SERVICES = [
     label: 'Field Staff',
     title: 'Caregiver Mobile App',
     desc: 'GPS-verified EVV at the point of care, offline documentation for areas without signal, digital signatures, discipline-filtered visit notes, and HIPAA-compliant in-app messaging. iOS and Android.',
-    metric: '< 5 min',
+    metric: 'Under 5 min',
     metricLabel: 'Avg Visit Documentation',
   },
   {
@@ -256,7 +256,7 @@ const SERVICES = [
     label: 'Compliance',
     title: 'EVV and State Compliance',
     desc: 'Real-time sync with all state EVV aggregators. GPS and telephony verification methods supported. Automatic alerts flag missed or incomplete verifications before they become claim issues.',
-    metric: '< 3s',
+    metric: 'Under 3s',
     metricLabel: 'EVV Sync to Aggregator',
   },
   {
